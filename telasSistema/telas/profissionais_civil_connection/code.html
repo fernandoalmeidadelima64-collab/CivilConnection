@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Sora:wght@600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "primary": "#000309", "primary-fixed-dim": "#b9c8dd", "primary-fixed": "#d5e4fa", "on-tertiary-fixed-variant": "#003ea8", "on-primary-fixed": "#0d1c2c", "inverse-surface": "#283044", "error": "#ba1a1a", "on-surface-variant": "#44474c", "on-surface": "#131b2e", "status-erro": "#DC2626", "primary-container": "#0f1e2e", "surface-container-low": "#f2f3ff", "status-concluida": "#16A34A", "surface-tint": "#516072", "outline": "#74777d", "secondary-container": "#fe752c", "on-background": "#131b2e", "on-secondary": "#ffffff", "secondary": "#a23f00", "tertiary-container": "#00194f", "surface": "#faf8ff", "surface-bright": "#faf8ff", "status-em-andamento": "#E8651B", "on-primary": "#ffffff", "inverse-on-surface": "#eef0ff", "tertiary-fixed": "#dbe1ff", "tertiary-fixed-dim": "#b4c5ff", "surface-canvas": "#F8FAFC", "surface-dim": "#d2d9f4", "background": "#faf8ff", "surface-card": "#FFFFFF", "surface-variant": "#dae2fd", "on-error-container": "#93000a", "status-pausada": "#EAB308", "status-planejamento": "#64748B", "error-container": "#ffdad6", "secondary-fixed": "#ffdbcc", "surface-subtle": "#F1F5F9", "on-secondary-container": "#5f2200", "surface-container-lowest": "#ffffff", "tertiary": "#000212", "outline-variant": "#c4c6cc", "border-focus": "#0F1E2E", "on-tertiary": "#ffffff", "on-secondary-fixed": "#351000", "on-primary-container": "#78869a", "secondary-fixed-dim": "#ffb695", "on-tertiary-fixed": "#00174b", "on-primary-fixed-variant": "#3a485a", "on-error": "#ffffff", "border-subtle": "#E2E8F0", "inverse-primary": "#b9c8dd", "surface-container-high": "#e2e7ff", "surface-container": "#eaedff", "surface-container-highest": "#dae2fd", "on-secondary-fixed-variant": "#7c2e00", "on-tertiary-container": "#4b7dff" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "margin": "2rem", "space-md": "1rem", "space-sm": "0.5rem", "gutter": "1.5rem", "space-xl": "2.5rem", "space-xs": "0.25rem", "margin-mobile": "1rem", "space-lg": "1.5rem", "space-2xl": "4rem", "gutter-mobile": "1rem" }, "fontFamily": { "headline-lg": ["Sora"], "display-mobile": ["Sora"], "headline-lg-mobile": ["Sora"], "body-sm": ["Inter"], "headline-sm": ["Sora"], "display": ["Sora"], "label-sm": ["Inter"], "title-md": ["Sora"], "label-md": ["Inter"], "caption": ["Inter"], "body-md": ["Inter"], "headline-md": ["Sora"], "body-lg": ["Inter"] }, "fontSize": { "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.025em", "fontWeight": "600" }], "display-mobile": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "headline-lg-mobile": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "600" }], "body-sm": ["13px", { "lineHeight": "20px", "letterSpacing": "0.005em", "fontWeight": "400" }], "headline-sm": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.015em", "fontWeight": "600" }], "display": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.03em", "fontWeight": "700" }], "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600" }], "title-md": ["16px", { "lineHeight": "24px", "letterSpacing": "-0.01em", "fontWeight": "600" }], "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }], "caption": ["11px", { "lineHeight": "16px", "letterSpacing": "0.03em", "fontWeight": "500" }], "body-md": ["15px", { "lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "400" }], "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "600" }], "body-lg": ["18px", { "lineHeight": "28px", "letterSpacing": "-0.005em", "fontWeight": "400" }] } } } };</script></head><body class="bg-surface-canvas font-body-md text-on-surface antialiased"><aside class="fixed left-0 top-0 h-full w-64 bg-surface-card z-50 flex flex-col justify-between shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex flex-col"><div class="h-16 px-space-lg flex items-center gap-space-sm"><img alt="civil_connection_logo.png" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1WjIs-o7ysduUDIzZO-uVXKd1KToB1n___KJBPisdxM6eurJpWNqAeFWCs8AJjp2cqDofkPAlAkcwxxHjxRPGpmvMNG2Q5wDfrrWLExlCbWtX8_C_kstg_0DKlcu53EMZ7gRMKjUMTEqzVUR-l3_Aim9uADjoyPy7vMVBXccJxHWrlXS9bIFUbtP8vhUGVqYRp0-haf2wJK_b-PyVr3zCuji_2rGJcvIjQZt6FbdYf2KEFpGPBOEZzQgik"/><div class="flex flex-col"><span class="font-title-md text-title-md text-primary tracking-tight">Civil Connection</span><span class="font-caption text-caption text-on-surface-variant uppercase tracking-wider">Gestão Integrada</span></div></div><div class="px-space-md py-space-sm"><a class="w-full flex items-center justify-center gap-space-xs py-2.5 px-space-md rounded-lg bg-status-em-andamento text-on-primary font-label-md text-label-md shadow-sm hover:bg-secondary transition-colors" data-path="nova-obra" href="#"><span class="material-symbols-outlined text-[18px]">add</span><span>Nova Obra</span></a></div><nav class="flex flex-col gap-space-xs px-space-md mt-space-sm" data-active-classes="bg-surface-container-high text-on-surface font-semibold rounded-lg"><a class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-subtle hover:text-on-surface transition-colors font-label-md text-label-md" data-path="dashboard" href="#"><span class="material-symbols-outlined text-[20px]">grid_view</span><span>Visão Geral</span></a><a class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-subtle hover:text-on-surface transition-colors font-label-md text-label-md" data-path="obras" href="#"><span class="material-symbols-outlined text-[20px]">foundation</span><span>Obras</span></a><a aria-current="page" class="flex items-center gap-space-sm px-space-md py-2.5 transition-colors bg-surface-container-high text-on-surface font-semibold rounded-lg" data-path="profissionais" href="#"><span class="material-symbols-outlined text-[20px]">badge</span><span>Profissionais</span></a></nav></div><div class="p-space-md bg-surface-card"><div class="flex items-center gap-space-sm p-space-sm rounded-lg bg-surface-subtle"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><div class="flex flex-col min-w-0 flex-1"><span class="font-label-sm text-label-sm text-on-surface truncate">Eng. Lucas Silva</span><span class="font-caption text-caption text-on-surface-variant truncate">Administrador</span></div><a class="text-on-surface-variant hover:text-error transition-colors p-1" data-path="login" href="#" title="Encerrar Sessão"><span class="material-symbols-outlined text-[18px]">logout</span></a></div></div></aside><div class="pl-64"><header class="fixed top-0 left-64 right-0 h-16 bg-surface-card/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-40 flex items-center justify-between px-space-xl"><div class="flex items-center gap-space-sm"><span class="font-caption text-caption uppercase text-on-surface-variant tracking-wider">Plataforma Técnica de Engenharia</span></div><div class="flex items-center gap-space-md"><div class="relative flex items-center"><span class="material-symbols-outlined absolute left-3 text-on-surface-variant text-[18px]">search</span><input class="w-72 h-10 pl-9 pr-space-md rounded-lg bg-surface-subtle font-body-sm text-body-sm text-on-surface placeholder:text-outline focus:outline-none focus:ring-1 focus:ring-primary-container" placeholder="Buscar obras, etapas, fornecedores..." type="text"/></div><button class="w-9 h-9 rounded-lg flex items-center justify-center text-on-surface-variant hover:bg-surface-subtle hover:text-on-surface transition-colors" type="button"><span class="material-symbols-outlined text-[20px]">notifications</span></button><button class="w-9 h-9 rounded-lg flex items-center justify-center text-on-surface-variant hover:bg-surface-subtle hover:text-on-surface transition-colors" type="button"><span class="material-symbols-outlined text-[20px]">tune</span></button></div></header><main class="relative pt-16 w-full px-space-xl py-space-lg bg-surface-canvas min-h-screen"><div class="flex flex-col w-full gap-space-lg">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-md">
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs text-status-em-andamento font-caption text-caption uppercase tracking-wider mb-1">
+<span class="inline-block w-2 h-2 rounded-full bg-status-em-andamento"></span>
+<span>Rede Técnica Credenciada</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface">Profissionais Cadastrados</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-0.5">Encontre especialistas qualificados para cada etapa da sua obra.</p>
+</div>
+<div class="flex items-center gap-space-sm self-start md:self-auto">
+<button class="inline-flex items-center justify-center gap-space-xs px-space-md py-2.5 rounded-lg bg-status-em-andamento hover:bg-secondary text-on-primary font-label-md text-label-md shadow-sm transition-all duration-200" id="open-register-modal" type="button">
+<span class="material-symbols-outlined text-[18px]">person_add</span>
+<span>+ Cadastrar Profissional</span>
+</button>
+</div>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-space-md">
+<div class="p-space-md rounded-xl bg-surface-card shadow-sm flex items-center gap-space-md">
+<div class="w-12 h-12 rounded-xl bg-surface-subtle flex items-center justify-center text-status-em-andamento shrink-0">
+<span class="material-symbols-outlined text-[24px]">verified</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-caption text-caption text-on-surface-variant uppercase tracking-wider">CREA / CAU Ativos</span>
+<span class="font-headline-sm text-headline-sm text-on-surface font-semibold">100%</span>
+</div>
+</div>
+<div class="p-space-md rounded-xl bg-surface-card shadow-sm flex items-center gap-space-md">
+<div class="w-12 h-12 rounded-xl bg-surface-subtle flex items-center justify-center text-on-surface shrink-0">
+<span class="material-symbols-outlined text-[24px]">engineering</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-caption text-caption text-on-surface-variant uppercase tracking-wider">Total Disponíveis</span>
+<span class="font-headline-sm text-headline-sm text-on-surface font-semibold" id="count-total">6</span>
+</div>
+</div>
+<div class="p-space-md rounded-xl bg-surface-card shadow-sm flex items-center gap-space-md">
+<div class="w-12 h-12 rounded-xl bg-surface-subtle flex items-center justify-center text-status-concluida shrink-0">
+<span class="material-symbols-outlined text-[24px]">star</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-caption text-caption text-on-surface-variant uppercase tracking-wider">Média de Avaliação</span>
+<span class="font-headline-sm text-headline-sm text-on-surface font-semibold">4.85</span>
+</div>
+</div>
+<div class="p-space-md rounded-xl bg-surface-card shadow-sm flex items-center gap-space-md">
+<div class="w-12 h-12 rounded-xl bg-surface-subtle flex items-center justify-center text-status-em-andamento shrink-0">
+<span class="material-symbols-outlined text-[24px]">pin_drop</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-caption text-caption text-on-surface-variant uppercase tracking-wider">Cidades Polo</span>
+<span class="font-headline-sm text-headline-sm text-on-surface font-semibold">4 Regiões</span>
+</div>
+</div>
+</div>
+<div class="p-space-md rounded-xl bg-surface-card shadow-sm flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-space-md">
+<div class="relative flex-1">
+<span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span>
+<input class="w-full h-11 pl-10 pr-space-md rounded-lg bg-surface-subtle text-on-surface font-body-sm text-body-sm placeholder:text-outline focus:outline-none focus:bg-surface-card transition-colors" id="input-search" placeholder="Buscar por nome ou competência..." type="text"/>
+</div>
+<div class="flex flex-wrap sm:flex-nowrap items-center gap-space-sm">
+<div class="relative min-w-[200px] flex-1 sm:flex-none">
+<label class="sr-only" for="select-especialidade">Especialidade</label>
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">construction</span>
+<select class="w-full h-11 pl-9 pr-8 rounded-lg bg-surface-subtle text-on-surface font-label-md text-label-md appearance-none focus:outline-none focus:bg-surface-card cursor-pointer" id="select-especialidade">
+<option value="">Todas Especialidades</option>
+<option value="Engenheiro Civil">Engenheiro Civil</option>
+<option value="Arquiteta &amp; Urbanista">Arquiteto(a)</option>
+<option value="Mestre de Obras">Mestre de Obras</option>
+<option value="Engenheira Eletricista">Engenheiro Eletricista</option>
+<option value="Técnico em Edificações">Técnico em Edificações</option>
+<option value="Pintura">Pintor / Acabamento</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant text-[18px]">expand_more</span>
+</div>
+<div class="relative min-w-[170px] flex-1 sm:flex-none">
+<label class="sr-only" for="select-cidade">Cidade</label>
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">location_on</span>
+<select class="w-full h-11 pl-9 pr-8 rounded-lg bg-surface-subtle text-on-surface font-label-md text-label-md appearance-none focus:outline-none focus:bg-surface-card cursor-pointer" id="select-cidade">
+<option value="">Todas as Cidades</option>
+<option value="Campinas">Campinas - SP</option>
+<option value="São Paulo">São Paulo - SP</option>
+<option value="Santos">Santos - SP</option>
+<option value="Jundiaí">Jundiaí - SP</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant text-[18px]">expand_more</span>
+</div>
+<button class="h-11 px-space-md rounded-lg bg-surface-subtle hover:bg-surface-container-high text-on-surface-variant font-label-md text-label-md transition-colors inline-flex items-center gap-space-xs" id="btn-limpar-filtros" type="button">
+<span class="material-symbols-outlined text-[18px]">filter_alt_off</span>
+<span>Limpar</span>
+</button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-space-lg" id="professionals-grid">
+<div class="professional-card group bg-surface-card rounded-xl p-space-lg shadow-sm hover:shadow-md transition-all duration-200 flex flex-col justify-between" data-city="Campinas" data-name="Carlos Mendes" data-role="Engenheiro Civil">
+<div class="flex flex-col gap-space-md">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-center gap-space-md">
+<div class="relative w-14 h-14 rounded-full overflow-hidden shrink-0 bg-surface-subtle">
+<img class="w-full h-full object-cover" data-alt="Close up professional portrait of civil engineer Carlos Mendes in safety helmet and clean navy attire, bright studio lighting with architectural blueprint blur in background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBqwRjsK3hS9Vr15WhsMOaOpY0DVF6PaXzhvGtWOn601eB09IDbR5EqKJM7X97xn4Rfd9TkHT3o8RDsO-d1XyFafBpEhF9WWGFrvokX9joEgzbWMLG58vvqr65JlcVX9qe63LXK8e5Fw5muHMIHcgY21n7S0QwwYAXR16Jk4fpfPnmrzfAK8RO4PSfQdYAap3-bIGwoI6pNQpBTNDLY97Me19nk2gMGmzdmT2tAeLM"/>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-1.5">
+<h3 class="font-title-md text-title-md text-on-surface font-bold">Carlos Mendes</h3>
+<span class="material-symbols-outlined text-[16px] text-status-concluida" title="Credencial Verificada">verified</span>
+</div>
+<span class="font-caption text-caption text-status-em-andamento font-semibold uppercase tracking-wider">CREA Ativo • SP-284910</span>
+</div>
+</div>
+<span class="px-2.5 py-1 rounded-full bg-surface-subtle text-on-surface-variant font-caption text-caption font-semibold">Engenharia</span>
+</div>
+<div class="flex flex-col gap-space-xs text-on-surface-variant font-body-sm text-body-sm">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant">engineering</span>
+<span class="text-on-surface font-medium">Engenheiro Civil Estrutural</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant">location_on</span>
+<span>Campinas - SP</span>
+</div>
+<div class="flex items-center gap-space-xs text-on-surface">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant">phone</span>
+<span class="font-label-sm text-label-sm tracking-wide">(19) 98765-4321</span>
+</div>
+</div>
+<div class="flex items-center justify-between py-2 px-3 rounded-lg bg-surface-subtle">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px] text-secondary-container" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-md text-label-md text-on-surface font-bold">4.9</span>
+<span class="font-caption text-caption text-on-surface-variant">(28 avaliações)</span>
+</div>
+<span class="font-caption text-caption text-status-concluida font-semibold">Disponível</span>
+</div>
+</div>
+<div class="pt-space-md mt-space-md border-t-0 flex items-center gap-space-sm">
+<a class="flex-1 py-2.5 px-space-md rounded-lg bg-surface-subtle hover:bg-surface-container-high text-on-surface font-label-md text-label-md text-center transition-colors flex items-center justify-center gap-space-xs" href="tel:19987654321">
+<span class="material-symbols-outlined text-[18px]">chat</span>
+<span>Entrar em Contato</span>
+</a>
+</div>
+</div>
+<div class="professional-card group bg-surface-card rounded-xl p-space-lg shadow-sm hover:shadow-md transition-all duration-200 flex flex-col justify-between" data-city="São Paulo" data-name="Juliana Ferreira" data-role="Arquiteta &amp; Urbanista">
+<div class="flex flex-col gap-space-md">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-center gap-space-md">
+<div class="relative w-14 h-14 rounded-full overflow-hidden shrink-0 bg-surface-subtle">
+<img class="w-full h-full object-cover" data-alt="Portrait of female architect Juliana Ferreira holding a digital tablet in a clean minimalist architectural office with warm natural sunlight and structural models" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDHGLX3himvSfLNqr5bvYR8UP9FlQbE_wwF84xTQeyC_WV-a2s8OlBvMj8T2hbYRFG1HbJ3fmYCRTAQQbcFT8HDncZq9k2uLecubl0BU1tw96V_zhtlgrdpw1DrcSqjGlp3virG_Jn0_mIVq6TYut3tBXLYhXfNEy8pmZZrE7AX8yNILfxzU1-magDcyE72eNu4H97Wkt9C5e-3V7CIllDfkc2-dykY-EtED_LcQkw"/>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-1.5">
+<h3 class="font-title-md text-title-md text-on-surface font-bold">Juliana Ferreira</h3>
+<span class="material-symbols-outlined text-[16px] text-status-concluida" title="Credencial Verificada">verified</span>
+</div>
+<span class="font-caption text-caption text-status-em-andamento font-semibold uppercase tracking-wider">CAU Ativo • A198234-1</span>
+</div>
+</div>
+<span class="px-2.5 py-1 rounded-full bg-surface-subtle text-on-surface-variant font-caption text-caption font-semibold">Arquitetura</span>
+</div>
+<div class="flex flex-col gap-space-xs text-on-surface-variant font-body-sm text-body-sm">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant">architecture</span>
+<span class="text-on-surface font-medium">Arquiteta &amp; Urbanista</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant">location_on</span>
+<span>São Paulo - SP</span>
+</div>
+<div class="flex items-center gap-space-xs text-on-surface">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant">phone</span>
+<span class="font-label-sm text-label-sm tracking-wide">(11) 99123-8877</span>
+</div>
+</div>
+<div class="flex items-center justify-between py-2 px-3 rounded-lg bg-surface-subtle">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px] text-secondary-container" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-md text-label-md text-on-surface font-bold">5.0</span>
+<span class="font-caption text-caption text-on-surface-variant">(42 avaliações)</span>
+</div>
+<span class="font-caption text-caption text-status-concluida font-semibold">Agenda Aberta</span>
+</div>
+</div>
+<div class="pt-space-md mt-space-md flex items-center gap-space-sm">
+<a class="flex-1 py-2.5 px-space-md rounded-lg bg-surface-subtle hover:bg-surface-container-high text-on-surface font-label-md text-label-md text-center transition-colors flex items-center justify-center gap-space-xs" href="tel:11991238877">
+<span class="material-symbols-outlined text-[18px]">chat</span>
+<span>Entrar em Contato</span>
+</a>
+</div>
+</div>
+<div class="professional-card group bg-surface-card rounded-xl p-space-lg shadow-sm hover:shadow-md transition-all duration-200 flex flex-col justify-between" data-city="Jundiaí" data-name="Roberto Albuquerque" data-role="Mestre de Obras">
+<div class="flex flex-col gap-space-md">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-center gap-space-md">
+<div class="relative w-14 h-14 rounded-full overflow-hidden shrink-0 bg-surface-subtle">
+<img class="w-full h-full object-cover" data-alt="Portrait of experienced construction site master Roberto Albuquerque on modern building site wearing protective glasses and orange safety jacket" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCNKAs-iQBiM-wSrV5KHXInUZOdBuQpQ-SWq3c4a7BXqXWNMMriVOT_ZtmRTNtxuU1sFiXMiQeVsLpVALmXCkAX01552rabmjrSxI9M1G27fn61KezVFaSh--c8nN6AmmO_knO_r_sD7SDEqn2iERxR0hQ5Ftut2GmRQ8KHQ5-QMZoRYAsthIYBSLlXw9vTG95tRRO0D4ogDskJfZ-YwNGL2TAAB0WLQFDqKD7v-0c"/>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-1.5">
+<h3 class="font-title-md text-title-md text-on-surface font-bold">Roberto Albuquerque</h3>
+<span class="material-symbols-outlined text-[16px] text-status-concluida" title="Credencial Verificada">verified</span>
+</div>
+<span class="font-caption text-caption text-on-surface-variant font-semibold uppercase tracking-wider">22 anos de canteiro</span>
+</div>
+</div>
+<span class="px-2.5 py-1 rounded-full bg-surface-subtle text-on-surface-variant font-caption text-caption font-semibold">Execução</span>
+</div>
+<div class="flex flex-col gap-space-xs text-on-surface-variant font-body-sm text-body-sm">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant">construction</span>
+<span class="text-on-surface font-medium">Mestre de Obras</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant">location_on</span>
+<span>Jundiaí - SP</span>
+</div>
+<div class="flex items-center gap-space-xs text-on-surface">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant">phone</span>
+<span class="font-label-sm text-label-sm tracking-wide">(11) 97766-5544</span>
+</div>
+</div>
+<div class="flex items-center justify-between py-2 px-3 rounded-lg bg-surface-subtle">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px] text-secondary-container" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-md text-label-md text-on-surface font-bold">4.8</span>
+<span class="font-caption text-caption text-on-surface-variant">(35 avaliações)</span>
+</div>
+<span class="font-caption text-caption text-status-em-andamento font-semibold">Em Obra</span>
+</div>
+</div>
+<div class="pt-space-md mt-space-md flex items-center gap-space-sm">
+<a class="flex-1 py-2.5 px-space-md rounded-lg bg-surface-subtle hover:bg-surface-container-high text-on-surface font-label-md text-label-md text-center transition-colors flex items-center justify-center gap-space-xs" href="tel:11977665544">
+<span class="material-symbols-outlined text-[18px]">chat</span>
+<span>Entrar em Contato</span>
+</a>
+</div>
+</div>
+<div class="professional-card group bg-surface-card rounded-xl p-space-lg shadow-sm hover:shadow-md transition-all duration-200 flex flex-col justify-between" data-city="Santos" data-name="Mariana Souza" data-role="Engenheira Eletricista">
+<div class="flex flex-col gap-space-md">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-center gap-space-md">
+<div class="relative w-14 h-14 rounded-full overflow-hidden shrink-0 bg-surface-subtle">
+<img class="w-full h-full object-cover" data-alt="Professional female electrical engineer Mariana Souza reviewing building circuit schematics with modern technical tools, bright commercial environment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA16AMczZzKuHe-1juMhLrP8wlNbX4E_7q74eGg__kx7i2KlgRlNXyxxIG3-nRSTxJWqAss1iRGgvj6vf4dUUF6IWq4L5CyYYazTFqNoghBPvFt4kFLut5cH93wrik29z6cC3hsMBvlwm2J7wWp_UAAQ7aCJxLDGYFCbztmR32N8pf0mfaqnIM5VQShJRYic0A-zC78Jhdpw1-3eMt8DGCUjxmnF_3qUuSH6rPSte8"/>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-1.5">
+<h3 class="font-title-md text-title-md text-on-surface font-bold">Mariana Souza</h3>
+<span class="material-symbols-outlined text-[16px] text-status-concluida" title="Credencial Verificada">verified</span>
+</div>
+<span class="font-caption text-caption text-status-em-andamento font-semibold uppercase tracking-wider">CREA Ativo • SP-310492</span>
+</div>
+</div>
+<span class="px-2.5 py-1 rounded-full bg-surface-subtle text-on-surface-variant font-caption text-caption font-semibold">Instalações</span>
+</div>
+<div class="flex flex-col gap-space-xs text-on-surface-variant font-body-sm text-body-sm">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant">bolt</span>
+<span class="text-on-surface font-medium">Engenheira Eletricista</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant">location_on</span>
+<span>Santos - SP</span>
+</div>
+<div class="flex items-center gap-space-xs text-on-surface">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant">phone</span>
+<span class="font-label-sm text-label-sm tracking-wide">(13) 98877-1122</span>
+</div>
+</div>
+<div class="flex items-center justify-between py-2 px-3 rounded-lg bg-surface-subtle">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px] text-secondary-container" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-md text-label-md text-on-surface font-bold">4.9</span>
+<span class="font-caption text-caption text-on-surface-variant">(19 avaliações)</span>
+</div>
+<span class="font-caption text-caption text-status-concluida font-semibold">Disponível</span>
+</div>
+</div>
+<div class="pt-space-md mt-space-md flex items-center gap-space-sm">
+<a class="flex-1 py-2.5 px-space-md rounded-lg bg-surface-subtle hover:bg-surface-container-high text-on-surface font-label-md text-label-md text-center transition-colors flex items-center justify-center gap-space-xs" href="tel:13988771122">
+<span class="material-symbols-outlined text-[18px]">chat</span>
+<span>Entrar em Contato</span>
+</a>
+</div>
+</div>
+<div class="professional-card group bg-surface-card rounded-xl p-space-lg shadow-sm hover:shadow-md transition-all duration-200 flex flex-col justify-between" data-city="São Paulo" data-name="Paulo Silveira" data-role="Técnico em Edificações">
+<div class="flex flex-col gap-space-md">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-center gap-space-md">
+<div class="relative w-14 h-14 rounded-full overflow-hidden shrink-0 bg-surface-subtle">
+<img class="w-full h-full object-cover" data-alt="Portrait of building technician Paulo Silveira with measurement devices and notebook, professional safety gear, realistic construction ambiance" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDidk6NFOBlolMa36gRdwSQjXUuRpw4OBpz3gC3bRNiltUhNDc27Dd6hQ4I3urjCaknxx29a_hSMpKh1fbGSll2SvnhtOPnRcWXhpXKeuCqXUHYsY1VFmcNaCWMWzRstOX-REF87QArWs1E62PTA9f9keAAaxnS_RMBMQf8SiwnCcTwZK4ZSFkxpy844dJujdg5DyTUOlxffXlcMPFDZRRzykwndEaeeDd2yZ_aH4o"/>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-1.5">
+<h3 class="font-title-md text-title-md text-on-surface font-bold">Paulo Silveira</h3>
+<span class="material-symbols-outlined text-[16px] text-status-concluida" title="Credencial Verificada">verified</span>
+</div>
+<span class="font-caption text-caption text-on-surface-variant font-semibold uppercase tracking-wider">CFT Ativo • 90123</span>
+</div>
+</div>
+<span class="px-2.5 py-1 rounded-full bg-surface-subtle text-on-surface-variant font-caption text-caption font-semibold">Fiscalização</span>
+</div>
+<div class="flex flex-col gap-space-xs text-on-surface-variant font-body-sm text-body-sm">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant">domain</span>
+<span class="text-on-surface font-medium">Técnico em Edificações</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant">location_on</span>
+<span>São Paulo - SP</span>
+</div>
+<div class="flex items-center gap-space-xs text-on-surface">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant">phone</span>
+<span class="font-label-sm text-label-sm tracking-wide">(11) 98111-2233</span>
+</div>
+</div>
+<div class="flex items-center justify-between py-2 px-3 rounded-lg bg-surface-subtle">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px] text-secondary-container" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-md text-label-md text-on-surface font-bold">4.7</span>
+<span class="font-caption text-caption text-on-surface-variant">(15 avaliações)</span>
+</div>
+<span class="font-caption text-caption text-status-concluida font-semibold">Disponível</span>
+</div>
+</div>
+<div class="pt-space-md mt-space-md flex items-center gap-space-sm">
+<a class="flex-1 py-2.5 px-space-md rounded-lg bg-surface-subtle hover:bg-surface-container-high text-on-surface font-label-md text-label-md text-center transition-colors flex items-center justify-center gap-space-xs" href="tel:11981112233">
+<span class="material-symbols-outlined text-[18px]">chat</span>
+<span>Entrar em Contato</span>
+</a>
+</div>
+</div>
+<div class="professional-card group bg-surface-card rounded-xl p-space-lg shadow-sm hover:shadow-md transition-all duration-200 flex flex-col justify-between" data-city="Campinas" data-name="Fernando Costa" data-role="Pintura">
+<div class="flex flex-col gap-space-md">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-center gap-space-md">
+<div class="relative w-14 h-14 rounded-full overflow-hidden shrink-0 bg-surface-subtle">
+<img class="w-full h-full object-cover" data-alt="Portrait of finishing specialist Fernando Costa holding professional coating tools inside a modern newly finished interior room with smooth walls" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDf4G7jg-naZeLmMcYxTmf9D_bqJfezEL6txc3kYFOuJt2kW5HAUjc6nKC9Orm9_L3UIzRbzXjpdSbMx5nN5MMqJyhukjuH8uI0pBcTGbiKS3MUVthQeKRhyXMjvfYRm6hRpH7YJrjHO--REuNOW5oQ9_vvhpF6nfkie-N9L5Mnk0F_rDbktdfX9vS6ci250HzsMwflf6xSol_ZG-HjTxA8TbIFdCFOlHIT5dpraKE"/>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-1.5">
+<h3 class="font-title-md text-title-md text-on-surface font-bold">Fernando Costa</h3>
+<span class="material-symbols-outlined text-[16px] text-status-concluida" title="Credencial Verificada">verified</span>
+</div>
+<span class="font-caption text-caption text-on-surface-variant font-semibold uppercase tracking-wider">Especialista Certificado</span>
+</div>
+</div>
+<span class="px-2.5 py-1 rounded-full bg-surface-subtle text-on-surface-variant font-caption text-caption font-semibold">Acabamento</span>
+</div>
+<div class="flex flex-col gap-space-xs text-on-surface-variant font-body-sm text-body-sm">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant">format_paint</span>
+<span class="text-on-surface font-medium">Especialista em Pintura e Acabamento</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant">location_on</span>
+<span>Campinas - SP</span>
+</div>
+<div class="flex items-center gap-space-xs text-on-surface">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant">phone</span>
+<span class="font-label-sm text-label-sm tracking-wide">(19) 97654-3210</span>
+</div>
+</div>
+<div class="flex items-center justify-between py-2 px-3 rounded-lg bg-surface-subtle">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px] text-secondary-container" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-md text-label-md text-on-surface font-bold">4.8</span>
+<span class="font-caption text-caption text-on-surface-variant">(22 avaliações)</span>
+</div>
+<span class="font-caption text-caption text-status-concluida font-semibold">Disponível</span>
+</div>
+</div>
+<div class="pt-space-md mt-space-md flex items-center gap-space-sm">
+<a class="flex-1 py-2.5 px-space-md rounded-lg bg-surface-subtle hover:bg-surface-container-high text-on-surface font-label-md text-label-md text-center transition-colors flex items-center justify-center gap-space-xs" href="tel:19976543210">
+<span class="material-symbols-outlined text-[18px]">chat</span>
+<span>Entrar em Contato</span>
+</a>
+</div>
+</div>
+</div>
+<div class="hidden p-space-2xl bg-surface-card rounded-xl shadow-sm text-center flex-col items-center justify-center gap-space-sm" id="no-results">
+<div class="w-14 h-14 rounded-full bg-surface-subtle flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined text-[28px]">search_off</span>
+</div>
+<span class="font-headline-sm text-headline-sm text-on-surface">Nenhum profissional encontrado</span>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-md">Não identificamos nenhum técnico correspondente aos critérios selecionados. Tente ajustar a busca ou limpar os filtros.</p>
+</div>
+<div class="fixed inset-0 z-50 hidden items-center justify-center bg-primary/60 backdrop-blur-sm p-space-md" id="modal-cadastro">
+<div class="w-full max-w-lg bg-surface-card rounded-2xl shadow-xl overflow-hidden flex flex-col">
+<div class="px-space-lg py-space-md bg-surface-subtle flex items-center justify-between">
+<div class="flex items-center gap-space-xs text-on-surface font-title-md text-title-md">
+<span class="material-symbols-outlined text-status-em-andamento">badge</span>
+<span>Cadastrar Novo Profissional</span>
+</div>
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors" id="close-modal" type="button">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<form class="p-space-lg flex flex-col gap-space-md" id="form-novo-profissional">
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-on-surface">Nome Completo</label>
+<input class="h-11 px-space-md rounded-lg bg-surface-subtle font-body-sm text-body-sm text-on-surface focus:outline-none focus:bg-surface-card" placeholder="Ex: Roberto Almeida" required="" type="text"/>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-space-md">
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-on-surface">Especialidade Técnica</label>
+<select class="h-11 px-space-md rounded-lg bg-surface-subtle font-body-sm text-body-sm text-on-surface focus:outline-none focus:bg-surface-card" required="">
+<option value="">Selecione...</option>
+<option value="Engenheiro Civil">Engenheiro Civil</option>
+<option value="Arquiteto">Arquiteto(a)</option>
+<option value="Mestre de Obras">Mestre de Obras</option>
+<option value="Eletricista">Eletricista</option>
+<option value="Encanador">Encanador</option>
+<option value="Pintor">Pintor</option>
+</select>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-on-surface">Registro Profissional (Opcional)</label>
+<input class="h-11 px-space-md rounded-lg bg-surface-subtle font-body-sm text-body-sm text-on-surface focus:outline-none focus:bg-surface-card" placeholder="Ex: CREA 123456/SP" type="text"/>
+</div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-space-md">
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-on-surface">Cidade - UF</label>
+<select class="h-11 px-space-md rounded-lg bg-surface-subtle font-body-sm text-body-sm text-on-surface focus:outline-none focus:bg-surface-card" required="">
+<option value="Campinas">Campinas - SP</option>
+<option value="São Paulo">São Paulo - SP</option>
+<option value="Santos">Santos - SP</option>
+<option value="Jundiaí">Jundiaí - SP</option>
+</select>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-on-surface">Telefone / WhatsApp</label>
+<input class="h-11 px-space-md rounded-lg bg-surface-subtle font-body-sm text-body-sm text-on-surface focus:outline-none focus:bg-surface-card" placeholder="(19) 99999-9999" required="" type="tel"/>
+</div>
+</div>
+<div class="flex items-center justify-end gap-space-sm pt-space-sm">
+<button class="px-space-md py-2.5 rounded-lg bg-surface-subtle hover:bg-surface-container-high text-on-surface font-label-md text-label-md transition-colors" id="cancel-modal" type="button">
+            Cancelar
+          </button>
+<button class="px-space-md py-2.5 rounded-lg bg-status-em-andamento hover:bg-secondary text-on-primary font-label-md text-label-md transition-colors shadow-sm" type="submit">
+            Salvar Profissional
+          </button>
+</div>
+</form>
+</div>
+</div>
+</div>
+<script>
+  (function() {
+    const inputSearch = document.getElementById('input-search');
+    const selectEspecialidade = document.getElementById('select-especialidade');
+    const selectCidade = document.getElementById('select-cidade');
+    const btnLimpar = document.getElementById('btn-limpar-filtros');
+    const cards = Array.from(document.querySelectorAll('.professional-card'));
+    const noResults = document.getElementById('no-results');
+    const countTotal = document.getElementById('count-total');
+
+    function filterProfessionals() {
+      const query = (inputSearch?.value || '').toLowerCase().trim();
+      const espFilter = (selectEspecialidade?.value || '').toLowerCase();
+      const cidFilter = (selectCidade?.value || '').toLowerCase();
+
+      let visibleCount = 0;
+
+      cards.forEach(card => {
+        const name = (card.getAttribute('data-name') || '').toLowerCase();
+        const role = (card.getAttribute('data-role') || '').toLowerCase();
+        const city = (card.getAttribute('data-city') || '').toLowerCase();
+
+        const matchQuery = !query || name.includes(query) || role.includes(query) || city.includes(query);
+        const matchEsp = !espFilter || role.includes(espFilter);
+        const matchCid = !cidFilter || city.includes(cidFilter);
+
+        if (matchQuery && matchEsp && matchCid) {
+          card.classList.remove('hidden');
+          card.classList.add('flex');
+          visibleCount++;
+        } else {
+          card.classList.add('hidden');
+          card.classList.remove('flex');
+        }
+      });
+
+      if (countTotal) countTotal.textContent = visibleCount.toString();
+
+      if (visibleCount === 0) {
+        noResults?.classList.remove('hidden');
+        noResults?.classList.add('flex');
+      } else {
+        noResults?.classList.add('hidden');
+        noResults?.classList.remove('flex');
+      }
+    }
+
+    inputSearch?.addEventListener('input', filterProfessionals);
+    selectEspecialidade?.addEventListener('change', filterProfessionals);
+    selectCidade?.addEventListener('change', filterProfessionals);
+
+    btnLimpar?.addEventListener('click', () => {
+      if (inputSearch) inputSearch.value = '';
+      if (selectEspecialidade) selectEspecialidade.value = '';
+      if (selectCidade) selectCidade.value = '';
+      filterProfessionals();
+    });
+
+    const modal = document.getElementById('modal-cadastro');
+    const btnOpenModal = document.getElementById('open-register-modal');
+    const btnCloseModal = document.getElementById('close-modal');
+    const btnCancelModal = document.getElementById('cancel-modal');
+    const formNovo = document.getElementById('form-novo-profissional');
+
+    function openModal() {
+      modal?.classList.remove('hidden');
+      modal?.classList.add('flex');
+    }
+
+    function closeModal() {
+      modal?.classList.add('hidden');
+      modal?.classList.remove('flex');
+    }
+
+    btnOpenModal?.addEventListener('click', openModal);
+    btnCloseModal?.addEventListener('click', closeModal);
+    btnCancelModal?.addEventListener('click', closeModal);
+
+    modal?.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal();
+    });
+
+    formNovo?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      closeModal();
+      formNovo.reset();
+    });
+  })();
+</script></main></div></body></html>
