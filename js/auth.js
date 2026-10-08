@@ -21,14 +21,14 @@ function switchAuthTab(mode) {
         registerFields.classList.remove('hidden');
         registerFields.classList.add('flex');
         if (formTitle) formTitle.textContent = 'Criar sua Conta';
-        if (submitBtnText) submitBtnText.textContent = 'Cadastrar-se';
+        if (submitBtnText) submitBtnText.textContent = 'Criar conta';
     } else {
         tabRegister.className = 'flex-1 py-2 rounded-md font-label-md text-label-md transition-all duration-200 text-on-surface-variant hover:text-on-surface text-center';
         tabLogin.className = 'flex-1 py-2 rounded-md font-label-md text-label-md transition-all duration-200 bg-surface-card text-on-surface shadow-sm text-center';
         registerFields.classList.add('hidden');
         registerFields.classList.remove('flex');
         if (formTitle) formTitle.textContent = 'Entrar na Plataforma';
-        if (submitBtnText) submitBtnText.textContent = 'Entrar no Sistema';
+        if (submitBtnText) submitBtnText.textContent = 'Entrar';
     }
 }
 
@@ -45,7 +45,6 @@ async function handleAuthSubmit(event) {
         feedbackMsg.className = 'p-3 rounded-lg text-body-sm font-label-sm text-center mt-2';
     }
 
-    // Validações
     if (!email || !email.includes('@')) {
         showAuthError('Por favor, informe um e-mail válido.');
         return;
@@ -60,10 +59,18 @@ async function handleAuthSubmit(event) {
 
         if (currentAuthMode === 'register') {
             const nome = document.getElementById('nome-completo').value.trim();
-            const tipoUsuario = document.getElementById('tipo-usuario') ? document.getElementById('tipo-usuario').value : 'cliente';
+            const confirmSenha = document.getElementById('confirmar-senha')?.value;
+            const tipoUsuarioEl = document.querySelector('input[name="tipo_usuario"]:checked') || document.getElementById('tipo-usuario');
+            const tipoUsuario = tipoUsuarioEl ? tipoUsuarioEl.value : 'cliente';
 
             if (!nome) {
                 showAuthError('O nome completo é obrigatório.');
+                if (submitBtn) submitBtn.disabled = false;
+                return;
+            }
+
+            if (confirmSenha && password !== confirmSenha) {
+                showAuthError('A confirmação de senha não confere.');
                 if (submitBtn) submitBtn.disabled = false;
                 return;
             }
@@ -78,14 +85,16 @@ async function handleAuthSubmit(event) {
 
             showAuthSuccess('Conta criada com sucesso! Redirecionando...');
             setTimeout(() => {
-                window.location.href = '../index.html';
+                const homePath = window.location.pathname.includes('/pages/') ? '../index.html' : 'index.html';
+                window.location.href = homePath;
             }, 1000);
         } else {
             showAuthSuccess('Autenticando...');
             await dbService.loginUser({ email, password });
             showAuthSuccess('Login realizado com sucesso! Redirecionando...');
             setTimeout(() => {
-                window.location.href = '../index.html';
+                const homePath = window.location.pathname.includes('/pages/') ? '../index.html' : 'index.html';
+                window.location.href = homePath;
             }, 1000);
         }
     } catch (err) {
@@ -100,7 +109,7 @@ function showAuthError(msg) {
     if (feedbackMsg) {
         feedbackMsg.textContent = msg;
         feedbackMsg.classList.remove('hidden');
-        feedbackMsg.classList.add('bg-error-container', 'text-on-error-container');
+        feedbackMsg.className = 'p-3 rounded-lg text-body-sm font-label-sm text-center mb-2 bg-error-container text-on-error-container';
     } else {
         alert(msg);
     }
@@ -111,22 +120,21 @@ function showAuthSuccess(msg) {
     if (feedbackMsg) {
         feedbackMsg.textContent = msg;
         feedbackMsg.classList.remove('hidden');
-        feedbackMsg.classList.add('bg-status-concluida/10', 'text-status-concluida');
+        feedbackMsg.className = 'p-3 rounded-lg text-body-sm font-label-sm text-center mb-2 bg-status-concluida/10 text-status-concluida';
     }
 }
 
-// Proteger rotas nas páginas privadas
 async function checkAuthAndHeader() {
     const currentUser = await dbService.getCurrentUser();
     const isLoginPage = window.location.pathname.endsWith('login.html');
 
     if (!currentUser && !isLoginPage) {
-        window.location.href = window.location.pathname.includes('/pages/') ? 'login.html' : 'pages/login.html';
+        const loginPath = window.location.pathname.includes('/pages/') ? 'login.html' : 'pages/login.html';
+        window.location.href = loginPath;
         return;
     }
 
     if (currentUser) {
-        // Atualizar nome do usuário no menu lateral e cabeçalho se existir
         const userNameElements = document.querySelectorAll('.user-display-name');
         userNameElements.forEach(el => {
             el.textContent = currentUser.nome;
@@ -137,6 +145,10 @@ async function checkAuthAndHeader() {
             const roleMap = {
                 'administrador': 'Administrador',
                 'profissional': 'Profissional Técnico',
+                'engenheiro': 'Engenheiro',
+                'arquiteto': 'Arquiteto',
+                'empreiteiro': 'Empreiteiro',
+                'mestre_obras': 'Mestre de obras',
                 'cliente': 'Cliente'
             };
             el.textContent = roleMap[currentUser.tipo_usuario] || 'Usuário';
@@ -153,7 +165,6 @@ async function handleLogout() {
 document.addEventListener('DOMContentLoaded', () => {
     checkAuthAndHeader();
 
-    // Adicionar listener de logout a botões com data-action="logout"
     document.querySelectorAll('[data-action="logout"], [title="Encerrar Sessão"]').forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.preventDefault();

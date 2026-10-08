@@ -6,7 +6,6 @@
 const DEFAULT_SUPABASE_URL = 'https://znnctmfnubammvgipozs.supabase.co';
 const DEFAULT_SUPABASE_ANON_KEY = 'sb_publishable_yZ0atX4BhKlWbvLNipY3lg_XEm4ceFd';
 
-// Carregar credenciais salvas no LocalStorage ou usar os padrões do projeto
 function getSupabaseCredentials() {
     const customUrl = localStorage.getItem('civil_supabase_url');
     const customKey = localStorage.getItem('civil_supabase_key');
@@ -30,7 +29,6 @@ function initSupabase() {
     }
 }
 
-// Inicializar mock storage se o Supabase não estiver ativo/configurado
 function getLocalData(key) {
     const data = localStorage.getItem('civil_db_' + key);
     return data ? JSON.parse(data) : null;
@@ -40,18 +38,10 @@ function setLocalData(key, value) {
     localStorage.setItem('civil_db_' + key, JSON.stringify(value));
 }
 
-// Seed de dados iniciais para demonstração se não houver dados no LocalStorage
 function seedInitialData() {
+    // Não inicializar usuário estático "Eng. Lucas" automaticamente em civil_current_user
     if (!getLocalData('usuarios')) {
-        const adminUser = {
-            id: 'u-1',
-            nome: 'Eng. Lucas Silva',
-            email: 'lucas@civilconection.com.br',
-            tipo_usuario: 'administrador',
-            criado_em: new Date().toISOString()
-        };
-        setLocalData('usuarios', [adminUser]);
-        localStorage.setItem('civil_current_user', JSON.stringify(adminUser));
+        setLocalData('usuarios', []);
     }
 
     if (!getLocalData('profissionais')) {
@@ -147,9 +137,7 @@ function seedInitialData() {
 
 seedInitialData();
 
-// Objeto de Acesso Unificado ao Banco (DB Service)
 const dbService = {
-    // ---- USUÁRIOS ----
     async getCurrentUser() {
         if (supabaseClient) {
             const { data: { user } } = await supabaseClient.auth.getUser();
@@ -175,16 +163,15 @@ const dbService = {
             return data;
         }
 
-        // Fallback local
         const usuarios = getLocalData('usuarios') || [];
         if (usuarios.some(u => u.email === email)) {
-            throw new Error('E-mail já cadastrado.');
+            throw new Error('E-mail já cadastrado no sistema.');
         }
         const newUser = {
             id: 'u-' + Date.now(),
             nome,
             email,
-            tipo_usuario,
+            tipo_usuario: tipo_usuario || 'cliente',
             criado_em: new Date().toISOString()
         };
         usuarios.push(newUser);
@@ -200,11 +187,9 @@ const dbService = {
             return data;
         }
 
-        // Fallback local
         const usuarios = getLocalData('usuarios') || [];
         let user = usuarios.find(u => u.email === email);
         if (!user) {
-            // Se for um login de teste, cria na hora
             user = {
                 id: 'u-' + Date.now(),
                 nome: email.split('@')[0],
@@ -226,7 +211,6 @@ const dbService = {
         localStorage.removeItem('civil_current_user');
     },
 
-    // ---- PROFISSIONAIS ----
     async getProfissionais({ busca = '', especialidade = '', cidade = '' } = {}) {
         if (supabaseClient) {
             let query = supabaseClient.from('profissionais').select('*');
@@ -285,7 +269,6 @@ const dbService = {
         return newProf;
     },
 
-    // ---- OBRAS ----
     async getObras({ busca = '', cidade = '', status = '' } = {}) {
         if (supabaseClient) {
             let query = supabaseClient.from('obras').select('*, usuarios(nome)');
@@ -358,7 +341,6 @@ const dbService = {
         }
     },
 
-    // ---- ETAPAS DA OBRA ----
     async getEtapasByObra(obraId) {
         if (supabaseClient) {
             const { data } = await supabaseClient.from('etapas_obra').select('*').eq('obra_id', obraId);
@@ -390,7 +372,6 @@ const dbService = {
             setLocalData('etapas_obra', lista);
         }
 
-        // Recalcular progresso da obra
         await this.recalcularProgressoObra(etapaData.obra_id);
         return newEtapa;
     },
@@ -429,7 +410,6 @@ const dbService = {
         await this.updateObraProgresso(obraId, media, status);
     },
 
-    // ---- DASHBOARD INDICADORES ----
     async getDashboardMetrics() {
         const profissionais = await this.getProfissionais();
         const obras = await this.getObras();
@@ -453,7 +433,6 @@ const dbService = {
     }
 };
 
-// Executar inicialização quando a página carrega
 document.addEventListener('DOMContentLoaded', () => {
     initSupabase();
 });
