@@ -1,13 +1,12 @@
 /* ============================================================
    Civil Conection — Supabase Client & DB Service Wrapper
-   Permite uso de Supabase JS oficial com fallback transparente
-   para LocalStorage/Memória para testes/demonstração.
+   Conexão direta do Frontend com Supabase PostgreSQL
    ============================================================ */
 
-const DEFAULT_SUPABASE_URL = 'https://your-project.supabase.co';
-const DEFAULT_SUPABASE_ANON_KEY = 'your-anon-key';
+const DEFAULT_SUPABASE_URL = 'https://znnctmfnubammvgipozs.supabase.co';
+const DEFAULT_SUPABASE_ANON_KEY = 'sb_publishable_yZ0atX4BhKlWbvLNipY3lg_XEm4ceFd';
 
-// Carregar credenciais salvas no LocalStorage ou usar padrões
+// Carregar credenciais salvas no LocalStorage ou usar os padrões do projeto
 function getSupabaseCredentials() {
     const customUrl = localStorage.getItem('civil_supabase_url');
     const customKey = localStorage.getItem('civil_supabase_key');
@@ -21,10 +20,10 @@ let supabaseClient = null;
 
 function initSupabase() {
     const creds = getSupabaseCredentials();
-    if (window.supabase && window.supabase.createClient && creds.url && creds.key && creds.url !== DEFAULT_SUPABASE_URL) {
+    if (window.supabase && window.supabase.createClient && creds.url && creds.key) {
         try {
             supabaseClient = window.supabase.createClient(creds.url, creds.key);
-            console.log('Supabase JS conectado com sucesso:', creds.url);
+            console.log('Supabase JS conectado com sucesso ao projeto:', creds.url);
         } catch (e) {
             console.warn('Erro ao inicializar Supabase JS:', e);
         }
@@ -235,7 +234,7 @@ const dbService = {
             if (especialidade) query = query.eq('especialidade', especialidade);
             if (cidade) query = query.eq('cidade', cidade);
             const { data, error } = await query;
-            if (!error) return data;
+            if (!error && data) return data;
         }
 
         let lista = getLocalData('profissionais') || [];
@@ -294,7 +293,7 @@ const dbService = {
             if (cidade) query = query.eq('cidade', cidade);
             if (status) query = query.eq('status', status);
             const { data, error } = await query;
-            if (!error) return data;
+            if (!error && data) return data;
         }
 
         let lista = getLocalData('obras') || [];
