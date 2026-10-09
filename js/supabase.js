@@ -39,7 +39,6 @@ function setLocalData(key, value) {
 }
 
 function seedInitialData() {
-    // Não inicializar usuário estático "Eng. Lucas" automaticamente em civil_current_user
     if (!getLocalData('usuarios')) {
         setLocalData('usuarios', []);
     }
@@ -140,10 +139,20 @@ seedInitialData();
 const dbService = {
     async getCurrentUser() {
         if (supabaseClient) {
-            const { data: { user } } = await supabaseClient.auth.getUser();
-            if (user) {
-                const { data } = await supabaseClient.from('usuarios').select('*').eq('id', user.id).single();
-                if (data) return data;
+            try {
+                const { data: { user } } = await supabaseClient.auth.getUser();
+                if (user) {
+                    const { data } = await supabaseClient.from('usuarios').select('*').eq('id', user.id).single();
+                    if (data) return data;
+                    return {
+                        id: user.id,
+                        nome: user.user_metadata?.nome || user.user_metadata?.full_name || user.email.split('@')[0],
+                        email: user.email,
+                        tipo_usuario: user.user_metadata?.tipo_usuario || 'cliente'
+                    };
+                }
+            } catch (e) {
+                console.warn('Erro ao consultar usuário atual no Supabase Auth:', e);
             }
         }
         const session = localStorage.getItem('civil_current_user');
@@ -152,11 +161,16 @@ const dbService = {
 
     async registerUser({ nome, email, password, tipo_usuario }) {
         if (supabaseClient) {
+            const normalizedType = (tipo_usuario || 'cliente').toLowerCase();
             const { data, error } = await supabaseClient.auth.signUp({
                 email,
                 password,
                 options: {
-                    data: { nome, tipo_usuario }
+                    data: {
+                        nome,
+                        full_name: nome,
+                        tipo_usuario: normalizedType
+                    }
                 }
             });
             if (error) throw error;
@@ -206,7 +220,11 @@ const dbService = {
 
     async logoutUser() {
         if (supabaseClient) {
-            await supabaseClient.auth.signOut();
+            try {
+                await supabaseClient.auth.signOut();
+            } catch (e) {
+                console.warn('Erro ao encerrar sessão no Supabase:', e);
+            }
         }
         localStorage.removeItem('civil_current_user');
     },
