@@ -45,7 +45,7 @@ async function handleAuthSubmit(event) {
         feedbackMsg.className = 'p-3 rounded-lg text-body-sm font-label-sm text-center mt-2';
     }
 
-    // Validações
+    // Validações de entrada
     if (!email || !email.includes('@')) {
         showAuthError('Por favor, informe um e-mail válido.');
         return;
@@ -60,7 +60,8 @@ async function handleAuthSubmit(event) {
 
         if (currentAuthMode === 'register') {
             const nome = document.getElementById('nome-completo').value.trim();
-            const tipoUsuario = document.getElementById('tipo-usuario') ? document.getElementById('tipo-usuario').value : 'cliente';
+            const tipoUsuarioInput = document.querySelector('input[name="tipo_usuario"]:checked');
+            const tipoUsuario = tipoUsuarioInput ? tipoUsuarioInput.value : 'cliente';
 
             if (!nome) {
                 showAuthError('O nome completo é obrigatório.');
@@ -68,7 +69,7 @@ async function handleAuthSubmit(event) {
                 return;
             }
 
-            showAuthSuccess('Criando conta...');
+            showAuthSuccess('Criando conta no sistema...');
             await dbService.registerUser({
                 nome,
                 email,
@@ -99,7 +100,7 @@ function showAuthError(msg) {
     const feedbackMsg = document.getElementById('auth-feedback');
     if (feedbackMsg) {
         feedbackMsg.textContent = msg;
-        feedbackMsg.classList.remove('hidden');
+        feedbackMsg.classList.remove('hidden', 'bg-status-concluida/10', 'text-status-concluida');
         feedbackMsg.classList.add('bg-error-container', 'text-on-error-container');
     } else {
         alert(msg);
@@ -110,7 +111,7 @@ function showAuthSuccess(msg) {
     const feedbackMsg = document.getElementById('auth-feedback');
     if (feedbackMsg) {
         feedbackMsg.textContent = msg;
-        feedbackMsg.classList.remove('hidden');
+        feedbackMsg.classList.remove('hidden', 'bg-error-container', 'text-on-error-container');
         feedbackMsg.classList.add('bg-status-concluida/10', 'text-status-concluida');
     }
 }
@@ -129,7 +130,7 @@ async function checkAuthAndHeader() {
         // Atualizar nome do usuário no menu lateral e cabeçalho se existir
         const userNameElements = document.querySelectorAll('.user-display-name');
         userNameElements.forEach(el => {
-            el.textContent = currentUser.nome;
+            el.textContent = currentUser.nome || 'Usuário';
         });
 
         const userRoleElements = document.querySelectorAll('.user-display-role');
