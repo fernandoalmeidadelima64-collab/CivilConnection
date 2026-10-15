@@ -153,10 +153,26 @@ const dbService = {
     // ---- USUÁRIOS ----
     async getCurrentUser() {
         if (supabaseClient) {
-            const { data: { user } } = await supabaseClient.auth.getUser();
-            if (user) {
-                const { data } = await supabaseClient.from('usuarios').select('*').eq('id', user.id).single();
-                if (data) return data;
+            try {
+                const { data: { user } } = await supabaseClient.auth.getUser();
+                if (user) {
+                    const { data, error } = await supabaseClient.from('usuarios').select('*').eq('id', user.id).maybeSingle();
+                    if (data && !error) {
+                        localStorage.setItem('civil_current_user', JSON.stringify(data));
+                        return data;
+                    }
+                    const metadataUser = {
+                        id: user.id,
+                        nome: (user.user_metadata && user.user_metadata.nome) || user.email.split('@')[0],
+                        email: user.email,
+                        tipo_usuario: (user.user_metadata && user.user_metadata.tipo_usuario) || 'cliente',
+                        criado_em: user.created_at || new Date().toISOString()
+                    };
+                    localStorage.setItem('civil_current_user', JSON.stringify(metadataUser));
+                    return metadataUser;
+                }
+            } catch (err) {
+                console.warn('Erro ao obter usuário Supabase Auth:', err);
             }
         }
         const session = localStorage.getItem('civil_current_user');
@@ -172,14 +188,30 @@ const dbService = {
                     data: { nome, tipo_usuario }
                 }
             });
-            if (error) throw error;
+            if (error) {
+                if (error.message && error.message.includes('already registered')) {
+                    throw new Error('E-mail já cadastrado no sistema.');
+                }
+                throw error;
+            }
+
+            if (data && data.user) {
+                const userObj = {
+                    id: data.user.id,
+                    nome,
+                    email,
+                    tipo_usuario,
+                    criado_em: data.user.created_at || new Date().toISOString()
+                };
+                localStorage.setItem('civil_current_user', JSON.stringify(userObj));
+            }
             return data;
         }
 
         // Fallback local
         const usuarios = getLocalData('usuarios') || [];
         if (usuarios.some(u => u.email === email)) {
-            throw new Error('E-mail já cadastrado.');
+            throw new Error('E-mail já cadastrado no sistema.');
         }
         const newUser = {
             id: 'u-' + Date.now(),
@@ -197,7 +229,24 @@ const dbService = {
     async loginUser({ email, password }) {
         if (supabaseClient) {
             const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-            if (error) throw error;
+            if (error) {
+                if (error.message && (error.message.includes('Invalid login credentials') || error.message.includes('invalid_credentials'))) {
+                    throw new Error('E-mail ou senha incorretos.');
+                }
+                throw error;
+            }
+
+            if (data && data.user) {
+                const { data: dbUser } = await supabaseClient.from('usuarios').select('*').eq('id', data.user.id).maybeSingle();
+                const userObj = dbUser || {
+                    id: data.user.id,
+                    nome: (data.user.user_metadata && data.user.user_metadata.nome) || email.split('@')[0],
+                    email: data.user.email,
+                    tipo_usuario: (data.user.user_metadata && data.user.user_metadata.tipo_usuario) || 'cliente',
+                    criado_em: data.user.created_at || new Date().toISOString()
+                };
+                localStorage.setItem('civil_current_user', JSON.stringify(userObj));
+            }
             return data;
         }
 
@@ -205,7 +254,6 @@ const dbService = {
         const usuarios = getLocalData('usuarios') || [];
         let user = usuarios.find(u => u.email === email);
         if (!user) {
-            // Se for um login de teste, cria na hora
             user = {
                 id: 'u-' + Date.now(),
                 nome: email.split('@')[0],
@@ -222,7 +270,11 @@ const dbService = {
 
     async logoutUser() {
         if (supabaseClient) {
-            await supabaseClient.auth.signOut();
+            try {
+                await supabaseClient.auth.signOut();
+            } catch (e) {
+                console.warn('Erro ao deslogar do Supabase:', e);
+            }
         }
         localStorage.removeItem('civil_current_user');
     },
@@ -235,7 +287,7 @@ const dbService = {
             if (especialidade) query = query.eq('especialidade', especialidade);
             if (cidade) query = query.eq('cidade', cidade);
             const { data, error } = await query;
-            if (!error) return data;
+            if (!error && data) return data;
         }
 
         let lista = getLocalData('profissionais') || [];
@@ -254,7 +306,7 @@ const dbService = {
 
     async getProfissionalById(id) {
         if (supabaseClient) {
-            const { data } = await supabaseClient.from('profissionais').select('*').eq('id', id).single();
+            const { data } = await supabaseClient.from('profissionais').select('*').eq('id', id).maybeSingle();
             if (data) return data;
         }
         const lista = getLocalData('profissionais') || [];
@@ -294,7 +346,7 @@ const dbService = {
             if (cidade) query = query.eq('cidade', cidade);
             if (status) query = query.eq('status', status);
             const { data, error } = await query;
-            if (!error) return data;
+            if (!error && data) return data;
         }
 
         let lista = getLocalData('obras') || [];
@@ -313,7 +365,7 @@ const dbService = {
 
     async getObraById(id) {
         if (supabaseClient) {
-            const { data } = await supabaseClient.from('obras').select('*, usuarios(nome)').eq('id', id).single();
+            const { data } = await supabaseClient.from('obras').select('*, usuarios(nome)').eq('id', id).maybeSingle();
             if (data) return data;
         }
         const lista = getLocalData('obras') || [];
