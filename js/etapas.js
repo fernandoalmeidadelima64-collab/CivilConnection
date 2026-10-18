@@ -274,7 +274,7 @@ async function abrirModalNovaTarefa(etapaId) {
         modal.innerHTML = `
             <div class="bg-surface-card rounded-xl shadow-xl w-full max-w-lg p-space-lg mx-4 flex flex-col gap-space-md">
                 <div class="flex items-center justify-between">
-                    <h3 class="font-headline-sm text-headline-sm text-on-surface">Cadastrar Atividade / Tarefa</h3>
+                    <h3 class="font-headline-sm text-headline-sm text-on-surface font-bold">Cadastrar Atividade / Tarefa</h3>
                     <button type="button" onclick="document.getElementById('modal-nova-tarefa').classList.add('hidden')" class="p-1 rounded-lg hover:bg-surface-subtle text-on-surface-variant">
                         <span class="material-symbols-outlined text-[20px]">close</span>
                     </button>
@@ -379,6 +379,8 @@ async function carregarDiarioEAnexos(obraId) {
     const containerDocs = document.getElementById('lista-documentos-obra');
     if (!containerDiario) return;
 
+    const placeholder = '../assets/images/placeholder-obra.svg';
+
     try {
         const diários = await dbService.getDiarioByObra(obraId);
         const documentos = await dbService.getDocumentosByObra(obraId);
@@ -405,27 +407,30 @@ async function carregarDiarioEAnexos(obraId) {
             if (!documentos || documentos.length === 0) {
                 containerDocs.innerHTML = `<p class="font-body-md text-body-md text-on-surface-variant p-6 text-center bg-surface-card rounded-xl border border-border-subtle">Nenhuma fotografia ou documento anexado.</p>`;
             } else {
-                containerDocs.innerHTML = documentos.map(doc => `
-                    <div class="bg-surface-card rounded-xl border border-border-subtle overflow-hidden flex flex-col shadow-sm group">
-                        ${doc.tipo === 'imagem' ? `
-                            <div class="h-36 w-full overflow-hidden bg-surface-subtle relative cursor-pointer" onclick="abrirLightboxVisualizador('${doc.url_arquivo}', '${doc.titulo}')">
-                                <img src="${doc.url_arquivo}" alt="${doc.titulo}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
-                                <div class="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-on-primary">
-                                    <span class="material-symbols-outlined text-3xl">zoom_in</span>
+                containerDocs.innerHTML = documentos.map(doc => {
+                    const imgUrl = typeof getObraImagemUrl === 'function' ? getObraImagemUrl(doc.url_arquivo, placeholder) : (doc.url_arquivo || placeholder);
+                    return `
+                        <div class="bg-surface-card rounded-xl border border-border-subtle overflow-hidden flex flex-col shadow-sm group">
+                            ${doc.tipo === 'imagem' ? `
+                                <div class="h-36 w-full overflow-hidden bg-surface-subtle relative cursor-pointer" onclick="abrirLightboxVisualizador('${imgUrl}', '${doc.titulo.replace(/'/g, "\\'")}')">
+                                    <img src="${imgUrl}" alt="${doc.titulo}" loading="lazy" onerror="this.onerror=null; this.src='${placeholder}';" class="w-full h-full object-cover text-transparent text-[0px] bg-surface-subtle group-hover:scale-105 transition-transform duration-300" />
+                                    <div class="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-on-primary">
+                                        <span class="material-symbols-outlined text-3xl">zoom_in</span>
+                                    </div>
                                 </div>
+                            ` : `
+                                <div class="h-36 w-full bg-surface-subtle flex flex-col items-center justify-center text-primary p-4">
+                                    <span class="material-symbols-outlined text-4xl mb-1">description</span>
+                                    <span class="font-caption text-caption truncate max-w-full">${doc.titulo}</span>
+                                </div>
+                            `}
+                            <div class="p-space-sm flex flex-col">
+                                <span class="font-label-sm text-label-sm text-on-surface truncate font-semibold">${doc.titulo}</span>
+                                <span class="font-caption text-caption text-on-surface-variant">${new Date(doc.criado_em).toLocaleDateString('pt-BR')}</span>
                             </div>
-                        ` : `
-                            <div class="h-36 w-full bg-surface-subtle flex flex-col items-center justify-center text-primary p-4">
-                                <span class="material-symbols-outlined text-4xl mb-1">description</span>
-                                <span class="font-caption text-caption truncate max-w-full">${doc.titulo}</span>
-                            </div>
-                        `}
-                        <div class="p-space-sm flex flex-col">
-                            <span class="font-label-sm text-label-sm text-on-surface truncate font-semibold">${doc.titulo}</span>
-                            <span class="font-caption text-caption text-on-surface-variant">${new Date(doc.criado_em).toLocaleDateString('pt-BR')}</span>
                         </div>
-                    </div>
-                `).join('');
+                    `;
+                }).join('');
             }
         }
     } catch (err) {
@@ -494,12 +499,14 @@ function abrirLightboxVisualizador(url, titulo) {
             <button type="button" onclick="document.getElementById('lightbox-galeria').classList.add('hidden')" class="absolute top-4 right-4 text-on-primary hover:opacity-80 p-2">
                 <span class="material-symbols-outlined text-3xl">close</span>
             </button>
-            <img id="lightbox-img" class="max-w-full max-h-[80vh] rounded-lg shadow-2xl object-contain mb-4" />
+            <img id="lightbox-img" class="max-w-full max-h-[80vh] rounded-lg shadow-2xl object-contain mb-4 text-transparent text-[0px]" />
             <span id="lightbox-title" class="text-on-primary font-title-md text-title-md"></span>
         `;
         document.body.appendChild(lightbox);
     }
-    document.getElementById('lightbox-img').src = url;
+    const placeholder = '../assets/images/placeholder-obra.svg';
+    const cleanUrl = typeof getObraImagemUrl === 'function' ? getObraImagemUrl(url, placeholder) : (url || placeholder);
+    document.getElementById('lightbox-img').src = cleanUrl;
     document.getElementById('lightbox-title').textContent = titulo;
     lightbox.classList.remove('hidden');
 }

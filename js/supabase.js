@@ -38,6 +38,21 @@ function setLocalData(key, value) {
     localStorage.setItem('civil_db_' + key, JSON.stringify(value));
 }
 
+// Utilitário para tratamento seguro de URLs de imagem e placeholders
+function getObraImagemUrl(url, relativePrefix = 'assets/images/placeholder-obra.svg') {
+    const placeholder = relativePrefix;
+    if (!url) return placeholder;
+
+    let clean = String(url).trim();
+    clean = clean.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"');
+
+    if (!clean || (!clean.startsWith('http://') && !clean.startsWith('https://') && !clean.startsWith('data:image/'))) {
+        return placeholder;
+    }
+
+    return clean;
+}
+
 // Seed Inicial Completo para testes e funcionamento imediato
 function seedInitialData() {
     if (!localStorage.getItem('civil_db_usuarios')) {
@@ -569,6 +584,11 @@ const dbService = {
 
     async saveObra(obraData) {
         const user = await this.getCurrentUser();
+
+        // Garantir limpeza da URL antes de salvar
+        let rawFotoCapa = (obraData.foto_capa_url || '').trim();
+        rawFotoCapa = rawFotoCapa.replace(/&amp;/g, '&');
+
         const payload = {
             cliente_id: user ? user.id : 'u-1',
             nome: obraData.nome,
@@ -576,7 +596,7 @@ const dbService = {
             cidade: obraData.cidade,
             status: obraData.status || 'planejamento',
             progresso: Number(obraData.progresso) || 0,
-            foto_capa_url: obraData.foto_capa_url || '',
+            foto_capa_url: rawFotoCapa,
             data_inicio: obraData.data_inicio || new Date().toISOString().split('T')[0],
             data_previsao_fim: obraData.data_previsao_fim || null,
             responsavel_id: obraData.responsavel_id || null,
@@ -605,6 +625,11 @@ const dbService = {
     },
 
     async updateObra(obraId, updateData) {
+        if (updateData.foto_capa_url !== undefined) {
+            let rawUrl = String(updateData.foto_capa_url || '').trim();
+            updateData.foto_capa_url = rawUrl.replace(/&amp;/g, '&');
+        }
+
         if (supabaseClient) {
             const { data, error } = await supabaseClient.from('obras').update(updateData).eq('id', obraId).select();
             if (error) throw error;
@@ -1128,12 +1153,16 @@ const dbService = {
 
     async saveDocumento(docData) {
         const user = await this.getCurrentUser();
+
+        let rawUrl = (docData.url_arquivo || '').trim();
+        rawUrl = rawUrl.replace(/&amp;/g, '&');
+
         const payload = {
             obra_id: docData.obra_id,
             diario_id: docData.diario_id || null,
             titulo: docData.titulo,
             tipo: docData.tipo || 'imagem',
-            url_arquivo: docData.url_arquivo,
+            url_arquivo: rawUrl,
             tamanho_bytes: docData.tamanho_bytes || 0,
             criado_por: user ? user.id : null
         };
