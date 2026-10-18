@@ -1,5 +1,5 @@
 /* ============================================================
-   Civil Conection — Lógica de Autenticação e Gestão de Sessão
+   Civil Conection — Lógica de Autenticação, Sessão e Perfil (CC-10)
    ============================================================ */
 
 let currentAuthMode = 'login'; // 'login' ou 'register'
@@ -45,7 +45,6 @@ async function handleAuthSubmit(event) {
         feedbackMsg.className = 'p-3 rounded-lg text-body-sm font-label-sm text-center mt-2';
     }
 
-    // Validações de entrada
     if (!email || !email.includes('@')) {
         showAuthError('Por favor, informe um e-mail válido.');
         return;
@@ -79,14 +78,16 @@ async function handleAuthSubmit(event) {
 
             showAuthSuccess('Conta criada com sucesso! Redirecionando...');
             setTimeout(() => {
-                window.location.href = '../index.html';
+                const isPagesDir = window.location.pathname.includes('/pages/');
+                window.location.href = isPagesDir ? '../index.html' : 'index.html';
             }, 1000);
         } else {
             showAuthSuccess('Autenticando...');
             await dbService.loginUser({ email, password });
             showAuthSuccess('Login realizado com sucesso! Redirecionando...');
             setTimeout(() => {
-                window.location.href = '../index.html';
+                const isPagesDir = window.location.pathname.includes('/pages/');
+                window.location.href = isPagesDir ? '../index.html' : 'index.html';
             }, 1000);
         }
     } catch (err) {
@@ -116,7 +117,7 @@ function showAuthSuccess(msg) {
     }
 }
 
-// Proteger rotas nas páginas privadas
+// CC-10 — Foto de Perfil & Atualização de Cabeçalho
 async function checkAuthAndHeader() {
     const currentUser = await dbService.getCurrentUser();
     const isLoginPage = window.location.pathname.endsWith('login.html');
@@ -127,21 +128,144 @@ async function checkAuthAndHeader() {
     }
 
     if (currentUser) {
-        // Atualizar nome do usuário no menu lateral e cabeçalho se existir
-        const userNameElements = document.querySelectorAll('.user-display-name');
-        userNameElements.forEach(el => {
+        // Atualizar nome e cargo do usuário
+        document.querySelectorAll('.user-display-name').forEach(el => {
             el.textContent = currentUser.nome || 'Usuário';
         });
 
-        const userRoleElements = document.querySelectorAll('.user-display-role');
-        userRoleElements.forEach(el => {
-            const roleMap = {
-                'administrador': 'Administrador',
-                'profissional': 'Profissional Técnico',
-                'cliente': 'Cliente'
-            };
+        const roleMap = {
+            'administrador': 'Administrador',
+            'profissional': 'Profissional Técnico',
+            'cliente': 'Cliente'
+        };
+        document.querySelectorAll('.user-display-role').forEach(el => {
             el.textContent = roleMap[currentUser.tipo_usuario] || 'Usuário';
         });
+
+        // Atualizar foto do perfil
+        updateAvatarDisplay(currentUser.foto_perfil_url, currentUser.nome);
+    }
+}
+
+function updateAvatarDisplay(fotoUrl, nome) {
+    const avatarContainers = document.querySelectorAll('.user-avatar-container');
+    avatarContainers.forEach(container => {
+        if (fotoUrl) {
+            container.innerHTML = `<img src="${fotoUrl}" alt="${nome || 'Foto de Perfil'}" class="w-full h-full object-cover rounded-full" />`;
+        } else {
+            const inicial = (nome || 'U').charAt(0).toUpperCase();
+            container.innerHTML = `<span class="material-symbols-outlined text-on-primary text-[18px]">person</span>`;
+        }
+    });
+}
+
+// CC-10 — Modal para Adicionar/Editar Foto de Perfil
+function abrirModalFotoPerfil() {
+    let modal = document.getElementById('modal-foto-perfil');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'modal-foto-perfil';
+        modal.className = 'fixed inset-0 z-50 flex items-center justify-center bg-primary/40 backdrop-blur-sm hidden';
+        modal.innerHTML = `
+            <div class="bg-surface-card rounded-xl shadow-xl w-full max-w-md p-space-lg mx-4 flex flex-col gap-space-md">
+                <div class="flex items-center justify-between">
+                    <h3 class="font-headline-sm text-headline-sm text-on-surface">Foto de Perfil</h3>
+                    <button type="button" onclick="fecharModalFotoPerfil()" class="p-1 rounded-lg hover:bg-surface-subtle text-on-surface-variant">
+                        <span class="material-symbols-outlined text-[20px]">close</span>
+                    </button>
+                </div>
+                <div class="flex flex-col items-center gap-space-md py-space-sm">
+                    <div id="preview-avatar-box" class="w-24 h-24 rounded-full bg-primary flex items-center justify-center text-on-primary font-display text-2xl overflow-hidden shadow-md">
+                        <span class="material-symbols-outlined text-4xl">person</span>
+                    </div>
+                    <label class="cursor-pointer inline-flex items-center gap-2 px-space-md py-2 rounded-lg bg-surface-subtle hover:bg-surface-container font-label-md text-label-md text-on-surface transition-colors">
+                        <span class="material-symbols-outlined text-[18px]">photo_camera</span>
+                        <span>Escolher Imagem...</span>
+                        <input type="file" id="input-foto-perfil" accept="image/jpeg,image/png,image/webp" class="hidden" onchange="previewFotoPerfilSelected(event)" />
+                    </label>
+                    <p class="font-caption text-caption text-on-surface-variant text-center">Formatos aceitos: JPEG, PNG e WebP (máx. 5MB)</p>
+                    <div id="foto-feedback" class="hidden w-full p-2 text-center rounded font-label-sm text-label-sm"></div>
+                </div>
+                <div class="flex items-center justify-between pt-space-xs border-t border-border-subtle">
+                    <button type="button" onclick="removerFotoPerfil()" class="px-space-md py-2 rounded-lg text-error hover:bg-error-container/20 font-label-md text-label-md transition-colors">Remover Foto</button>
+                    <div class="flex items-center gap-space-sm">
+                        <button type="button" onclick="fecharModalFotoPerfil()" class="px-space-md py-2 rounded-lg bg-surface-subtle font-label-md text-label-md text-on-surface">Cancelar</button>
+                        <button type="button" onclick="salvarFotoPerfil()" id="btn-salvar-foto" class="px-space-md py-2 rounded-lg bg-status-em-andamento text-on-primary font-label-md text-label-md shadow-sm hover:bg-secondary transition-colors">Salvar</button>
+                    </div>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+    }
+
+    // Carregar preview com foto atual
+    dbService.getCurrentUser().then(user => {
+        const previewBox = document.getElementById('preview-avatar-box');
+        if (previewBox) {
+            if (user && user.foto_perfil_url) {
+                previewBox.innerHTML = `<img src="${user.foto_perfil_url}" class="w-full h-full object-cover" />`;
+            } else {
+                const inicial = (user?.nome || 'U').charAt(0).toUpperCase();
+                previewBox.innerHTML = `<span class="material-symbols-outlined text-4xl">person</span>`;
+            }
+        }
+        window.tempPerfilFotoData = null;
+    });
+
+    modal.classList.remove('hidden');
+}
+
+function fecharModalFotoPerfil() {
+    const modal = document.getElementById('modal-foto-perfil');
+    if (modal) modal.classList.add('hidden');
+}
+
+function previewFotoPerfilSelected(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    if (file.size > 5 * 1024 * 1024) {
+        alert('O arquivo selecionado é maior que 5MB. Por favor escolha uma imagem menor.');
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const dataUrl = e.target.result;
+        window.tempPerfilFotoData = dataUrl;
+        const previewBox = document.getElementById('preview-avatar-box');
+        if (previewBox) {
+            previewBox.innerHTML = `<img src="${dataUrl}" class="w-full h-full object-cover" />`;
+        }
+    };
+    reader.readAsDataURL(file);
+}
+
+async function salvarFotoPerfil() {
+    const btn = document.getElementById('btn-salvar-foto');
+    try {
+        if (btn) btn.disabled = true;
+        if (window.tempPerfilFotoData) {
+            const updated = await dbService.updateUserProfile({ foto_perfil_url: window.tempPerfilFotoData });
+            updateAvatarDisplay(updated.foto_perfil_url, updated.nome);
+        }
+        fecharModalFotoPerfil();
+    } catch (err) {
+        console.error(err);
+        alert('Erro ao salvar foto de perfil.');
+    } finally {
+        if (btn) btn.disabled = false;
+    }
+}
+
+async function removerFotoPerfil() {
+    try {
+        const updated = await dbService.updateUserProfile({ foto_perfil_url: '' });
+        updateAvatarDisplay('', updated.nome);
+        fecharModalFotoPerfil();
+    } catch (err) {
+        console.error(err);
+        alert('Erro ao remover foto de perfil.');
     }
 }
 
@@ -154,11 +278,19 @@ async function handleLogout() {
 document.addEventListener('DOMContentLoaded', () => {
     checkAuthAndHeader();
 
-    // Adicionar listener de logout a botões com data-action="logout"
+    // Listener para logout
     document.querySelectorAll('[data-action="logout"], [title="Encerrar Sessão"]').forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.preventDefault();
             handleLogout();
         });
+    });
+
+    // Listener para alterar foto de perfil
+    document.querySelectorAll('.user-avatar-container, .user-display-name').forEach(el => {
+        el.addEventListener('click', () => {
+            abrirModalFotoPerfil();
+        });
+        el.classList.add('cursor-pointer');
     });
 });

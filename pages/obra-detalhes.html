@@ -7,26 +7,99 @@
 <script src="../js/auth.js"></script>
 <script src="../js/obras.js"></script>
 <script src="../js/etapas.js"></script>
-</head><body class="bg-surface-canvas font-body-md text-on-surface antialiased"><aside class="fixed left-0 top-0 h-full w-64 bg-surface-card z-50 flex flex-col justify-between shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex flex-col"><div class="h-16 px-space-lg flex items-center gap-space-sm"><img alt="Civil Connection Logo" class="h-8 w-auto object-contain" src="../assets/images/civil_connection_logo.png"/><div class="flex flex-col"><span class="font-title-md text-title-md text-primary tracking-tight">Civil Connection</span><span class="font-caption text-caption text-on-surface-variant uppercase tracking-wider">Gestão Integrada</span></div></div><div class="px-space-md py-space-sm"><a class="w-full flex items-center justify-center gap-space-xs py-2.5 px-space-md rounded-lg bg-status-em-andamento text-on-primary font-label-md text-label-md shadow-sm hover:bg-secondary transition-colors" href="cadastro-obra.html"><span class="material-symbols-outlined text-[18px]">add</span><span>Nova Obra</span></a></div><nav class="flex flex-col gap-space-xs px-space-md mt-space-sm"><a class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-subtle hover:text-on-surface transition-colors font-label-md text-label-md" href="../index.html"><span class="material-symbols-outlined text-[20px]">grid_view</span><span>Visão Geral</span></a><a aria-current="page" class="flex items-center gap-space-sm px-space-md py-2.5 transition-colors bg-surface-container-high text-on-surface font-semibold rounded-lg" href="obras.html"><span class="material-symbols-outlined text-[20px]">foundation</span><span>Obras</span></a><a class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-subtle hover:text-on-surface transition-colors font-label-md text-label-md" href="profissionais.html"><span class="material-symbols-outlined text-[20px]">badge</span><span>Profissionais</span></a></nav></div><div class="p-space-md bg-surface-card"><div class="flex items-center gap-space-sm p-space-sm rounded-lg bg-surface-subtle"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><div class="flex flex-col min-w-0 flex-1"><span class="font-label-sm text-label-sm text-on-surface truncate user-display-name">Eng. Lucas Silva</span><span class="font-caption text-caption text-on-surface-variant truncate user-display-role">Administrador</span></div><a class="text-on-surface-variant hover:text-error transition-colors p-1" data-action="logout" href="#" title="Encerrar Sessão"><span class="material-symbols-outlined text-[18px]">logout</span></a></div></div></aside><div class="pl-64"><header class="fixed top-0 left-64 right-0 h-16 bg-surface-card/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-40 flex items-center justify-between px-space-xl"><div class="flex items-center gap-space-sm"><span class="font-caption text-caption uppercase text-on-surface-variant tracking-wider">Plataforma Técnica de Engenharia</span></div><div class="flex items-center gap-space-md"><div class="relative flex items-center"><span class="material-symbols-outlined absolute left-3 text-on-surface-variant text-[18px]">search</span><input class="w-72 h-10 pl-9 pr-space-md rounded-lg bg-surface-subtle font-body-sm text-body-sm text-on-surface placeholder:text-outline focus:outline-none focus:ring-1 focus:ring-primary-container" placeholder="Buscar obras, etapas, fornecedores..." type="text"/></div></div></header><main class="relative pt-16 w-full px-space-xl py-space-lg bg-surface-canvas min-h-screen"><div class="flex flex-col w-full gap-space-lg">
+</head><body class="bg-surface-canvas font-body-md text-on-surface antialiased"><aside class="fixed left-0 top-0 h-full w-64 bg-surface-card z-50 flex flex-col justify-between shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex flex-col"><div class="h-16 px-space-lg flex items-center gap-space-sm"><img alt="Civil Connection Logo" class="h-8 w-auto object-contain" src="../assets/images/civil_connection_logo.png"/><div class="flex flex-col"><span class="font-title-md text-title-md text-primary tracking-tight">Civil Connection</span><span class="font-caption text-caption text-on-surface-variant uppercase tracking-wider">Gestão Integrada</span></div></div><div class="px-space-md py-space-sm"><a class="w-full flex items-center justify-center gap-space-xs py-2.5 px-space-md rounded-lg bg-status-em-andamento text-on-primary font-label-md text-label-md shadow-sm hover:bg-secondary transition-colors" href="cadastro-obra.html"><span class="material-symbols-outlined text-[18px]">add</span><span>Nova Obra</span></a></div><nav class="flex flex-col gap-space-xs px-space-md mt-space-sm"><a class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-subtle hover:text-on-surface transition-colors font-label-md text-label-md" href="../index.html"><span class="material-symbols-outlined text-[20px]">grid_view</span><span>Visão Geral</span></a><a aria-current="page" class="flex items-center gap-space-sm px-space-md py-2.5 transition-colors bg-surface-container-high text-on-surface font-semibold rounded-lg" href="obras.html"><span class="material-symbols-outlined text-[20px]">foundation</span><span>Obras</span></a><a class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-subtle hover:text-on-surface transition-colors font-label-md text-label-md" href="agenda.html"><span class="material-symbols-outlined text-[20px]">calendar_month</span><span>Agenda</span></a><a class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-subtle hover:text-on-surface transition-colors font-label-md text-label-md" href="profissionais.html"><span class="material-symbols-outlined text-[20px]">badge</span><span>Profissionais</span></a><a class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-subtle hover:text-on-surface transition-colors font-label-md text-label-md" href="relatorios.html"><span class="material-symbols-outlined text-[20px]">description</span><span>Relatórios</span></a></nav></div><div class="p-space-md bg-surface-card"><div class="flex items-center gap-space-sm p-space-sm rounded-lg bg-surface-subtle"><div class="w-9 h-9 rounded-full bg-primary flex items-center justify-center shrink-0 user-avatar-container cursor-pointer overflow-hidden shadow-sm" title="Clique para alterar foto de perfil"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><div class="flex flex-col min-w-0 flex-1"><span class="font-label-sm text-label-sm text-on-surface truncate user-display-name cursor-pointer" title="Clique para alterar foto de perfil">Eng. Lucas Silva</span><span class="font-caption text-caption text-on-surface-variant truncate user-display-role">Administrador</span></div><a class="text-on-surface-variant hover:text-error transition-colors p-1" data-action="logout" href="#" title="Encerrar Sessão"><span class="material-symbols-outlined text-[18px]">logout</span></a></div></div></aside><div class="pl-64"><header class="fixed top-0 left-64 right-0 h-16 bg-surface-card/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-40 flex items-center justify-between px-space-xl"><div class="flex items-center gap-space-sm"><span class="font-caption text-caption uppercase text-on-surface-variant tracking-wider">Plataforma Técnica de Engenharia</span></div><div class="flex items-center gap-space-md"><div class="relative flex items-center"><span class="material-symbols-outlined absolute left-3 text-on-surface-variant text-[18px]">search</span><input class="w-72 h-10 pl-9 pr-space-md rounded-lg bg-surface-subtle font-body-sm text-body-sm text-on-surface placeholder:text-outline focus:outline-none focus:ring-1 focus:ring-primary-container" placeholder="Buscar obras, etapas, fornecedores..." type="text"/></div></div></header><main class="relative pt-16 w-full px-space-xl py-space-lg bg-surface-canvas min-h-screen"><div class="flex flex-col w-full gap-space-lg">
 <div class="flex items-center justify-between">
 <a class="inline-flex items-center gap-space-xs text-on-surface-variant hover:text-on-surface transition-colors font-label-md text-label-md group" href="obras.html">
 <span class="material-symbols-outlined text-[18px] group-hover:-translate-x-0.5 transition-transform">arrow_back</span>
-<span>Voltar para Obras</span>
+<span>Voltar para Gestão de Obras</span>
 </a>
-<button class="inline-flex items-center gap-space-xs px-space-md py-2 rounded-lg bg-status-em-andamento hover:bg-secondary text-on-primary font-label-md text-label-md shadow-sm transition-colors" onclick="document.getElementById('modal-nova-etapa').classList.remove('hidden')" type="button">
-<span class="material-symbols-outlined text-[18px]">add</span>
-<span>Adicionar Etapa</span>
+</div>
+
+<!-- Container do Cabeçalho da Obra -->
+<div id="detalhes-obra-container">
+<!-- Renderizado dinamicamente via js/obras.js -->
+</div>
+
+<!-- Navegação por Abas -->
+<div class="border-b border-border-subtle flex items-center gap-space-md">
+<button class="py-3 px-space-md font-label-md text-label-md text-status-em-andamento border-b-2 border-status-em-andamento font-semibold" id="tab-btn-etapas" type="button">
+<span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-[18px]">view_timeline</span> Acompanhamento &amp; Tarefas</span>
+</button>
+<button class="py-3 px-space-md font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors" id="tab-btn-diario" type="button">
+<span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-[18px]">edit_note</span> Diário de Obra &amp; Fotos</span>
+</button>
+<button class="py-3 px-space-md font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors" id="tab-btn-equipe" type="button">
+<span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-[18px]">group</span> Equipe &amp; Profissionais</span>
+</button>
+<button class="py-3 px-space-md font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors" id="tab-btn-historico" type="button">
+<span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-[18px]">history</span> Histórico &amp; Auditoria</span>
 </button>
 </div>
 
-<div id="detalhes-obra-container">
-<!-- Detalhes da obra carregados via js/obras.js -->
+<!-- Conteúdo Aba 1: Etapas e Tarefas -->
+<div class="flex flex-col gap-space-md" id="tab-content-etapas">
+<div class="flex items-center justify-between">
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold">Cronograma de Etapas Técnicas</h3>
+<button class="inline-flex items-center gap-space-xs px-space-md py-2 rounded-lg bg-status-em-andamento hover:bg-secondary text-on-primary font-label-md text-label-md shadow-sm transition-colors" onclick="document.getElementById('modal-nova-etapa').classList.remove('hidden')" type="button">
+<span class="material-symbols-outlined text-[18px]">add</span>
+<span>Cadastrar Etapa</span>
+</button>
+</div>
+<div class="flex flex-col gap-space-md" id="lista-etapas-obra">
+<!-- Renderizado dinamicamente via js/etapas.js -->
+</div>
+</div>
+
+<!-- Conteúdo Aba 2: Diário e Anexos -->
+<div class="flex flex-col gap-space-lg hidden" id="tab-content-diario">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-md">
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold">Diário de Canteiro e Galeria de Fotos</h3>
+<div class="flex items-center gap-space-sm">
+<button class="inline-flex items-center gap-space-xs px-space-md py-2 rounded-lg bg-surface-card border border-border-subtle text-on-surface font-label-md text-label-md shadow-sm hover:bg-surface-subtle transition-colors" onclick="document.getElementById('modal-novo-anexo').classList.remove('hidden')" type="button">
+<span class="material-symbols-outlined text-[18px]">add_a_photo</span>
+<span>Anexar Foto / Doc</span>
+</button>
+<button class="inline-flex items-center gap-space-xs px-space-md py-2 rounded-lg bg-status-em-andamento hover:bg-secondary text-on-primary font-label-md text-label-md shadow-sm transition-colors" onclick="document.getElementById('modal-novo-diario').classList.remove('hidden')" type="button">
+<span class="material-symbols-outlined text-[18px]">post_add</span>
+<span>Novo Registro Diário</span>
+</button>
+</div>
 </div>
 
 <div class="flex flex-col gap-space-md">
-<h2 class="font-headline-sm text-headline-sm text-on-surface tracking-tight">Cronograma de Etapas</h2>
-<div class="flex flex-col gap-space-sm" id="lista-etapas-obra">
-<!-- Etapas carregadas via js/etapas.js -->
+<h4 class="font-title-md text-title-md text-on-surface font-bold">Fotografias &amp; Documentos da Obra</h4>
+<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-space-md" id="lista-documentos-obra">
+<!-- Renderizado dinamicamente via js/etapas.js -->
+</div>
+</div>
+
+<div class="flex flex-col gap-space-md mt-space-md">
+<h4 class="font-title-md text-title-md text-on-surface font-bold">Histórico do Diário de Bordo</h4>
+<div class="flex flex-col gap-space-sm" id="lista-diario-obra">
+<!-- Renderizado dinamicamente via js/etapas.js -->
+</div>
+</div>
+</div>
+
+<!-- Conteúdo Aba 3: Equipe -->
+<div class="flex flex-col gap-space-md hidden" id="tab-content-equipe">
+<div class="flex items-center justify-between">
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold">Equipe Técnica e Fornecedores Alocados</h3>
+<button class="inline-flex items-center gap-space-xs px-space-md py-2 rounded-lg bg-status-em-andamento hover:bg-secondary text-on-primary font-label-md text-label-md shadow-sm transition-colors" onclick="abrirModalAssociarProfissional()" type="button">
+<span class="material-symbols-outlined text-[18px]">person_add</span>
+<span>Vincular Profissional</span>
+</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-md" id="lista-equipe-obra">
+<!-- Renderizado dinamicamente via js/etapas.js -->
+</div>
+</div>
+
+<!-- Conteúdo Aba 4: Histórico -->
+<div class="flex flex-col gap-space-md hidden" id="tab-content-historico">
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold">Registro Geral de Auditoria e Alterações</h3>
+<div class="flex flex-col gap-space-sm" id="lista-historico-obra">
+<!-- Renderizado dinamicamente via js/etapas.js -->
 </div>
 </div>
 
@@ -34,12 +107,12 @@
 <div class="fixed inset-0 z-50 flex items-center justify-center bg-primary/40 backdrop-blur-sm hidden" id="modal-nova-etapa">
 <div class="bg-surface-card rounded-xl shadow-xl w-full max-w-lg p-space-lg mx-4 flex flex-col gap-space-md">
 <div class="flex items-center justify-between">
-<h3 class="font-headline-sm text-headline-sm text-on-surface">Cadastrar Nova Etapa</h3>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold">Cadastrar Nova Etapa</h3>
 <button class="p-1 rounded-lg hover:bg-surface-subtle text-on-surface-variant" onclick="document.getElementById('modal-nova-etapa').classList.add('hidden')" type="button">
 <span class="material-symbols-outlined text-[20px]">close</span>
 </button>
 </div>
-<form class="flex flex-col gap-space-md" onsubmit="cadastrarNovaEtapa(event)">
+<form class="flex flex-col gap-space-md" id="form-nova-etapa" onsubmit="cadastrarNovaEtapa(event)">
 <div class="flex flex-col gap-1.5">
 <label class="font-label-sm text-label-sm text-on-surface" for="nome-etapa">Nome da Etapa *</label>
 <input class="h-10 px-3.5 rounded-lg bg-surface-subtle text-body-md text-on-surface focus:outline-none" id="nome-etapa" required="" type="text"/>
@@ -69,4 +142,75 @@
 </form>
 </div>
 </div>
+
+<!-- Modal Novo Registro Diário -->
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-primary/40 backdrop-blur-sm hidden" id="modal-novo-diario">
+<div class="bg-surface-card rounded-xl shadow-xl w-full max-w-lg p-space-lg mx-4 flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold">Novo Registro no Diário de Obra</h3>
+<button class="p-1 rounded-lg hover:bg-surface-subtle text-on-surface-variant" onclick="document.getElementById('modal-novo-diario').classList.add('hidden')" type="button">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<form class="flex flex-col gap-space-md" id="form-novo-diario" onsubmit="cadastrarNovoDiarioSubmit(event)">
+<div class="grid grid-cols-2 gap-space-sm">
+<div class="flex flex-col gap-1.5">
+<label class="font-label-sm text-label-sm text-on-surface">Data do Registro *</label>
+<input class="h-10 px-3.5 rounded-lg bg-surface-subtle text-body-md text-on-surface focus:outline-none" id="diario-data" required="" type="date"/>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="font-label-sm text-label-sm text-on-surface">Condição do Clima</label>
+<select class="h-10 px-3.5 rounded-lg bg-surface-subtle text-body-md text-on-surface focus:outline-none" id="diario-clima">
+<option value="Ensolarado">Ensolarado</option>
+<option value="Nublado">Nublado</option>
+<option value="Chuvoso">Chuvoso</option>
+<option value="Instável">Instável</option>
+</select>
+</div>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="font-label-sm text-label-sm text-on-surface">Resumo das Atividades Executadas *</label>
+<textarea class="p-3 rounded-lg bg-surface-subtle text-body-md text-on-surface focus:outline-none" id="diario-resumo" required="" rows="4"></textarea>
+</div>
+<div class="flex items-center justify-end gap-space-sm pt-space-xs">
+<button class="px-space-md py-2 rounded-lg bg-surface-subtle text-on-surface font-label-md text-label-md" onclick="document.getElementById('modal-novo-diario').classList.add('hidden')" type="button">Cancelar</button>
+<button class="px-space-md py-2 rounded-lg bg-status-em-andamento text-on-primary font-label-md text-label-md shadow-sm" type="submit">Salvar Registro</button>
+</div>
+</form>
+</div>
+</div>
+
+<!-- Modal Novo Anexo / Foto -->
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-primary/40 backdrop-blur-sm hidden" id="modal-novo-anexo">
+<div class="bg-surface-card rounded-xl shadow-xl w-full max-w-lg p-space-lg mx-4 flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold">Anexar Fotografia ou Relatório</h3>
+<button class="p-1 rounded-lg hover:bg-surface-subtle text-on-surface-variant" onclick="document.getElementById('modal-novo-anexo').classList.add('hidden')" type="button">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<form class="flex flex-col gap-space-md" id="form-novo-anexo" onsubmit="anexarFotoDocumentoSubmit(event)">
+<div class="flex flex-col gap-1.5">
+<label class="font-label-sm text-label-sm text-on-surface">Título do Arquivo *</label>
+<input class="h-10 px-3.5 rounded-lg bg-surface-subtle text-body-md text-on-surface focus:outline-none" id="anexo-titulo" placeholder="Ex: Fotografia Concretagem Laje 5" required="" type="text"/>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="font-label-sm text-label-sm text-on-surface">Tipo de Anexo</label>
+<select class="h-10 px-3.5 rounded-lg bg-surface-subtle text-body-md text-on-surface focus:outline-none" id="anexo-tipo">
+<option value="imagem">Fotografia / Imagem</option>
+<option value="documento">Documento / Relatório PDF</option>
+</select>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="font-label-sm text-label-sm text-on-surface">URL do Arquivo *</label>
+<input class="h-10 px-3.5 rounded-lg bg-surface-subtle text-body-md text-on-surface focus:outline-none" id="anexo-url" placeholder="https://..." required="" type="url"/>
+</div>
+<div class="flex items-center justify-end gap-space-sm pt-space-xs">
+<button class="px-space-md py-2 rounded-lg bg-surface-subtle text-on-surface font-label-md text-label-md" onclick="document.getElementById('modal-novo-anexo').classList.add('hidden')" type="button">Cancelar</button>
+<button class="px-space-md py-2 rounded-lg bg-status-em-andamento text-on-primary font-label-md text-label-md shadow-sm" type="submit">Salvar Anexo</button>
+</div>
+</form>
+</div>
+</div>
+
 </div></main></div></body></html>
