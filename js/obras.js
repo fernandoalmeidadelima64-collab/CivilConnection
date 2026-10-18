@@ -100,12 +100,14 @@ function renderCardObra(o) {
 
     const st = statusConfig[o.status] || statusConfig['planejamento'];
     const progresso = Math.min(100, Math.max(0, Number(o.progresso) || 0));
-    const fotoCapa = o.foto_capa_url || 'https://images.unsplash.com/photo-1541888946425-d0fbb186a5b3?auto=format&fit=crop&w=800&q=80';
+
+    const placeholder = '../assets/images/placeholder-obra.svg';
+    const fotoCapa = typeof getObraImagemUrl === 'function' ? getObraImagemUrl(o.foto_capa_url, placeholder) : (o.foto_capa_url || placeholder);
 
     return `
         <div class="bg-surface-card rounded-xl shadow-sm border border-border-subtle hover:shadow-md transition-all flex flex-col justify-between overflow-hidden">
             <div class="relative h-40 w-full bg-surface-subtle overflow-hidden">
-                <img src="${fotoCapa}" alt="${o.nome}" class="w-full h-full object-cover" />
+                <img src="${fotoCapa}" alt="${o.nome}" loading="lazy" onerror="this.onerror=null; this.src='${placeholder}';" class="w-full h-full object-cover text-transparent text-[0px] bg-surface-subtle" />
                 <div class="absolute top-3 right-3">
                     <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full font-caption text-caption font-semibold shadow-sm ${st.class}">
                         <span class="material-symbols-outlined text-[14px]">${st.icon}</span>
@@ -188,12 +190,14 @@ async function carregarDetalhesObra() {
             'concluida': { label: 'Concluída', class: 'bg-green-100 text-status-concluida', icon: 'task_alt' }
         };
         const st = statusConfig[obra.status] || statusConfig['planejamento'];
-        const fotoCapa = obra.foto_capa_url || 'https://images.unsplash.com/photo-1541888946425-d0fbb186a5b3?auto=format&fit=crop&w=800&q=80';
+
+        const placeholder = '../assets/images/placeholder-obra.svg';
+        const fotoCapa = typeof getObraImagemUrl === 'function' ? getObraImagemUrl(obra.foto_capa_url, placeholder) : (obra.foto_capa_url || placeholder);
 
         container.innerHTML = `
             <div class="bg-surface-card rounded-xl shadow-sm border border-border-subtle overflow-hidden flex flex-col gap-space-lg mb-space-lg">
                 <div class="relative h-56 w-full bg-surface-subtle overflow-hidden">
-                    <img src="${fotoCapa}" alt="${obra.nome}" class="w-full h-full object-cover" />
+                    <img src="${fotoCapa}" alt="${obra.nome}" loading="lazy" onerror="this.onerror=null; this.src='${placeholder}';" class="w-full h-full object-cover text-transparent text-[0px] bg-surface-subtle" />
                     <div class="absolute inset-0 bg-gradient-to-t from-primary/80 via-primary/30 to-transparent flex items-end p-space-xl">
                         <div class="flex flex-col sm:flex-row sm:items-end justify-between w-full gap-space-md text-on-primary">
                             <div class="flex flex-col">

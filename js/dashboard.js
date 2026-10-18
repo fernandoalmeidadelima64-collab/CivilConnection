@@ -56,13 +56,14 @@ async function carregarDashboardMetrics() {
 
 function renderDashboardObraRow(o) {
     const prog = Math.min(100, Math.max(0, Number(o.progresso) || 0));
-    const foto = o.foto_capa_url || 'https://images.unsplash.com/photo-1541888946425-d0fbb186a5b3?auto=format&fit=crop&w=800&q=80';
+    const placeholder = 'assets/images/placeholder-obra.svg';
+    const foto = typeof getObraImagemUrl === 'function' ? getObraImagemUrl(o.foto_capa_url, placeholder) : (o.foto_capa_url || placeholder);
 
     return `
         <div class="p-space-md bg-surface-card rounded-xl border border-border-subtle flex flex-col sm:flex-row sm:items-center justify-between gap-space-md shadow-sm hover:shadow transition-shadow">
             <div class="flex items-center gap-space-md">
                 <div class="w-12 h-12 rounded-lg bg-surface-subtle overflow-hidden shrink-0">
-                    <img src="${foto}" alt="${o.nome}" class="w-full h-full object-cover" />
+                    <img src="${foto}" alt="${o.nome}" loading="lazy" onerror="this.onerror=null; this.src='${placeholder}';" class="w-full h-full object-cover text-transparent text-[0px] bg-surface-subtle" />
                 </div>
                 <div class="flex flex-col">
                     <span class="font-title-md text-title-md text-on-surface font-bold">${o.nome}</span>
