@@ -762,6 +762,7 @@ main {
 .cc-quebra {
     overflow-wrap: anywhere;
     word-break: break-word;
+    hyphens: auto;
 }
 
 /* Cards de obra/agendamento/profissional em telas pequenas. */
