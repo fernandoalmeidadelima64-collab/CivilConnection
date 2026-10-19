@@ -16,8 +16,8 @@
    ========================================================================== */
 
 window.CIVIL_CONNECTION_CONFIG = window.CIVIL_CONNECTION_CONFIG || {
-    supabaseUrl: '',
-    supabaseAnonKey: '',
+    supabaseUrl: 'https://znnctmfnubammvgipozs.supabase.co',
+    supabaseAnonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpubmN0bWZudWJhbW12Z2lwb3pzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTEzMDQ1MTAsImV4cCI6MjEwNjg4MDUxMH0.DRXGa8siIFr2MGnBtBODgS7kkPdSCSVUtmc0E7-vmSM',
     // Bucket público do Supabase Storage usado pelos anexos das obras.
     // Crie o bucket com as políticas de docs/storage-documentos.sql.
     bucketDocumentos: 'documentos-obra'
