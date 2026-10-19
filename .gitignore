@@ -1,0 +1,10 @@
+# Dependências e artefatos locais
+node_modules/
+test-results/
+playwright-report/
+blob-report/
+.DS_Store
+
+# Evita subir credenciais locais
+.env
+.env.*
