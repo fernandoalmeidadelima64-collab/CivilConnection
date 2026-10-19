@@ -1,4 +1,29 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
-  <rect width="200" height="200" rx="16" fill="#F1F5F9"/>
-  <path d="M60 160V60h80v100H60zm16-84h12v12H76V76zm32 0h12v12h-12V76zm-32 28h12v12H76v-12zm32 0h12v12h-12v-12zm-32 28h12v12H76v-12zm32 0h12v12h-12v-12z" fill="#E8651B"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img" aria-label="Obra sem foto de capa">
+  <defs>
+    <linearGradient id="fundo" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F8FAFC"/>
+      <stop offset="1" stop-color="#E2E8F0"/>
+    </linearGradient>
+    <pattern id="grade" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0v40" fill="none" stroke="#CBD5E1" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="800" height="450" fill="url(#fundo)"/>
+  <rect width="800" height="450" fill="url(#grade)" opacity="0.45"/>
+  <g transform="translate(400 210)">
+    <path d="M-60 60V-50h120v110z" fill="#FFFFFF" stroke="#94A3B8" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M-92 60V-6h32v66zM60 60V-20h32v80z" fill="#F1F5F9" stroke="#94A3B8" stroke-width="4" stroke-linejoin="round"/>
+    <g fill="#E8651B">
+      <rect x="-38" y="-32" width="20" height="20" rx="2"/>
+      <rect x="-8" y="-32" width="20" height="20" rx="2"/>
+      <rect x="22" y="-32" width="20" height="20" rx="2"/>
+      <rect x="-38" y="-2" width="20" height="20" rx="2"/>
+      <rect x="-8" y="-2" width="20" height="20" rx="2"/>
+      <rect x="22" y="-2" width="20" height="20" rx="2"/>
+      <rect x="-38" y="28" width="20" height="32" rx="2"/>
+      <rect x="22" y="28" width="20" height="32" rx="2"/>
+    </g>
+    <rect x="-92" y="60" width="184" height="8" rx="2" fill="#94A3B8"/>
+  </g>
+  <text x="400" y="352" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="600" fill="#64748B">Sem foto de capa</text>
 </svg>
