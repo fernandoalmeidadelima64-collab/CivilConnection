@@ -124,7 +124,7 @@ function escaparCampoCsv(valor) {
 
 async function exportarRelatorioCSV() {
     try {
-        const obras = relatorioObras.length ? relatorioObras : await window.dbService.getObras();
+        const obras = relatorioObras.length ? relatorioObras : await window.dbService.getObras({ includeDeleted: false });
         if (!obras.length) {
             window.ccUI.mostrarAviso('Não há obras para exportar.', 'aviso');
             return;

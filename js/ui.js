@@ -120,7 +120,8 @@
     }
 
     function pluralizar(quantidade, singular, plural) {
-        return `${quantidade} ${quantidade === 1 ? singular : plural}`;
+        const n = Number(quantidade) || 0;
+        return `${n} ${n === 1 ? singular : plural}`;
     }
 
     function nomeStatusObra(status) {

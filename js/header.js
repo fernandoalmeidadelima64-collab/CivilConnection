@@ -31,7 +31,16 @@
             const emPaginas = window.location.pathname.includes('/pages/');
             const destino = new URL(emPaginas ? 'obras.html' : 'pages/obras.html', window.location.href);
             if (termo) destino.searchParams.set('busca', termo);
+            else destino.searchParams.delete('busca');
             window.location.href = destino.href;
+        });
+        // Limpa busca se campo for esvaziado e Enter pressionado sem termo
+        campo.addEventListener('search', () => {
+            if (!campo.value.trim()) {
+                const emPaginas = window.location.pathname.includes('/pages/');
+                const destino = new URL(emPaginas ? 'obras.html' : 'pages/obras.html', window.location.href);
+                destino.searchParams.delete('busca');
+            }
         });
     }
 
