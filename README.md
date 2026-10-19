@@ -27,6 +27,11 @@ dependências estão versionadas em `assets/vendor/` e `assets/fonts/`.
 3. Para anexos, execute `docs/storage-documentos.sql` (cria o bucket público
    `documentos-obra` com upload restrito a usuários autenticados).
 
+O cadastro público só permite perfis de cliente ou profissional. Contas de
+administrador devem ser atribuídas por um operador confiável no Supabase; a
+função de criação de perfil também valida isso no banco. Acesso SQL anônimo é
+revogado para evitar exposição de dados de contato do diretório profissional.
+
 Detalhes em [`docs/CONFIGURACAO.md`](docs/CONFIGURACAO.md).
 
 Sem configuração válida o site **não** exibe dados de exemplo: ele leva o
