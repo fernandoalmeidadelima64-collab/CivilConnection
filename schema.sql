@@ -214,9 +214,6 @@ CREATE INDEX IF NOT EXISTS idx_agendamentos_obra ON public.agendamentos (obra_id
 CREATE INDEX IF NOT EXISTS idx_diario_obra ON public.diario_obra (obra_id);
 CREATE INDEX IF NOT EXISTS idx_documentos_obra ON public.documentos_obra (obra_id);
 CREATE INDEX IF NOT EXISTS idx_historico_obra ON public.historico_obra (obra_id);
-CREATE INDEX IF NOT EXISTS idx_obras_responsavel ON public.obras (responsavel_id);
-CREATE INDEX IF NOT EXISTS idx_agendamentos_responsavel ON public.agendamentos (responsavel_id);
-CREATE INDEX IF NOT EXISTS idx_tarefas_responsavel ON public.tarefas_obra (responsavel_id);
 
 -- 5. FUNÇÕES E TRIGGERS DE ATUALIZAÇÃO
 CREATE OR REPLACE FUNCTION public.atualizar_timestamp()
@@ -318,7 +315,7 @@ DROP POLICY IF EXISTS "Inserir profissional autenticado" ON public.profissionais
 CREATE POLICY "Inserir profissional autenticado" ON public.profissionais FOR INSERT WITH CHECK (auth.uid() IS NOT NULL);
 
 DROP POLICY IF EXISTS "Atualizar profissional proprio" ON public.profissionais;
-CREATE POLICY "Atualizar profissional proprio" ON public.profissionais FOR UPDATE USING (auth.uid() IS NOT NULL) WITH CHECK (auth.uid() IS NOT NULL);
+CREATE POLICY "Atualizar profissional proprio" ON public.profissionais FOR UPDATE USING (auth.uid() = usuario_id OR auth.uid() IS NOT NULL);
 
 -- POLÍTICAS RLS PARA OBRAS
 DROP POLICY IF EXISTS "Leitura de obras ativas" ON public.obras;
@@ -340,39 +337,23 @@ DROP POLICY IF EXISTS "Gerenciar etapas autenticado" ON public.etapas_obra;
 CREATE POLICY "Gerenciar etapas autenticado" ON public.etapas_obra FOR ALL USING (auth.uid() IS NOT NULL);
 
 DROP POLICY IF EXISTS "Acesso tarefas" ON public.tarefas_obra;
-CREATE POLICY "Leitura publica de tarefas" ON public.tarefas_obra FOR SELECT USING (true);
-DROP POLICY IF EXISTS "Gestao tarefas autenticado" ON public.tarefas_obra;
-CREATE POLICY "Gestao tarefas autenticado" ON public.tarefas_obra FOR ALL USING (auth.uid() IS NOT NULL) WITH CHECK (auth.uid() IS NOT NULL);
+CREATE POLICY "Acesso tarefas" ON public.tarefas_obra FOR ALL USING (auth.uid() IS NOT NULL OR true);
 
 DROP POLICY IF EXISTS "Acesso obra_profissionais" ON public.obra_profissionais;
 CREATE POLICY "Acesso obra_profissionais" ON public.obra_profissionais FOR ALL USING (true);
--- Reforço: escrita exige autenticação, leitura pública para indicadores
-DROP POLICY IF EXISTS "Escrita obra_profissionais autenticado" ON public.obra_profissionais;
-CREATE POLICY "Escrita obra_profissionais autenticado" ON public.obra_profissionais FOR INSERT WITH CHECK (auth.uid() IS NOT NULL);
-DROP POLICY IF EXISTS "Remocao obra_profissionais autenticado" ON public.obra_profissionais;
-CREATE POLICY "Remocao obra_profissionais autenticado" ON public.obra_profissionais FOR DELETE USING (auth.uid() IS NOT NULL);
 
 DROP POLICY IF EXISTS "Acesso agendamentos" ON public.agendamentos;
-CREATE POLICY "Leitura publica de agendamentos" ON public.agendamentos FOR SELECT USING (true);
-DROP POLICY IF EXISTS "Gestao agendamentos autenticado" ON public.agendamentos;
-CREATE POLICY "Gestao agendamentos autenticado" ON public.agendamentos FOR ALL USING (auth.uid() IS NOT NULL) WITH CHECK (auth.uid() IS NOT NULL);
+CREATE POLICY "Acesso agendamentos" ON public.agendamentos FOR ALL USING (true);
 
 DROP POLICY IF EXISTS "Acesso diario_obra" ON public.diario_obra;
-CREATE POLICY "Leitura publica diario" ON public.diario_obra FOR SELECT USING (true);
-DROP POLICY IF EXISTS "Escrita diario autenticado" ON public.diario_obra;
-CREATE POLICY "Escrita diario autenticado" ON public.diario_obra FOR INSERT WITH CHECK (auth.uid() IS NOT NULL);
+CREATE POLICY "Acesso diario_obra" ON public.diario_obra FOR ALL USING (true);
 
 DROP POLICY IF EXISTS "Acesso documentos_obra" ON public.documentos_obra;
-CREATE POLICY "Leitura publica documentos" ON public.documentos_obra FOR SELECT USING (true);
-DROP POLICY IF EXISTS "Escrita documentos autenticado" ON public.documentos_obra;
-CREATE POLICY "Escrita documentos autenticado" ON public.documentos_obra FOR INSERT WITH CHECK (auth.uid() IS NOT NULL);
+CREATE POLICY "Acesso documentos_obra" ON public.documentos_obra FOR ALL USING (true);
 
 DROP POLICY IF EXISTS "Acesso historico_obra" ON public.historico_obra;
-CREATE POLICY "Leitura historico autenticado" ON public.historico_obra FOR SELECT USING (auth.uid() IS NOT NULL);
-DROP POLICY IF EXISTS "Escrita historico autenticado" ON public.historico_obra;
-CREATE POLICY "Escrita historico autenticado" ON public.historico_obra FOR INSERT WITH CHECK (auth.uid() IS NOT NULL);
+CREATE POLICY "Acesso historico_obra" ON public.historico_obra FOR ALL USING (true);
 
 -- 8. PERMISSÕES
 GRANT USAGE ON SCHEMA public TO anon, authenticated;
 GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO anon, authenticated;
-GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO anon, authenticated;

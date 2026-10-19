@@ -97,15 +97,6 @@ async function carregarProfissionais() {
         if (!busca && !especialidade && !cidade && !tipoRegistro) {
             atualizarOpcoesFiltro('filtro-especialidade', profissionaisCarregados.map((item) => item.especialidade), 'Todas as especialidades');
             atualizarOpcoesFiltro('filtro-cidade', profissionaisCarregados.map((item) => item.cidade), 'Todas as cidades');
-        } else {
-            // Mantém opções coerentes mesmo com filtro ativo, sem sobrescrever a seleção do usuário
-            window.dbService.getProfissionais().then((todos) => {
-                const aindaFiltrado = (document.getElementById('busca-profissional')?.value || '').trim() || document.getElementById('filtro-especialidade')?.value || document.getElementById('filtro-cidade')?.value || document.getElementById('filtro-tipo-registro')?.value;
-                if (aindaFiltrado) {
-                    atualizarOpcoesFiltro('filtro-especialidade', todos.map((item) => item.especialidade), 'Todas as especialidades');
-                    atualizarOpcoesFiltro('filtro-cidade', todos.map((item) => item.cidade), 'Todas as cidades');
-                }
-            }).catch(() => {});
         }
 
         if (!profissionaisCarregados.length) {
@@ -417,9 +408,7 @@ function setupFormCadastroProfissional(form) {
         const descricao = (document.getElementById('descricao-prof')?.value || '').trim();
 
         if (!nome) return showFormError('O nome é obrigatório.');
-        if (nome.length < 2) return showFormError('O nome deve ter pelo menos 2 caracteres.');
         if (!especialidade || especialidade === '__outra__') return showFormError('Selecione ou descreva uma especialidade válida.');
-        if (especialidade.length > 120) return showFormError('A especialidade deve ter no máximo 120 caracteres.');
         adicionarOpcaoEspecialidade(especialidade);
         if (!cidade) return showFormError('A cidade de atuação é obrigatória.');
         if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showFormError('Informe um e-mail válido.');
@@ -505,42 +494,11 @@ async function carregarDetalhesProfissional() {
             });
             return;
         }
-        const tipoLabel = profissional.tipo_registro === 'fornecedor' ? 'Fornecedor' : 'Profissional';
-        const nome = window.ccUI.escapeHtml(profissional.nome || 'Sem nome');
-        const esp = window.ccUI.escapeHtml(profissional.especialidade || 'Especialidade não informada');
-        const cidade = window.ccUI.escapeHtml(profissional.cidade || 'Cidade não informada');
-        const descricao = window.ccUI.escapeHtml(profissional.descricao || 'Sem descrição cadastrada.');
-        const contato = profissional.contato ? window.ccUI.escapeHtml(profissional.contato) : 'Não informado';
-        const email = profissional.email ? window.ccUI.escapeHtml(profissional.email) : 'Não informado';
-        const doc = profissional.cnpj_cpf ? window.ccUI.escapeHtml(profissional.cnpj_cpf) : 'Não informado';
-        const isFornecedor = profissional.tipo_registro === 'fornecedor';
-        container.innerHTML = `
-            <div class="bg-surface-card rounded-xl shadow-sm border border-border-subtle p-space-xl flex flex-col gap-space-lg">
-                <div class="flex items-start gap-space-md">
-                    <div class="w-16 h-16 rounded-full ${isFornecedor ? 'bg-secondary text-on-secondary' : 'bg-primary-container text-on-primary'} flex items-center justify-center text-2xl font-bold shrink-0" aria-hidden="true">
-                        ${window.ccUI.escapeHtml(String(profissional.nome || '?').charAt(0).toUpperCase())}
-                    </div>
-                    <div class="flex flex-col flex-1 min-w-0">
-                        <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full ${isFornecedor ? 'bg-amber-100 text-amber-800' : 'bg-blue-100 text-blue-800'} font-caption text-caption font-bold self-start">${tipoLabel}</span>
-                        <h2 class="font-headline-sm text-headline-sm font-bold text-on-surface mt-1 cc-quebra">${nome}</h2>
-                        <span class="font-label-md text-label-md text-status-em-andamento font-semibold cc-quebra">${esp} — ${cidade}</span>
-                    </div>
-                </div>
-                <p class="font-body-md text-body-md text-on-surface-variant cc-quebra">${descricao}</p>
-                <dl class="grid grid-cols-1 sm:grid-cols-2 gap-space-md bg-surface-subtle p-space-md rounded-lg border border-border-subtle">
-                    <div class="flex flex-col"><dt class="font-caption text-caption uppercase text-on-surface-variant font-semibold">Contato</dt><dd class="font-body-md text-body-md text-on-surface cc-quebra">${contato}</dd></div>
-                    <div class="flex flex-col"><dt class="font-caption text-caption uppercase text-on-surface-variant font-semibold">E-mail</dt><dd class="font-body-md text-body-md text-on-surface cc-quebra">${email}</dd></div>
-                    <div class="flex flex-col"><dt class="font-caption text-caption uppercase text-on-surface-variant font-semibold">CPF / CNPJ</dt><dd class="font-body-md text-body-md text-on-surface cc-quebra">${doc}</dd></div>
-                    <div class="flex flex-col"><dt class="font-caption text-caption uppercase text-on-surface-variant font-semibold">Avaliação</dt><dd class="font-body-md text-body-md text-on-surface">${profissional.avaliacao || 5} / 5</dd></div>
-                </dl>
-                <div class="flex flex-wrap gap-space-sm pt-space-sm border-t border-border-subtle">
-                    <a href="profissionais.html" class="inline-flex items-center gap-1 px-space-md py-2 rounded-lg bg-surface-subtle hover:bg-surface-container text-on-surface font-label-md text-label-md"><span class="material-symbols-outlined text-[18px]" aria-hidden="true">arrow_back</span> Voltar</a>
-                    <button type="button" onclick="abrirModalEditarProfissional('${window.ccUI.escapeHtml(profissional.id)}')" class="inline-flex items-center gap-1 px-space-md py-2 rounded-lg bg-status-em-andamento text-on-primary font-label-md text-label-md shadow-sm"><span class="material-symbols-outlined text-[18px]" aria-hidden="true">edit</span> Editar cadastro</button>
-                </div>
-            </div>
-        `;
-        // Mantém o profissional carregado disponível para edição direta na página de detalhes
-        profissionaisCarregados = [profissional];
+        container.innerHTML = window.ccUI.estadoVazio({
+            icone: 'badge',
+            titulo: window.ccUI.escapeHtml(profissional.nome),
+            mensagem: `${window.ccUI.escapeHtml(profissional.especialidade)} — ${window.ccUI.escapeHtml(profissional.cidade)}`
+        });
     } catch (erro) {
         console.error('Erro ao carregar profissional:', erro);
         container.innerHTML = window.ccUI.estadoErro({

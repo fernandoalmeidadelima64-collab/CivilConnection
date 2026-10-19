@@ -6,7 +6,7 @@ repositório: a configuração é responsabilidade de quem faz o deploy.
 
 ## 1. Chaves públicas do projeto
 
-Edite `js/supabase-config.js` e preencha **localmente** (não commite chaves reais):
+Edite `js/supabase-config.js` e preencha:
 
 ```js
 window.CIVIL_CONNECTION_CONFIG = {
@@ -15,10 +15,6 @@ window.CIVIL_CONNECTION_CONFIG = {
     bucketDocumentos: 'documentos-obra'
 };
 ```
-
-> **Segurança:** o repositório traz placeholders (`your-project.supabase.co` / `your-anon-key`).
-> Em produção, injete a configuração via variável de ambiente ou substitua
-> o arquivo no pipeline de deploy. Nunca faça commit da chave real.
 
 Regras aplicadas pela camada `js/supabase.js`:
 
