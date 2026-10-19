@@ -585,30 +585,84 @@ const dbService = {
     async saveObra(obraData) {
         const user = await this.getCurrentUser();
 
+        // Helper para validar UUID em Supabase PostgreSQL
+        const isValidUUID = (str) => typeof str === 'string' && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(str);
+
         // Garantir limpeza da URL antes de salvar
         let rawFotoCapa = (obraData.foto_capa_url || '').trim();
         rawFotoCapa = rawFotoCapa.replace(/&amp;/g, '&');
 
+        // Tratar cliente_id: se não for UUID válido e estiver via Supabase, obter UUID do usuário autenticado no Supabase Auth
+        let clienteId = user ? user.id : null;
+        if (supabaseClient) {
+            try {
+                const { data: { user: authUser } } = await supabaseClient.auth.getUser();
+                if (authUser && authUser.id) {
+                    clienteId = authUser.id;
+                }
+            } catch (e) {
+                console.warn('Não foi possível recuperar UUID do usuário via Supabase Auth:', e);
+            }
+        }
+        if (!isValidUUID(clienteId)) {
+            clienteId = isValidUUID(user?.id) ? user.id : null;
+        }
+
+        // Sanitização do responsavel_id (deve ser UUID válido ou NULL)
+        const respId = isValidUUID(obraData.responsavel_id) ? obraData.responsavel_id : null;
+
+        // Sanitização e normalização de datas
+        const formatIsoDate = (d) => {
+            if (!d) return null;
+            const str = String(d).trim();
+            if (!str) return null;
+            // Se formato DD/MM/YYYY
+            if (/^\d{2}\/\d{2}\/\d{4}$/.test(str)) {
+                const [dia, mes, ano] = str.split('/');
+                return `${ano}-${mes.padStart(2, '0')}-${dia.padStart(2, '0')}`;
+            }
+            // Se formato YYYY-MM-DD
+            if (/^\d{4}-\d{2}-\d{2}$/.test(str)) {
+                return str;
+            }
+            const dt = new Date(str);
+            return isNaN(dt.getTime()) ? null : dt.toISOString().split('T')[0];
+        };
+
+        const dataInicio = formatIsoDate(obraData.data_inicio) || new Date().toISOString().split('T')[0];
+        const dataPrevisaoFim = formatIsoDate(obraData.data_previsao_fim);
+
         const payload = {
-            cliente_id: user ? user.id : 'u-1',
             nome: obraData.nome,
             descricao: obraData.descricao || '',
             cidade: obraData.cidade,
             status: obraData.status || 'planejamento',
             progresso: Number(obraData.progresso) || 0,
-            foto_capa_url: rawFotoCapa,
-            data_inicio: obraData.data_inicio || new Date().toISOString().split('T')[0],
-            data_previsao_fim: obraData.data_previsao_fim || null,
-            responsavel_id: obraData.responsavel_id || null,
+            foto_capa_url: rawFotoCapa || null,
+            data_inicio: dataInicio,
+            data_previsao_fim: dataPrevisaoFim,
+            responsavel_id: respId,
             deleted_at: null
         };
 
+        if (clienteId) {
+            payload.cliente_id = clienteId;
+        }
+
         let newObra;
         if (supabaseClient) {
+            if (!payload.cliente_id) {
+                throw new Error('Usuário autenticado não identificado para vincular como responsável da obra.');
+            }
             const { data, error } = await supabaseClient.from('obras').insert([payload]).select();
-            if (error) throw error;
+            if (error) {
+                console.error('Erro de inserção Supabase Obras:', error);
+                const detail = error.details || error.hint || error.message || 'Erro de integridade ou permissão no Supabase.';
+                throw new Error(detail);
+            }
             newObra = data[0];
         } else {
+            payload.cliente_id = payload.cliente_id || (user ? user.id : 'u-1');
             const lista = getLocalData('obras');
             newObra = { id: 'o-' + Date.now(), ...payload, criado_em: new Date().toISOString() };
             lista.unshift(newObra);

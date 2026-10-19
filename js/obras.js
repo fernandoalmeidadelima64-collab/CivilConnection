@@ -526,8 +526,11 @@ function setupFormCadastroObra(form) {
                 window.location.href = 'obras.html';
             }, 1200);
         } catch (err) {
-            console.error(err);
-            showObraError('Falha ao cadastrar a obra.');
+            console.error('Erro ao cadastrar obra:', err);
+            const msg = err.message || 'Não foi possível cadastrar a obra. Tente novamente.';
+            showObraError(`Não foi possível cadastrar a obra: ${msg}`);
+            const btnSubmit = form.querySelector('button[type="submit"]');
+            if (btnSubmit) btnSubmit.disabled = false;
         }
     });
 }
