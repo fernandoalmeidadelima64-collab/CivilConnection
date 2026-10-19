@@ -12,7 +12,7 @@ projeto **CivilConnection** (ref `znnctmfnubammvgipozs`, sa-east-1):
 ```js
 window.CIVIL_CONNECTION_CONFIG = {
     supabaseUrl: 'https://znnctmfnubammvgipozs.supabase.co',
-    supabaseAnonKey: 'sb_publishable_...', // chave publishable (pública)
+    supabaseAnonKey: 'eyJ...', // chave pública "anon" do projeto (legada)
     bucketDocumentos: 'documentos-obra'
 };
 ```

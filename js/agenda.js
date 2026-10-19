@@ -33,17 +33,15 @@ function setupFiltrosAgenda() {
 
 async function preencherFiltroObrasAgenda(obraSelecionada) {
     const select = document.getElementById('filtro-obra-agenda');
-    if (!select) return;
+    if (!select || select.dataset.ccPreenchido === 'true') return;
 
     try {
         const obras = await window.dbService.getObras();
-        const valorAtual = select.value || obraSelecionada || '';
         select.innerHTML = '<option value="">Todas as obras</option>' + obras
             .map((obra) => `<option value="${window.ccUI.escapeHtml(obra.id)}">${window.ccUI.escapeHtml(obra.nome)}</option>`)
             .join('');
-        if (valorAtual) select.value = valorAtual;
-        // Permite recarregar a lista quando novas obras são cadastradas sem reload manual
-        select.dataset.ccPreenchido = String(Date.now());
+        select.dataset.ccPreenchido = 'true';
+        if (obraSelecionada) select.value = obraSelecionada;
     } catch (erro) {
         console.error('Erro ao carregar obras para o filtro:', erro);
         select.innerHTML = '<option value="">Não foi possível carregar as obras</option>';
@@ -60,8 +58,7 @@ async function carregarAgenda() {
     const obraId = document.getElementById('filtro-obra-agenda')?.value || obraParametro;
     const status = document.getElementById('filtro-status-agenda')?.value || '';
 
-    // Preenche filtro de obras em paralelo, sem bloquear a listagem
-    preencherFiltroObrasAgenda(obraParametro).catch(() => {});
+    await preencherFiltroObrasAgenda(obraParametro);
 
     container.setAttribute('aria-busy', 'true');
     container.innerHTML = `<div class="col-span-full">${window.ccUI.estadoCarregando('Carregando compromissos da agenda...')}</div>`;

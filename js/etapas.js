@@ -23,30 +23,19 @@ function inicializarDetalhesObra(obraId) {
     carregarTodasAsSecoes();
 }
 
-function atualizarDataDiarioPadrao() {
-    const campoData = document.getElementById('diario-data');
-    if (campoData) campoData.value = window.ccUI.paraInputData(new Date());
-}
 function configurarFormulariosEstaticos() {
     const formEtapa = document.getElementById('form-nova-etapa');
     if (formEtapa && formEtapa.dataset.ccConfigurado !== 'true') {
         formEtapa.dataset.ccConfigurado = 'true';
         formEtapa.addEventListener('submit', cadastrarNovaEtapa);
     }
-    // Observa abertura do modal de diário para sempre sugerir a data de hoje
-    const modalDiario = document.getElementById('modal-novo-diario');
-    if (modalDiario && !modalDiario.dataset.ccDataObservada) {
-        modalDiario.dataset.ccDataObservada = 'true';
-        const observer = new MutationObserver(() => {
-            if (!modalDiario.classList.contains('hidden')) atualizarDataDiarioPadrao();
-        });
-        observer.observe(modalDiario, { attributes: true, attributeFilter: ['class'] });
-    }
 
     const formDiario = document.getElementById('form-novo-diario');
     if (formDiario && formDiario.dataset.ccConfigurado !== 'true') {
         formDiario.dataset.ccConfigurado = 'true';
         formDiario.addEventListener('submit', cadastrarNovoDiarioSubmit);
+        const campoData = document.getElementById('diario-data');
+        if (campoData && !campoData.value) campoData.value = window.ccUI.paraInputData(new Date());
     }
 
     const formAnexo = document.getElementById('form-novo-anexo');
@@ -125,16 +114,10 @@ async function carregarEtapasObra(obraId) {
     container.innerHTML = window.ccUI.estadoCarregando('Carregando etapas e atividades...');
 
     try {
-        const [resultadoEtapas, resultadoTarefas] = await Promise.allSettled([
+        const [etapas, tarefas] = await Promise.all([
             window.dbService.getEtapasByObra(obraId),
             window.dbService.getTarefasByObra(obraId)
         ]);
-        if (resultadoEtapas.status === 'rejected') throw resultadoEtapas.reason;
-        const etapas = resultadoEtapas.value;
-        const tarefas = resultadoTarefas.status === 'fulfilled' ? resultadoTarefas.value : [];
-        if (resultadoTarefas.status === 'rejected') {
-            console.warn('Falha ao carregar tarefas, exibindo etapas sem detalhamento de atividades:', resultadoTarefas.reason);
-        }
         const profissionais = await obterProfissionaisDaObra();
 
         etapasCarregadas = etapas || [];
@@ -697,7 +680,7 @@ function renderDocumentoCard(documento) {
     const placeholder = '../assets/images/placeholder-obra.svg';
     const url = typeof window.getDocumentoUrl === 'function'
         ? window.getDocumentoUrl(documento.url_arquivo)
-        : (documento.url_arquivo && /^https?:\/\//i.test(documento.url_arquivo) ? documento.url_arquivo : null);
+        : documento.url_arquivo;
     const ehImagem = documento.tipo === 'imagem';
     const imagem = typeof window.getObraImagemUrl === 'function'
         ? window.getObraImagemUrl(documento.url_arquivo, placeholder)

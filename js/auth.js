@@ -111,13 +111,12 @@ async function handleAuthSubmit(event) {
     const email = (document.getElementById('email-login')?.value || '').trim();
     const password = document.getElementById('senha-login')?.value || '';
 
-    const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
-    if (!email || !EMAIL_RE.test(email)) {
+    if (!email || !email.includes('@')) {
         showAuthError('Por favor, informe um e-mail válido.');
         return;
     }
-    if (!password || password.length < 6) {
-        showAuthError('A senha deve conter no mínimo 6 caracteres.');
+    if (!password || password.length < 4) {
+        showAuthError('A senha deve conter no mínimo 4 caracteres.');
         return;
     }
 
@@ -177,15 +176,13 @@ async function handleAuthSubmit(event) {
 
 async function handlePasswordReset(event) {
     if (event) event.preventDefault();
-    const _emailReset = (document.getElementById('email-login')?.value || '').trim();
-    const EMAIL_RESET_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
-    if (!_emailReset || !EMAIL_RESET_RE.test(_emailReset)) {
+    const email = (document.getElementById('email-login')?.value || '').trim();
+    if (!email || !email.includes('@')) {
         showAuthError('Informe seu e-mail no campo de acesso para receber o link de recuperação.');
         const campo = document.getElementById('email-login');
         if (campo) campo.focus();
         return;
     }
-    const email = _emailReset;
     try {
         await window.dbService.resetPassword(email);
         showAuthSuccess('Enviamos um link de recuperação de senha para o seu e-mail. Verifique também a caixa de spam.');
@@ -634,13 +631,3 @@ document.addEventListener('DOMContentLoaded', () => {
         feedback.setAttribute('aria-live', 'polite');
     }
 });
-
-// Expor funções necessárias para mobile.js e testes manuais
-if (typeof window !== 'undefined') {
-    window.abrirModalFotoPerfil = abrirModalFotoPerfil;
-    window.handleLogout = handleLogout;
-    window.checkAuthAndHeader = checkAuthAndHeader;
-    window.switchAuthTab = switchAuthTab;
-    window.handleAuthSubmit = handleAuthSubmit;
-    window.handlePasswordReset = handlePasswordReset;
-}

@@ -243,21 +243,16 @@ function normalizarBusca(busca) {
 function normalizarUrlHttp(valor, campo) {
     const bruto = String(valor || '').trim();
     if (!bruto) return '';
-    // Permite data:image para casos de foto_perfil_url legada, mas para capa de obra exige http(s)
     let parsed;
     try {
         parsed = new URL(bruto);
     } catch (erro) {
         throw new ErroIntegracao(`Informe uma URL válida para ${campo || 'o arquivo'}.`, { operacao: 'validar a URL' });
     }
-    // Para anexos e capas, só aceita http(s); data:image é tratado separadamente no perfil
     if (parsed.protocol !== 'https:' && parsed.protocol !== 'http:') {
-        // Se for data:image (foto de perfil legada), permite, senão exige http(s)
-        if (!/^data:image\//i.test(bruto)) {
-            throw new ErroIntegracao('A URL deve começar com https:// ou http://.', { operacao: 'validar a URL' });
-        }
+        throw new ErroIntegracao('A URL deve começar com https:// ou http://.', { operacao: 'validar a URL' });
     }
-    return parsed.href || bruto;
+    return parsed.href;
 }
 
 function respostaDeEscrita(resultado, operacao) {
@@ -840,16 +835,14 @@ const dbService = {
     async recalcularProgressoObra(obraId) {
         const etapas = await this.getEtapasByObra(obraId);
         if (!etapas.length) return null;
+
         const total = etapas.reduce((soma, etapa) => soma + (Number(etapa.progresso) || 0), 0);
         const media = Math.round(total / etapas.length);
+
         let status = 'em_andamento';
         if (media === 0) status = 'planejamento';
         else if (media === 100) status = 'concluida';
-        // Evita loop infinito: só grava se houve mudança real
-        try {
-            const atual = await this.getObraById(obraId);
-            if (atual && Number(atual.progresso) === media && atual.status === status) return atual;
-        } catch (e) {}
+
         return this.updateObraProgresso(obraId, media, status);
     },
 
@@ -1177,13 +1170,12 @@ const dbService = {
         const obrasEmAndamento = obras.filter((obra) => obra.status === 'em_andamento').length;
         const obrasConcluidas = obras.filter((obra) => obra.status === 'concluida').length;
 
-        const hojeISO = new Date().toISOString().split('T')[0];
-        const obrasAtrasadas = obras.filter((obra) => {
-            if (obra.status === 'concluida' || !obra.data_previsao_fim) return false;
-            const prevista = new Date(obra.data_previsao_fim);
-            const hoje = new Date(hojeISO);
-            return !Number.isNaN(prevista.getTime()) && prevista < hoje;
-        }).length;
+        const hoje = new Date().toISOString().split('T')[0];
+        const obrasAtrasadas = obras.filter((obra) =>
+            obra.status !== 'concluida' &&
+            obra.data_previsao_fim &&
+            obra.data_previsao_fim < hoje
+        ).length;
 
         const somaProgresso = obras.reduce((total, obra) => total + (Number(obra.progresso) || 0), 0);
         const progressoMedio = totalObras > 0 ? Math.round(somaProgresso / totalObras) : 0;
@@ -1212,26 +1204,18 @@ const dbService = {
 
 // Utilitário compartilhado para imagens de capa e miniaturas.
 function getObraImagemUrl(url, relativePrefix = 'assets/images/placeholder-obra.svg') {
-    const placeholder = relativePrefix || 'assets/images/placeholder-obra.svg';
-    const bruto = String(url || '').trim();
-    if (!bruto) return placeholder;
-    let limpa = bruto
+    const placeholder = relativePrefix;
+    if (!url) return placeholder;
+
+    let limpa = String(url).trim();
+    limpa = limpa
         .replace(/&amp;/g, '&')
         .replace(/&lt;/g, '<')
         .replace(/&gt;/g, '>')
-        .replace(/&quot;/g, '"')
-        .replace(/&#39;/g, "'");
-    // Bloqueia protocolos ativos como javascript: e data:text/html
+        .replace(/&quot;/g, '"');
+
     if (!limpa || (!/^https?:\/\//i.test(limpa) && !/^data:image\//i.test(limpa))) {
         return placeholder;
-    }
-    try {
-        const parsed = new URL(limpa);
-        if (parsed.protocol !== 'https:' && parsed.protocol !== 'http:' && !String(parsed.protocol).startsWith('data:')) {
-            return placeholder;
-        }
-    } catch (e) {
-        if (!/^data:image\//i.test(limpa)) return placeholder;
     }
     return limpa;
 }
@@ -1240,12 +1224,6 @@ function getObraImagemUrl(url, relativePrefix = 'assets/images/placeholder-obra.
 function getDocumentoUrl(url) {
     const limpa = String(url || '').trim();
     if (!limpa || !/^https?:\/\//i.test(limpa)) return null;
-    try {
-        const parsed = new URL(limpa);
-        if (parsed.protocol !== 'https:' && parsed.protocol !== 'http:') return null;
-    } catch (e) {
-        return null;
-    }
     return limpa;
 }
 
