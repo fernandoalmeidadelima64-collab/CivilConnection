@@ -520,8 +520,9 @@ const dbService = {
     async saveProfissional(profissional) {
         const client = clientSupabase();
         const usuario = await obterUsuarioAtual();
+        const usuarioId = exigirUsuarioId(usuario);
         const payload = {
-            usuario_id: usuario ? usuario.id : null,
+            usuario_id: usuarioId,
             nome: String(profissional.nome || '').trim(),
             especialidade: String(profissional.especialidade || '').trim(),
             cidade: String(profissional.cidade || '').trim(),

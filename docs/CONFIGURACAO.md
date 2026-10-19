@@ -43,6 +43,15 @@ bucket de Storage e endurecimento de grants). Para um projeto novo:
 4. As políticas de Row Level Security já vêm no `schema.sql`. Não desative o
    RLS para "resolver" erros de permissão.
 
+### Erro de permissÃ£o ao cadastrar obra como profissional
+
+Em um projeto jÃ¡ existente, execute `docs/fix-cadastro-obra-profissional.sql`
+no SQL Editor do Supabase. O script atualiza as polÃ­ticas de leitura e inserÃ§Ã£o
+de obras sem desativar o RLS. Cada conta autenticada sÃ³ pode inserir obras
+quando `cliente_id` corresponde ao prÃ³prio `auth.uid()`. Confira a consulta ao
+final do script: devem aparecer `obras_insert_autenticado` (INSERT) e
+`obras_select` (SELECT).
+
 ## 3. Supabase Storage (anexos das obras)
 
 O envio de arquivos usa o bucket público `documentos-obra`. As instruções de
