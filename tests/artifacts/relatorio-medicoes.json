@@ -1,0 +1,506 @@
+[
+  {
+    "resolucao": "320x568",
+    "pagina": "visao-geral",
+    "larguraConteudo": 320,
+    "larguraVisivel": 320,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "320x568",
+    "pagina": "obras",
+    "larguraConteudo": 320,
+    "larguraVisivel": 320,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "320x568",
+    "pagina": "obra-detalhes",
+    "larguraConteudo": 320,
+    "larguraVisivel": 320,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "320x568",
+    "pagina": "agenda",
+    "larguraConteudo": 320,
+    "larguraVisivel": 320,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "320x568",
+    "pagina": "profissionais",
+    "larguraConteudo": 320,
+    "larguraVisivel": 320,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "320x568",
+    "pagina": "relatorios",
+    "larguraConteudo": 320,
+    "larguraVisivel": 320,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "320x568",
+    "pagina": "cadastro-obra",
+    "larguraConteudo": 320,
+    "larguraVisivel": 320,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "320x568",
+    "pagina": "cadastro-profissional",
+    "larguraConteudo": 320,
+    "larguraVisivel": 320,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "320x568",
+    "pagina": "login",
+    "larguraConteudo": 320,
+    "larguraVisivel": 320,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "360x800",
+    "pagina": "visao-geral",
+    "larguraConteudo": 360,
+    "larguraVisivel": 360,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "360x800",
+    "pagina": "obras",
+    "larguraConteudo": 360,
+    "larguraVisivel": 360,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "360x800",
+    "pagina": "obra-detalhes",
+    "larguraConteudo": 360,
+    "larguraVisivel": 360,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "360x800",
+    "pagina": "agenda",
+    "larguraConteudo": 360,
+    "larguraVisivel": 360,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "360x800",
+    "pagina": "profissionais",
+    "larguraConteudo": 360,
+    "larguraVisivel": 360,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "360x800",
+    "pagina": "relatorios",
+    "larguraConteudo": 360,
+    "larguraVisivel": 360,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "360x800",
+    "pagina": "cadastro-obra",
+    "larguraConteudo": 360,
+    "larguraVisivel": 360,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "360x800",
+    "pagina": "cadastro-profissional",
+    "larguraConteudo": 360,
+    "larguraVisivel": 360,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "360x800",
+    "pagina": "login",
+    "larguraConteudo": 360,
+    "larguraVisivel": 360,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "375x812",
+    "pagina": "visao-geral",
+    "larguraConteudo": 375,
+    "larguraVisivel": 375,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "375x812",
+    "pagina": "obras",
+    "larguraConteudo": 375,
+    "larguraVisivel": 375,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "375x812",
+    "pagina": "obra-detalhes",
+    "larguraConteudo": 375,
+    "larguraVisivel": 375,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "375x812",
+    "pagina": "agenda",
+    "larguraConteudo": 375,
+    "larguraVisivel": 375,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "375x812",
+    "pagina": "profissionais",
+    "larguraConteudo": 375,
+    "larguraVisivel": 375,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "375x812",
+    "pagina": "relatorios",
+    "larguraConteudo": 375,
+    "larguraVisivel": 375,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "375x812",
+    "pagina": "cadastro-obra",
+    "larguraConteudo": 375,
+    "larguraVisivel": 375,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "375x812",
+    "pagina": "cadastro-profissional",
+    "larguraConteudo": 375,
+    "larguraVisivel": 375,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "375x812",
+    "pagina": "login",
+    "larguraConteudo": 375,
+    "larguraVisivel": 375,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "390x844",
+    "pagina": "visao-geral",
+    "larguraConteudo": 390,
+    "larguraVisivel": 390,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "390x844",
+    "pagina": "obras",
+    "larguraConteudo": 390,
+    "larguraVisivel": 390,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "390x844",
+    "pagina": "obra-detalhes",
+    "larguraConteudo": 390,
+    "larguraVisivel": 390,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "390x844",
+    "pagina": "agenda",
+    "larguraConteudo": 390,
+    "larguraVisivel": 390,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "390x844",
+    "pagina": "profissionais",
+    "larguraConteudo": 390,
+    "larguraVisivel": 390,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "390x844",
+    "pagina": "relatorios",
+    "larguraConteudo": 390,
+    "larguraVisivel": 390,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "390x844",
+    "pagina": "cadastro-obra",
+    "larguraConteudo": 390,
+    "larguraVisivel": 390,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "390x844",
+    "pagina": "cadastro-profissional",
+    "larguraConteudo": 390,
+    "larguraVisivel": 390,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "390x844",
+    "pagina": "login",
+    "larguraConteudo": 390,
+    "larguraVisivel": 390,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "430x932",
+    "pagina": "visao-geral",
+    "larguraConteudo": 430,
+    "larguraVisivel": 430,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "430x932",
+    "pagina": "obras",
+    "larguraConteudo": 430,
+    "larguraVisivel": 430,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "430x932",
+    "pagina": "obra-detalhes",
+    "larguraConteudo": 430,
+    "larguraVisivel": 430,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "430x932",
+    "pagina": "agenda",
+    "larguraConteudo": 430,
+    "larguraVisivel": 430,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "430x932",
+    "pagina": "profissionais",
+    "larguraConteudo": 430,
+    "larguraVisivel": 430,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "430x932",
+    "pagina": "relatorios",
+    "larguraConteudo": 430,
+    "larguraVisivel": 430,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "430x932",
+    "pagina": "cadastro-obra",
+    "larguraConteudo": 430,
+    "larguraVisivel": 430,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "430x932",
+    "pagina": "cadastro-profissional",
+    "larguraConteudo": 430,
+    "larguraVisivel": 430,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "430x932",
+    "pagina": "login",
+    "larguraConteudo": 430,
+    "larguraVisivel": 430,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "768x1024",
+    "pagina": "visao-geral",
+    "larguraConteudo": 768,
+    "larguraVisivel": 768,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "768x1024",
+    "pagina": "obras",
+    "larguraConteudo": 768,
+    "larguraVisivel": 768,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "768x1024",
+    "pagina": "obra-detalhes",
+    "larguraConteudo": 768,
+    "larguraVisivel": 768,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "768x1024",
+    "pagina": "agenda",
+    "larguraConteudo": 768,
+    "larguraVisivel": 768,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "768x1024",
+    "pagina": "profissionais",
+    "larguraConteudo": 768,
+    "larguraVisivel": 768,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "768x1024",
+    "pagina": "relatorios",
+    "larguraConteudo": 768,
+    "larguraVisivel": 768,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "768x1024",
+    "pagina": "cadastro-obra",
+    "larguraConteudo": 768,
+    "larguraVisivel": 768,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "768x1024",
+    "pagina": "cadastro-profissional",
+    "larguraConteudo": 768,
+    "larguraVisivel": 768,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "768x1024",
+    "pagina": "login",
+    "larguraConteudo": 768,
+    "larguraVisivel": 768,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "1024x768",
+    "pagina": "visao-geral",
+    "larguraConteudo": 1024,
+    "larguraVisivel": 1024,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "1024x768",
+    "pagina": "obras",
+    "larguraConteudo": 1024,
+    "larguraVisivel": 1024,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "1024x768",
+    "pagina": "obra-detalhes",
+    "larguraConteudo": 1024,
+    "larguraVisivel": 1024,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "1024x768",
+    "pagina": "agenda",
+    "larguraConteudo": 1024,
+    "larguraVisivel": 1024,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "1024x768",
+    "pagina": "profissionais",
+    "larguraConteudo": 1024,
+    "larguraVisivel": 1024,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "1024x768",
+    "pagina": "relatorios",
+    "larguraConteudo": 1024,
+    "larguraVisivel": 1024,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "1024x768",
+    "pagina": "cadastro-obra",
+    "larguraConteudo": 1024,
+    "larguraVisivel": 1024,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "1024x768",
+    "pagina": "cadastro-profissional",
+    "larguraConteudo": 1024,
+    "larguraVisivel": 1024,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "1024x768",
+    "pagina": "login",
+    "larguraConteudo": 1024,
+    "larguraVisivel": 1024,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "1440x900",
+    "pagina": "visao-geral",
+    "larguraConteudo": 1440,
+    "larguraVisivel": 1440,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "1440x900",
+    "pagina": "obras",
+    "larguraConteudo": 1440,
+    "larguraVisivel": 1440,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "1440x900",
+    "pagina": "obra-detalhes",
+    "larguraConteudo": 1440,
+    "larguraVisivel": 1440,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "1440x900",
+    "pagina": "agenda",
+    "larguraConteudo": 1440,
+    "larguraVisivel": 1440,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "1440x900",
+    "pagina": "profissionais",
+    "larguraConteudo": 1440,
+    "larguraVisivel": 1440,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "1440x900",
+    "pagina": "relatorios",
+    "larguraConteudo": 1440,
+    "larguraVisivel": 1440,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "1440x900",
+    "pagina": "cadastro-obra",
+    "larguraConteudo": 1440,
+    "larguraVisivel": 1440,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "1440x900",
+    "pagina": "cadastro-profissional",
+    "larguraConteudo": 1440,
+    "larguraVisivel": 1440,
+    "transbordoHorizontal": false
+  },
+  {
+    "resolucao": "1440x900",
+    "pagina": "login",
+    "larguraConteudo": 1440,
+    "larguraVisivel": 1440,
+    "transbordoHorizontal": false
+  }
+]
