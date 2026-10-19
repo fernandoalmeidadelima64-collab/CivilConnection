@@ -1,13 +1,19 @@
 <!DOCTYPE html>
 
-<html lang="pt-BR"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Sora:wght@600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "primary": "#000309", "primary-fixed-dim": "#b9c8dd", "primary-fixed": "#d5e4fa", "on-tertiary-fixed-variant": "#003ea8", "on-primary-fixed": "#0d1c2c", "inverse-surface": "#283044", "error": "#ba1a1a", "on-surface-variant": "#44474c", "on-surface": "#131b2e", "status-erro": "#DC2626", "primary-container": "#0f1e2e", "surface-container-low": "#f2f3ff", "status-concluida": "#16A34A", "surface-tint": "#516072", "outline": "#74777d", "secondary-container": "#fe752c", "on-background": "#131b2e", "on-secondary": "#ffffff", "secondary": "#a23f00", "tertiary-container": "#00194f", "surface": "#faf8ff", "surface-bright": "#faf8ff", "status-em-andamento": "#E8651B", "on-primary": "#ffffff", "inverse-on-surface": "#eef0ff", "tertiary-fixed": "#dbe1ff", "tertiary-fixed-dim": "#b4c5ff", "surface-canvas": "#F8FAFC", "surface-dim": "#d2d9f4", "background": "#faf8ff", "surface-card": "#FFFFFF", "surface-variant": "#dae2fd", "on-error-container": "#93000a", "status-pausada": "#EAB308", "status-planejamento": "#64748B", "error-container": "#ffdad6", "secondary-fixed": "#ffdbcc", "surface-subtle": "#F1F5F9", "on-secondary-container": "#5f2200", "surface-container-lowest": "#ffffff", "tertiary": "#000212", "outline-variant": "#c4c6cc", "border-focus": "#0F1E2E", "on-tertiary": "#ffffff", "on-secondary-fixed": "#351000", "on-primary-container": "#78869a", "secondary-fixed-dim": "#ffb695", "on-tertiary-fixed": "#00174b", "on-primary-fixed-variant": "#3a485a", "on-error": "#ffffff", "border-subtle": "#E2E8F0", "inverse-primary": "#b9c8dd", "surface-container-high": "#e2e7ff", "surface-container": "#eaedff", "surface-container-highest": "#dae2fd", "on-secondary-fixed-variant": "#7c2e00", "on-tertiary-container": "#4b7dff" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "margin": "2rem", "space-md": "1rem", "space-sm": "0.5rem", "gutter": "1.5rem", "space-xl": "2.5rem", "space-xs": "0.25rem", "margin-mobile": "1rem", "space-lg": "1.5rem", "space-2xl": "4rem", "gutter-mobile": "1rem" }, "fontFamily": { "headline-lg": ["Sora"], "display-mobile": ["Sora"], "headline-lg-mobile": ["Sora"], "body-sm": ["Inter"], "headline-sm": ["Sora"], "display": ["Sora"], "label-sm": ["Inter"], "title-md": ["Sora"], "label-md": ["Inter"], "caption": ["Inter"], "body-md": ["Inter"], "headline-md": ["Sora"], "body-lg": ["Inter"] }, "fontSize": { "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.025em", "fontWeight": "600" }], "display-mobile": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "headline-lg-mobile": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "600" }], "body-sm": ["13px", { "lineHeight": "20px", "letterSpacing": "0.005em", "fontWeight": "400" }], "headline-sm": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.015em", "fontWeight": "600" }], "display": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.03em", "fontWeight": "700" }], "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600" }], "title-md": ["16px", { "lineHeight": "24px", "letterSpacing": "-0.01em", "fontWeight": "600" }], "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }], "caption": ["11px", { "lineHeight": "16px", "letterSpacing": "0.03em", "fontWeight": "500" }], "body-md": ["15px", { "lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "400" }], "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "600" }], "body-lg": ["18px", { "lineHeight": "28px", "letterSpacing": "-0.005em", "fontWeight": "400" }] } } } };</script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="../js/supabase.js"></script>
-<script src="../js/auth.js"></script>
-<script src="../js/obras.js"></script>
-<script src="../js/etapas.js"></script>
-</head><body class="bg-surface-canvas font-body-md text-on-surface antialiased"><aside class="fixed left-0 top-0 h-full w-64 bg-surface-card z-50 flex flex-col justify-between shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex flex-col"><div class="h-16 px-space-lg flex items-center gap-space-sm"><img alt="Civil Connection Logo" class="h-8 w-auto object-contain" src="../assets/images/civil_connection_logo.png"/><div class="flex flex-col"><span class="font-title-md text-title-md text-primary tracking-tight">Civil Connection</span><span class="font-caption text-caption text-on-surface-variant uppercase tracking-wider">Gestão Integrada</span></div></div><div class="px-space-md py-space-sm"><a class="w-full flex items-center justify-center gap-space-xs py-2.5 px-space-md rounded-lg bg-status-em-andamento text-on-primary font-label-md text-label-md shadow-sm hover:bg-secondary transition-colors" href="cadastro-obra.html"><span class="material-symbols-outlined text-[18px]">add</span><span>Nova Obra</span></a></div><nav class="flex flex-col gap-space-xs px-space-md mt-space-sm"><a class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-subtle hover:text-on-surface transition-colors font-label-md text-label-md" href="../index.html"><span class="material-symbols-outlined text-[20px]">grid_view</span><span>Visão Geral</span></a><a aria-current="page" class="flex items-center gap-space-sm px-space-md py-2.5 transition-colors bg-surface-container-high text-on-surface font-semibold rounded-lg" href="obras.html"><span class="material-symbols-outlined text-[20px]">foundation</span><span>Obras</span></a><a class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-subtle hover:text-on-surface transition-colors font-label-md text-label-md" href="agenda.html"><span class="material-symbols-outlined text-[20px]">calendar_month</span><span>Agenda</span></a><a class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-subtle hover:text-on-surface transition-colors font-label-md text-label-md" href="profissionais.html"><span class="material-symbols-outlined text-[20px]">badge</span><span>Profissionais</span></a><a class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-subtle hover:text-on-surface transition-colors font-label-md text-label-md" href="relatorios.html"><span class="material-symbols-outlined text-[20px]">description</span><span>Relatórios</span></a></nav></div><div class="p-space-md bg-surface-card"><div class="flex items-center gap-space-sm p-space-sm rounded-lg bg-surface-subtle"><div class="w-9 h-9 rounded-full bg-primary flex items-center justify-center shrink-0 user-avatar-container cursor-pointer overflow-hidden shadow-sm" title="Clique para alterar foto de perfil"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><div class="flex flex-col min-w-0 flex-1"><span class="font-label-sm text-label-sm text-on-surface truncate user-display-name cursor-pointer" title="Clique para alterar foto de perfil">Eng. Lucas Silva</span><span class="font-caption text-caption text-on-surface-variant truncate user-display-role">Administrador</span></div><a class="text-on-surface-variant hover:text-error transition-colors p-1" data-action="logout" href="#" title="Encerrar Sessão"><span class="material-symbols-outlined text-[18px]">logout</span></a></div></div></aside><div class="pl-64"><header class="fixed top-0 left-64 right-0 h-16 bg-surface-card/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-40 flex items-center justify-between px-space-xl"><div class="flex items-center gap-space-sm"><span class="font-caption text-caption uppercase text-on-surface-variant tracking-wider">Plataforma Técnica de Engenharia</span></div><div class="flex items-center gap-space-md"><div class="relative flex items-center"><span class="material-symbols-outlined absolute left-3 text-on-surface-variant text-[18px]">search</span><input class="w-72 h-10 pl-9 pr-space-md rounded-lg bg-surface-subtle font-body-sm text-body-sm text-on-surface placeholder:text-outline focus:outline-none focus:ring-1 focus:ring-primary-container" placeholder="Buscar obras, etapas, fornecedores..." type="text"/></div></div></header><main class="relative pt-16 w-full px-space-xl py-space-lg bg-surface-canvas min-h-screen"><div class="flex flex-col w-full gap-space-lg">
+<html lang="pt-BR"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/><meta content="web_dashboard" name="shell-type"/>
+<style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style>
+<link rel="stylesheet" href="../css/app.css" />
+<link rel="stylesheet" href="../css/mobile.css" />
+<script defer src="../assets/vendor/supabase-js.min.js"></script>
+<script defer src="../js/supabase-config.js"></script>
+<script defer src="../js/supabase.js"></script>
+<script defer src="../js/ui.js"></script>
+<script defer src="../js/header.js"></script>
+<script defer src="../js/auth.js"></script>
+<script defer src="../js/obras.js"></script>
+<script defer src="../js/etapas.js"></script>
+<script defer src="../js/mobile.js"></script>
+</head><body class="bg-surface-canvas font-body-md text-on-surface antialiased"><aside class="fixed left-0 top-0 h-full w-64 bg-surface-card z-50 flex flex-col justify-between shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex flex-col"><div class="h-16 px-space-lg flex items-center gap-space-sm"><img alt="Civil Connection Logo" class="h-8 w-auto object-contain" src="../assets/images/civil_connection_logo.png"/><div class="flex flex-col"><span class="font-title-md text-title-md text-primary tracking-tight">Civil Connection</span><span class="font-caption text-caption text-on-surface-variant uppercase tracking-wider">Gestão Integrada</span></div></div><div class="px-space-md py-space-sm"><a class="w-full flex items-center justify-center gap-space-xs py-2.5 px-space-md rounded-lg bg-status-em-andamento text-on-primary font-label-md text-label-md shadow-sm hover:bg-secondary transition-colors" href="cadastro-obra.html"><span class="material-symbols-outlined text-[18px]">add</span><span>Nova Obra</span></a></div><nav class="flex flex-col gap-space-xs px-space-md mt-space-sm"><a class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-subtle hover:text-on-surface transition-colors font-label-md text-label-md" href="../index.html"><span class="material-symbols-outlined text-[20px]">grid_view</span><span>Visão Geral</span></a><a aria-current="page" class="flex items-center gap-space-sm px-space-md py-2.5 transition-colors bg-surface-container-high text-on-surface font-semibold rounded-lg" href="obras.html"><span class="material-symbols-outlined text-[20px]">foundation</span><span>Obras</span></a><a class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-subtle hover:text-on-surface transition-colors font-label-md text-label-md" href="agenda.html"><span class="material-symbols-outlined text-[20px]">calendar_month</span><span>Agenda</span></a><a class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-subtle hover:text-on-surface transition-colors font-label-md text-label-md" href="profissionais.html"><span class="material-symbols-outlined text-[20px]">badge</span><span>Profissionais</span></a><a class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-subtle hover:text-on-surface transition-colors font-label-md text-label-md" href="relatorios.html"><span class="material-symbols-outlined text-[20px]">description</span><span>Relatórios</span></a></nav></div><div class="p-space-md bg-surface-card"><div class="flex items-center gap-space-sm p-space-sm rounded-lg bg-surface-subtle"><div class="w-9 h-9 rounded-full bg-primary flex items-center justify-center shrink-0 user-avatar-container cursor-pointer overflow-hidden shadow-sm" title="Clique para alterar foto de perfil"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><div class="flex flex-col min-w-0 flex-1"><span class="font-label-sm text-label-sm text-on-surface truncate user-display-name cursor-pointer" title="Clique para alterar foto de perfil">Carregando perfil...</span><span class="font-caption text-caption text-on-surface-variant truncate user-display-role">Perfil</span></div><a class="text-on-surface-variant hover:text-error transition-colors p-1" data-action="logout" href="#" title="Encerrar Sessão"><span class="material-symbols-outlined text-[18px]">logout</span></a></div></div></aside><div class="pl-64"><header class="fixed top-0 left-64 right-0 h-16 bg-surface-card/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-40 flex items-center justify-between px-space-xl"><div class="flex items-center gap-space-sm"><span class="font-caption text-caption uppercase text-on-surface-variant tracking-wider">Plataforma Técnica de Engenharia</span></div><div class="flex items-center gap-space-md"><div class="relative flex items-center"><span class="material-symbols-outlined absolute left-3 text-on-surface-variant text-[18px]">search</span><input class="w-72 h-10 pl-9 pr-space-md rounded-lg bg-surface-subtle font-body-sm text-body-sm text-on-surface placeholder:text-outline focus:outline-none focus:ring-1 focus:ring-primary-container" placeholder="Buscar obras, etapas, fornecedores..." type="text"/></div></div></header><main class="relative pt-16 w-full px-space-xl py-space-lg bg-surface-canvas min-h-screen"><div class="flex flex-col w-full gap-space-lg">
 <div class="flex items-center justify-between">
 <a class="inline-flex items-center gap-space-xs text-on-surface-variant hover:text-on-surface transition-colors font-label-md text-label-md group" href="obras.html">
 <span class="material-symbols-outlined text-[18px] group-hover:-translate-x-0.5 transition-transform">arrow_back</span>
@@ -23,26 +29,26 @@
 <!-- Navegação por Abas -->
 <div class="border-b border-border-subtle flex items-center gap-space-md">
 <button class="py-3 px-space-md font-label-md text-label-md text-status-em-andamento border-b-2 border-status-em-andamento font-semibold" id="tab-btn-etapas" type="button">
-<span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-[18px]">view_timeline</span> Acompanhamento &amp; Tarefas</span>
+<span class="flex items-center justify-center gap-1.5"><span class="material-symbols-outlined text-[18px]" aria-hidden="true">view_timeline</span><span class="cc-aba-curta">Etapas</span><span class="cc-aba-longa">Acompanhamento &amp; Tarefas</span></span>
 </button>
 <button class="py-3 px-space-md font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors" id="tab-btn-diario" type="button">
-<span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-[18px]">edit_note</span> Diário de Obra &amp; Fotos</span>
+<span class="flex items-center justify-center gap-1.5"><span class="material-symbols-outlined text-[18px]" aria-hidden="true">edit_note</span><span class="cc-aba-curta">Diário</span><span class="cc-aba-longa">Diário de Obra &amp; Fotos</span></span>
 </button>
 <button class="py-3 px-space-md font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors" id="tab-btn-equipe" type="button">
-<span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-[18px]">group</span> Equipe &amp; Profissionais</span>
+<span class="flex items-center justify-center gap-1.5"><span class="material-symbols-outlined text-[18px]" aria-hidden="true">group</span><span class="cc-aba-curta">Equipe</span><span class="cc-aba-longa">Equipe &amp; Profissionais</span></span>
 </button>
 <button class="py-3 px-space-md font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors" id="tab-btn-historico" type="button">
-<span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-[18px]">history</span> Histórico &amp; Auditoria</span>
+<span class="flex items-center justify-center gap-1.5"><span class="material-symbols-outlined text-[18px]" aria-hidden="true">history</span><span class="cc-aba-curta">Histórico</span><span class="cc-aba-longa">Histórico &amp; Auditoria</span></span>
 </button>
 </div>
 
 <!-- Conteúdo Aba 1: Etapas e Tarefas -->
 <div class="flex flex-col gap-space-md" id="tab-content-etapas">
-<div class="flex items-center justify-between">
-<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold">Cronograma de Etapas Técnicas</h3>
-<button class="inline-flex items-center gap-space-xs px-space-md py-2 rounded-lg bg-status-em-andamento hover:bg-secondary text-on-primary font-label-md text-label-md shadow-sm transition-colors" onclick="document.getElementById('modal-nova-etapa').classList.remove('hidden')" type="button">
-<span class="material-symbols-outlined text-[18px]">add</span>
-<span>Cadastrar Etapa</span>
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm">
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold">Cronograma de etapas técnicas</h3>
+<button class="inline-flex items-center justify-center gap-space-xs min-h-11 px-space-md py-2 rounded-lg bg-status-em-andamento hover:bg-secondary text-on-primary font-label-md text-label-md shadow-sm transition-colors" onclick="document.getElementById('modal-nova-etapa').classList.remove('hidden'); document.getElementById('nome-etapa')?.focus();" type="button">
+<span class="material-symbols-outlined text-[18px]" aria-hidden="true">add</span>
+<span>Cadastrar etapa</span>
 </button>
 </div>
 <div class="flex flex-col gap-space-md" id="lista-etapas-obra">
@@ -53,28 +59,28 @@
 <!-- Conteúdo Aba 2: Diário e Anexos -->
 <div class="flex flex-col gap-space-lg hidden" id="tab-content-diario">
 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-md">
-<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold">Diário de Canteiro e Galeria de Fotos</h3>
-<div class="flex items-center gap-space-sm">
-<button class="inline-flex items-center gap-space-xs px-space-md py-2 rounded-lg bg-surface-card border border-border-subtle text-on-surface font-label-md text-label-md shadow-sm hover:bg-surface-subtle transition-colors" onclick="document.getElementById('modal-novo-anexo').classList.remove('hidden')" type="button">
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold">Diário de canteiro e galeria</h3>
+<div class="flex flex-col sm:flex-row sm:items-center gap-space-sm w-full sm:w-auto">
+<button class="inline-flex items-center justify-center gap-space-xs min-h-11 px-space-md py-2 rounded-lg bg-surface-card border border-border-subtle text-on-surface font-label-md text-label-md shadow-sm hover:bg-surface-subtle transition-colors" onclick="document.getElementById('modal-novo-anexo').classList.remove('hidden'); document.getElementById('anexo-titulo')?.focus();" type="button">
 <span class="material-symbols-outlined text-[18px]">add_a_photo</span>
-<span>Anexar Foto / Doc</span>
+<span>Anexar arquivo</span>
 </button>
-<button class="inline-flex items-center gap-space-xs px-space-md py-2 rounded-lg bg-status-em-andamento hover:bg-secondary text-on-primary font-label-md text-label-md shadow-sm transition-colors" onclick="document.getElementById('modal-novo-diario').classList.remove('hidden')" type="button">
+<button class="inline-flex items-center justify-center gap-space-xs min-h-11 px-space-md py-2 rounded-lg bg-status-em-andamento hover:bg-secondary text-on-primary font-label-md text-label-md shadow-sm transition-colors" onclick="document.getElementById('modal-novo-diario').classList.remove('hidden'); document.getElementById('diario-resumo')?.focus();" type="button">
 <span class="material-symbols-outlined text-[18px]">post_add</span>
-<span>Novo Registro Diário</span>
+<span>Novo registro diário</span>
 </button>
 </div>
 </div>
 
 <div class="flex flex-col gap-space-md">
-<h4 class="font-title-md text-title-md text-on-surface font-bold">Fotografias &amp; Documentos da Obra</h4>
+<h4 class="font-title-md text-title-md text-on-surface font-bold">Fotografias e documentos da obra</h4>
 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-space-md" id="lista-documentos-obra">
 <!-- Renderizado dinamicamente via js/etapas.js -->
 </div>
 </div>
 
 <div class="flex flex-col gap-space-md mt-space-md">
-<h4 class="font-title-md text-title-md text-on-surface font-bold">Histórico do Diário de Bordo</h4>
+<h4 class="font-title-md text-title-md text-on-surface font-bold">Histórico do diário de bordo</h4>
 <div class="flex flex-col gap-space-sm" id="lista-diario-obra">
 <!-- Renderizado dinamicamente via js/etapas.js -->
 </div>
@@ -84,7 +90,7 @@
 <!-- Conteúdo Aba 3: Equipe -->
 <div class="flex flex-col gap-space-md hidden" id="tab-content-equipe">
 <div class="flex items-center justify-between">
-<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold">Equipe Técnica e Fornecedores Alocados</h3>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold">Equipe técnica e fornecedores alocados</h3>
 <button class="inline-flex items-center gap-space-xs px-space-md py-2 rounded-lg bg-status-em-andamento hover:bg-secondary text-on-primary font-label-md text-label-md shadow-sm transition-colors" onclick="abrirModalAssociarProfissional()" type="button">
 <span class="material-symbols-outlined text-[18px]">person_add</span>
 <span>Vincular Profissional</span>
@@ -97,7 +103,7 @@
 
 <!-- Conteúdo Aba 4: Histórico -->
 <div class="flex flex-col gap-space-md hidden" id="tab-content-historico">
-<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold">Registro Geral de Auditoria e Alterações</h3>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold">Registro geral de auditoria e alterações</h3>
 <div class="flex flex-col gap-space-sm" id="lista-historico-obra">
 <!-- Renderizado dinamicamente via js/etapas.js -->
 </div>
@@ -107,12 +113,13 @@
 <div class="fixed inset-0 z-50 flex items-center justify-center bg-primary/40 backdrop-blur-sm hidden" id="modal-nova-etapa">
 <div class="bg-surface-card rounded-xl shadow-xl w-full max-w-lg p-space-lg mx-4 flex flex-col gap-space-md">
 <div class="flex items-center justify-between">
-<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold">Cadastrar Nova Etapa</h3>
-<button class="p-1 rounded-lg hover:bg-surface-subtle text-on-surface-variant" onclick="document.getElementById('modal-nova-etapa').classList.add('hidden')" type="button">
-<span class="material-symbols-outlined text-[20px]">close</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold" id="titulo-modal-nova-etapa">Cadastrar nova etapa</h3>
+<button class="p-1 rounded-lg hover:bg-surface-subtle text-on-surface-variant" onclick="document.getElementById('modal-nova-etapa').classList.add('hidden')" type="button" aria-label="Fechar cadastro de etapa">
+<span class="material-symbols-outlined text-[20px]" aria-hidden="true">close</span>
 </button>
 </div>
-<form class="flex flex-col gap-space-md" id="form-nova-etapa" onsubmit="cadastrarNovaEtapa(event)">
+<form class="flex flex-col gap-space-md" id="form-nova-etapa" novalidate>
+<div id="etapa-feedback" class="hidden p-2.5 rounded-lg font-label-sm text-label-sm text-center" role="alert" aria-live="polite"></div>
 <div class="flex flex-col gap-1.5">
 <label class="font-label-sm text-label-sm text-on-surface" for="nome-etapa">Nome da Etapa *</label>
 <input class="h-10 px-3.5 rounded-lg bg-surface-subtle text-body-md text-on-surface focus:outline-none" id="nome-etapa" required="" type="text"/>
@@ -137,7 +144,7 @@
 </div>
 <div class="flex items-center justify-end gap-space-sm pt-space-xs">
 <button class="px-space-md py-2 rounded-lg bg-surface-subtle text-on-surface font-label-md text-label-md" onclick="document.getElementById('modal-nova-etapa').classList.add('hidden')" type="button">Cancelar</button>
-<button class="px-space-md py-2 rounded-lg bg-status-em-andamento text-on-primary font-label-md text-label-md shadow-sm" type="submit">Salvar Etapa</button>
+<button class="px-space-md py-2 rounded-lg bg-status-em-andamento text-on-primary font-label-md text-label-md shadow-sm" type="submit">Salvar etapa</button>
 </div>
 </form>
 </div>
@@ -147,19 +154,20 @@
 <div class="fixed inset-0 z-50 flex items-center justify-center bg-primary/40 backdrop-blur-sm hidden" id="modal-novo-diario">
 <div class="bg-surface-card rounded-xl shadow-xl w-full max-w-lg p-space-lg mx-4 flex flex-col gap-space-md">
 <div class="flex items-center justify-between">
-<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold">Novo Registro no Diário de Obra</h3>
-<button class="p-1 rounded-lg hover:bg-surface-subtle text-on-surface-variant" onclick="document.getElementById('modal-novo-diario').classList.add('hidden')" type="button">
-<span class="material-symbols-outlined text-[20px]">close</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold" id="titulo-modal-novo-diario">Novo registro no diário de obra</h3>
+<button class="p-1 rounded-lg hover:bg-surface-subtle text-on-surface-variant" onclick="document.getElementById('modal-novo-diario').classList.add('hidden')" type="button" aria-label="Fechar registro do diário">
+<span class="material-symbols-outlined text-[20px]" aria-hidden="true">close</span>
 </button>
 </div>
-<form class="flex flex-col gap-space-md" id="form-novo-diario" onsubmit="cadastrarNovoDiarioSubmit(event)">
+<form class="flex flex-col gap-space-md" id="form-novo-diario" novalidate>
+<div id="diario-feedback" class="hidden p-2.5 rounded-lg font-label-sm text-label-sm text-center" role="alert" aria-live="polite"></div>
 <div class="grid grid-cols-2 gap-space-sm">
 <div class="flex flex-col gap-1.5">
-<label class="font-label-sm text-label-sm text-on-surface">Data do Registro *</label>
+<label class="font-label-sm text-label-sm text-on-surface" for="diario-data">Data do registro *</label>
 <input class="h-10 px-3.5 rounded-lg bg-surface-subtle text-body-md text-on-surface focus:outline-none" id="diario-data" required="" type="date"/>
 </div>
 <div class="flex flex-col gap-1.5">
-<label class="font-label-sm text-label-sm text-on-surface">Condição do Clima</label>
+<label class="font-label-sm text-label-sm text-on-surface" for="diario-clima">Condição do clima</label>
 <select class="h-10 px-3.5 rounded-lg bg-surface-subtle text-body-md text-on-surface focus:outline-none" id="diario-clima">
 <option value="Ensolarado">Ensolarado</option>
 <option value="Nublado">Nublado</option>
@@ -169,12 +177,12 @@
 </div>
 </div>
 <div class="flex flex-col gap-1.5">
-<label class="font-label-sm text-label-sm text-on-surface">Resumo das Atividades Executadas *</label>
+<label class="font-label-sm text-label-sm text-on-surface" for="diario-resumo">Resumo das atividades executadas *</label>
 <textarea class="p-3 rounded-lg bg-surface-subtle text-body-md text-on-surface focus:outline-none" id="diario-resumo" required="" rows="4"></textarea>
 </div>
 <div class="flex items-center justify-end gap-space-sm pt-space-xs">
 <button class="px-space-md py-2 rounded-lg bg-surface-subtle text-on-surface font-label-md text-label-md" onclick="document.getElementById('modal-novo-diario').classList.add('hidden')" type="button">Cancelar</button>
-<button class="px-space-md py-2 rounded-lg bg-status-em-andamento text-on-primary font-label-md text-label-md shadow-sm" type="submit">Salvar Registro</button>
+<button class="px-space-md py-2 rounded-lg bg-status-em-andamento text-on-primary font-label-md text-label-md shadow-sm" type="submit">Salvar registro</button>
 </div>
 </form>
 </div>
@@ -184,12 +192,13 @@
 <div class="fixed inset-0 z-50 flex items-center justify-center bg-primary/40 backdrop-blur-sm hidden" id="modal-novo-anexo">
 <div class="bg-surface-card rounded-xl shadow-xl w-full max-w-lg p-space-lg mx-4 flex flex-col gap-space-md">
 <div class="flex items-center justify-between">
-<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold">Anexar Fotografia ou Relatório</h3>
-<button class="p-1 rounded-lg hover:bg-surface-subtle text-on-surface-variant" onclick="document.getElementById('modal-novo-anexo').classList.add('hidden')" type="button">
-<span class="material-symbols-outlined text-[20px]">close</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold">Anexar fotografia ou relatório</h3>
+<button class="p-1 rounded-lg hover:bg-surface-subtle text-on-surface-variant" onclick="document.getElementById('modal-novo-anexo').classList.add('hidden')" type="button" aria-label="Fechar envio de anexo">
+<span class="material-symbols-outlined text-[20px]" aria-hidden="true">close</span>
 </button>
 </div>
-<form class="flex flex-col gap-space-md" id="form-novo-anexo" onsubmit="anexarFotoDocumentoSubmit(event)">
+<form class="flex flex-col gap-space-md" id="form-novo-anexo" novalidate>
+<div id="anexo-feedback" class="hidden p-2.5 rounded-lg font-label-sm text-label-sm text-center" role="alert" aria-live="polite"></div>
 <div class="flex flex-col gap-1.5">
 <label class="font-label-sm text-label-sm text-on-surface">Título do Arquivo *</label>
 <input class="h-10 px-3.5 rounded-lg bg-surface-subtle text-body-md text-on-surface focus:outline-none" id="anexo-titulo" placeholder="Ex: Fotografia Concretagem Laje 5" required="" type="text"/>
@@ -202,12 +211,17 @@
 </select>
 </div>
 <div class="flex flex-col gap-1.5">
-<label class="font-label-sm text-label-sm text-on-surface">URL do Arquivo *</label>
-<input class="h-10 px-3.5 rounded-lg bg-surface-subtle text-body-md text-on-surface focus:outline-none" id="anexo-url" placeholder="https://..." required="" type="url"/>
+<label class="font-label-sm text-label-sm text-on-surface" for="anexo-arquivo">Enviar arquivo (até 20 MB)</label>
+<input class="w-full p-2.5 rounded-lg bg-surface-subtle text-body-sm text-on-surface file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:bg-surface-card file:text-on-surface file:font-label-sm" id="anexo-arquivo" accept="image/*,.pdf,.doc,.docx,.xls,.xlsx" type="file"/>
+<span class="font-caption text-caption text-on-surface-variant">O arquivo é enviado ao bucket "documentos-obra" do Supabase Storage.</span>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="font-label-sm text-label-sm text-on-surface" for="anexo-url">Ou informe a URL pública do arquivo (opcional)</label>
+<input class="h-11 px-3.5 rounded-lg bg-surface-subtle text-body-md text-on-surface focus:outline-none" id="anexo-url" placeholder="https://..." type="url"/>
 </div>
 <div class="flex items-center justify-end gap-space-sm pt-space-xs">
 <button class="px-space-md py-2 rounded-lg bg-surface-subtle text-on-surface font-label-md text-label-md" onclick="document.getElementById('modal-novo-anexo').classList.add('hidden')" type="button">Cancelar</button>
-<button class="px-space-md py-2 rounded-lg bg-status-em-andamento text-on-primary font-label-md text-label-md shadow-sm" type="submit">Salvar Anexo</button>
+<button class="px-space-md py-2 rounded-lg bg-status-em-andamento text-on-primary font-label-md text-label-md shadow-sm" type="submit">Salvar anexo</button>
 </div>
 </form>
 </div>
