@@ -99,18 +99,7 @@ async function carregarObras() {
             totalCountEl.textContent = window.ccUI.pluralizar(obrasCarregadas.length, 'obra', 'obras');
         }
 
-        // Sempre mantém as opções de cidade coerentes com o banco, mas preserva a seleção atual
-        // Se houver filtro ativo, buscamos todas as obras sem filtro apenas para montar as opções
-        if (!busca && !cidade && !status) {
-            atualizarOpcoesCidadeObras(obrasCarregadas);
-        } else if (busca || cidade || status) {
-            // Em segundo plano, atualiza opções de cidade com dados completos sem bloquear a listagem filtrada
-            window.dbService.getObras({ includeDeleted: false }).then((todas) => {
-                // Só atualiza se o usuário ainda estiver com algum filtro ativo
-                const aindaFiltrado = (document.getElementById('busca-obra')?.value || '').trim() || document.getElementById('filtro-cidade-obra')?.value || document.getElementById('filtro-status-obra')?.value;
-                if (aindaFiltrado) atualizarOpcoesCidadeObras(todas || []);
-            }).catch(() => {});
-        }
+        if (!busca && !cidade && !status) atualizarOpcoesCidadeObras(obrasCarregadas);
 
         if (!obrasCarregadas.length) {
             const temFiltro = !!(busca || cidade || status);
@@ -152,7 +141,7 @@ function renderCardObra(obra) {
     const progresso = Math.min(100, Math.max(0, Number(obra.progresso) || 0));
     const placeholder = '../assets/images/placeholder-obra.svg';
     const foto = typeof window.getObraImagemUrl === 'function'
-        ? window.getObraImagemUrl(obra.foto_capa_url, placeholder)
+        ? window.getObraImagemUrl(obra.foto_capa_url, '')
         : '';
     const nome = window.ccUI.escapeHtml(obra.nome);
     const cidade = window.ccUI.escapeHtml(obra.cidade || 'Cidade não informada');
@@ -243,8 +232,6 @@ async function carregarDetalhesObra() {
         const obra = await window.dbService.getObraById(obraId);
         if (!obra) {
             container.innerHTML = estadoDetalhesObra('A construção solicitada não existe ou foi removida do sistema.');
-            // Esconde abas e controles quando a obra não existe
-            document.querySelectorAll('[id^="tab-btn-"], [id^="tab-content-"]').forEach((el) => { el.style.display = 'none'; });
             return;
         }
 
@@ -538,10 +525,6 @@ async function salvarEdicaoObraSubmit(evento) {
 }
 
 async function solicitarExclusaoObra(id) {
-    if (!id || typeof id !== 'string') {
-        window.ccUI.mostrarAviso('Não foi possível identificar a obra para exclusão.', 'erro');
-        return;
-    }
     obraIdParaExcluir = id;
     const obra = (obraAtualDetalhes && obraAtualDetalhes.id === id)
         ? obraAtualDetalhes
@@ -648,8 +631,7 @@ function setupFormCadastroObra(form) {
 
         if (!nome) return showObraError('O nome da obra é obrigatório.');
         if (!cidade) return showObraError('A cidade do empreendimento é obrigatória.');
-        const progressoNum = Number(progresso);
-        if (Number.isNaN(progressoNum) || progressoNum < 0 || progressoNum > 100) {
+        if (Number(progresso) < 0 || Number(progresso) > 100) {
             return showObraError('O progresso deve estar entre 0% e 100%.');
         }
         if (dataInicio && dataFim && dataFim < dataInicio) {

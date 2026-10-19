@@ -245,12 +245,8 @@
         drawer.setAttribute('aria-hidden', 'false');
         if (botaoMenu) botaoMenu.setAttribute('aria-expanded', 'true');
         document.body.classList.add('cc-drawer-aberto');
-        // inert é ideal para acessibilidade, mas nem todos os navegadores suportam; fallback para aria-hidden
         document.querySelectorAll('.cc-topbar, .cc-bottomnav, main').forEach((el) => {
-            if ('inert' in el) el.inert = true;
-            else el.setAttribute('aria-hidden', 'true');
-            // Também tenta o atributo para compatibilidade
-            try { el.setAttribute('inert', ''); } catch (e) {}
+            el.setAttribute('inert', '');
         });
         const fechar = drawer.querySelector('.cc-drawer__fechar');
         if (fechar) fechar.focus({ preventScroll: true });
@@ -268,12 +264,10 @@
             document.body.classList.remove('cc-drawer-aberto');
         }
         document.querySelectorAll('.cc-topbar, .cc-bottomnav, main').forEach((el) => {
-            if ('inert' in el) el.inert = false;
             el.removeAttribute('inert');
-            el.removeAttribute('aria-hidden');
         });
         if (estavaAberto && cfg.restaurarFoco !== false && botaoMenu && document.contains(botaoMenu)) {
-            try { botaoMenu.focus({ preventScroll: true }); } catch (e) { botaoMenu.focus(); }
+            botaoMenu.focus({ preventScroll: true });
         }
         focoAntesDrawer = null;
     }

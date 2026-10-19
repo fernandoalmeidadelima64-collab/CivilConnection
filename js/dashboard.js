@@ -139,10 +139,10 @@ function renderDashboardObraRow(obra) {
     const progresso = Math.min(100, Math.max(0, Number(obra.progresso) || 0));
     const placeholder = 'assets/images/placeholder-obra.svg';
     const foto = typeof window.getObraImagemUrl === 'function'
-        ? window.getObraImagemUrl(obra.foto_capa_url, placeholder)
+        ? window.getObraImagemUrl(obra.foto_capa_url, '')
         : '';
-    const midia = foto && foto !== placeholder
-        ? `<img src="${window.ccUI.escapeHtml(foto)}" alt="Imagem da obra ${window.ccUI.escapeHtml(obra.nome)}" loading="lazy" onerror="this.onerror=null; this.src='${placeholder}'; this.className='w-full h-full object-cover';" class="w-full h-full object-cover" />`
+    const midia = foto
+        ? `<img src="${window.ccUI.escapeHtml(foto)}" alt="" loading="lazy" onerror="this.onerror=null; this.src='${placeholder}'; this.className='w-full h-full object-cover';" class="w-full h-full object-cover" />`
         : '<span class="material-symbols-outlined text-status-em-andamento text-[22px]" aria-hidden="true">apartment</span>';
 
     return `
