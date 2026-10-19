@@ -231,6 +231,34 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION public.proteger_tipo_usuario()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = ''
+AS $$
+BEGIN
+    -- A user may edit their profile, but cannot promote themselves.
+    -- Trusted operators (service role) and existing admins can manage roles.
+    IF (SELECT auth.uid()) = OLD.id
+       AND NEW.tipo_usuario IS DISTINCT FROM OLD.tipo_usuario
+       AND NOT EXISTS (
+           SELECT 1 FROM public.usuarios u
+           WHERE u.id = (SELECT auth.uid())
+             AND u.tipo_usuario = 'administrador'::public.tipo_usuario_enum
+       ) THEN
+        RAISE EXCEPTION 'Somente um administrador pode alterar o perfil de acesso.'
+            USING ERRCODE = '42501';
+    END IF;
+    RETURN NEW;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS trg_proteger_tipo_usuario ON public.usuarios;
+CREATE TRIGGER trg_proteger_tipo_usuario
+    BEFORE UPDATE OF tipo_usuario ON public.usuarios
+    FOR EACH ROW EXECUTE FUNCTION public.proteger_tipo_usuario();
+
 DROP TRIGGER IF EXISTS trg_usuarios_updated ON public.usuarios;
 CREATE TRIGGER trg_usuarios_updated
     BEFORE UPDATE ON public.usuarios
@@ -276,13 +304,15 @@ BEGIN
         v_nome := 'Usuário';
     END IF;
 
+    -- Self-service signup can never create an administrator account.
+    -- Administrative roles must be assigned by a trusted database operator.
     v_tipo := NEW.raw_user_meta_data ->> 'tipo_usuario';
-    IF v_tipo NOT IN ('cliente', 'profissional', 'administrador') OR v_tipo IS NULL THEN
+    IF v_tipo NOT IN ('cliente', 'profissional') OR v_tipo IS NULL THEN
         v_tipo := 'cliente';
     END IF;
 
     INSERT INTO public.usuarios (id, nome, email, tipo_usuario)
-    VALUES (NEW.id, v_nome, NEW.email, v_tipo::tipo_usuario_enum)
+    VALUES (NEW.id, v_nome, NEW.email, v_tipo::public.tipo_usuario_enum)
     ON CONFLICT (id) DO UPDATE
     SET nome = EXCLUDED.nome,
         email = EXCLUDED.email,
@@ -290,7 +320,7 @@ BEGIN
 
     RETURN NEW;
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = '';
 
 DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
 CREATE TRIGGER on_auth_user_created
@@ -335,9 +365,14 @@ CREATE OR REPLACE FUNCTION private.pode_editar_obra(p_obra_id uuid)
 RETURNS boolean LANGUAGE sql STABLE SECURITY DEFINER SET search_path = ''
 AS $$ SELECT private.is_admin() OR private.eh_dono_obra(p_obra_id) $$;
 
+REVOKE ALL ON SCHEMA private FROM PUBLIC, anon;
+GRANT USAGE ON SCHEMA private TO authenticated;
+REVOKE ALL ON FUNCTION private.is_admin(), private.eh_dono_obra(uuid),
+    private.eh_vinculado_obra(uuid), private.pode_ver_obra(uuid),
+    private.pode_editar_obra(uuid) FROM PUBLIC, anon;
 GRANT EXECUTE ON FUNCTION private.is_admin(), private.eh_dono_obra(uuid),
     private.eh_vinculado_obra(uuid), private.pode_ver_obra(uuid),
-    private.pode_editar_obra(uuid) TO anon, authenticated;
+    private.pode_editar_obra(uuid) TO authenticated;
 
 -- POLÍTICAS RLS PARA USUÁRIOS
 -- Leitura: qualquer usuário autenticado (nomes em listas/histórico).
@@ -353,7 +388,8 @@ CREATE POLICY "usuarios_delete_admin" ON public.usuarios FOR DELETE TO authentic
 
 -- POLÍTICAS RLS PARA PROFISSIONAIS (diretório público de leitura)
 DROP POLICY IF EXISTS "profissionais_select_publico" ON public.profissionais;
-CREATE POLICY "profissionais_select_publico" ON public.profissionais FOR SELECT USING (true);
+DROP POLICY IF EXISTS "profissionais_select_autenticado" ON public.profissionais;
+CREATE POLICY "profissionais_select_autenticado" ON public.profissionais FOR SELECT TO authenticated USING ((SELECT auth.uid()) IS NOT NULL);
 DROP POLICY IF EXISTS "profissionais_insert_autenticado" ON public.profissionais;
 CREATE POLICY "profissionais_insert_autenticado" ON public.profissionais FOR INSERT TO authenticated WITH CHECK ((SELECT auth.uid()) = usuario_id);
 DROP POLICY IF EXISTS "profissionais_update_proprio" ON public.profissionais;
@@ -436,10 +472,14 @@ CREATE POLICY "historico_obra_insert" ON public.historico_obra FOR INSERT TO aut
 -- 8. PERMISSÕES
 -- O RLS é a barreira de linhas; os grants ficam no mínimo necessário
 -- (TRUNCATE/REFERENCES/TRIGGER ignoram RLS e nunca são concedidos).
-GRANT USAGE ON SCHEMA public TO anon, authenticated;
-REVOKE TRUNCATE, REFERENCES, TRIGGER ON ALL TABLES IN SCHEMA public FROM anon, authenticated;
-GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO anon, authenticated;
-GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO anon, authenticated;
+GRANT USAGE ON SCHEMA public TO authenticated;
+-- Anonymous clients have no direct table access. In particular, the professional
+-- directory contains contact details and must not be exposed without a session.
+REVOKE ALL ON ALL TABLES IN SCHEMA public FROM PUBLIC, anon;
+REVOKE ALL ON ALL SEQUENCES IN SCHEMA public FROM PUBLIC, anon;
+REVOKE TRUNCATE, REFERENCES, TRIGGER ON ALL TABLES IN SCHEMA public FROM authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO authenticated;
+GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO authenticated;
 
 -- A view de resumo respeita o RLS de quem consulta e não é exposta à API.
 CREATE OR REPLACE VIEW public.vw_obras_resumo WITH (security_invoker = true) AS

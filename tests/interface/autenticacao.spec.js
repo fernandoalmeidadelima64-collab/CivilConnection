@@ -72,6 +72,14 @@ test('chave privada configurada é recusada e o login fica bloqueado', async ({ 
     expect(status).toBe(false);
 });
 
+test('cadastro público não oferece nem envia perfil de administrador', async ({ page }) => {
+    await limparEstado(page);
+    await page.goto('/pages/login.html');
+    await page.click('#tab-register');
+    await expect(page.locator('input[name="tipo_usuario"][value="administrador"]')).toHaveCount(0);
+    await expect(page.locator('input[name="tipo_usuario"][value="cliente"]')).toBeChecked();
+});
+
 test('página de login alterna entre entrar e criar conta com ARIA correto', async ({ page }) => {
     await limparEstado(page);
     await page.goto('/pages/login.html');

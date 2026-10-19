@@ -129,7 +129,11 @@ async function handleAuthSubmit(event) {
         if (currentAuthMode === 'register') {
             const nome = (document.getElementById('nome-completo')?.value || '').trim();
             const tipoUsuarioInput = document.querySelector('input[name="tipo_usuario"]:checked');
-            const tipoUsuario = tipoUsuarioInput ? tipoUsuarioInput.value : 'cliente';
+            const tipoSolicitado = tipoUsuarioInput ? tipoUsuarioInput.value : 'cliente';
+            // Never accept administrator elevation from a public signup form.
+            const tipoUsuario = ['cliente', 'profissional'].includes(tipoSolicitado)
+                ? tipoSolicitado
+                : 'cliente';
 
             if (!nome) {
                 showAuthError('O nome completo é obrigatório.');
