@@ -1,24 +1,21 @@
 /* ==========================================================================
    Civil Connection — Configuração pública do Supabase
    ==========================================================================
-   Preencha os dois campos abaixo com os dados do projeto Supabase:
+   Projeto: CivilConnection (ref znnctmfnubammvgipozs, sa-east-1)
 
-   1. supabaseUrl: URL do projeto, no formato https://SEU-PROJETO.supabase.co
-   2. supabaseAnonKey: chave pública "anon" ou "publishable" do projeto.
+   - supabaseUrl: URL pública do projeto.
+   - supabaseAnonKey: chave "publishable" (pública). Ela é protegida pelas
+     políticas de Row Level Security (RLS) do banco — nunca use aqui a chave
+     "service_role"/secret, que ignora o RLS.
+   - bucketDocumentos: bucket público de anexos (docs/storage-documentos.sql,
+     aplicado no projeto em 2026-10-19).
 
-   IMPORTANTE:
-   - Nunca coloque a chave "service_role" ou qualquer segredo privado neste
-     arquivo. Tudo o que está aqui é público no navegador.
-   - A chave anon/publishable é protegida pelas políticas de Row Level Security
-     (RLS) do Supabase. Não desative o RLS para "fazer funcionar".
-   - Este arquivo pode ser editado diretamente no repositório ou substituído no
-     processo de deploy. Veja docs/CONFIGURACAO.md e docs/storage-documentos.sql para instruções completas.
+   Veja docs/CONFIGURACAO.md para o passo a passo completo.
    ========================================================================== */
 
 window.CIVIL_CONNECTION_CONFIG = window.CIVIL_CONNECTION_CONFIG || {
-    supabaseUrl: 'https://your-project.supabase.co',
-    supabaseAnonKey: 'your-anon-key',
+    supabaseUrl: 'https://znnctmfnubammvgipozs.supabase.co',
+    supabaseAnonKey: 'sb_publishable_yZ0atX4BhKlWbvLNipY3lg_XEm4ceFd',
     // Bucket público do Supabase Storage usado pelos anexos das obras.
-    // Crie o bucket com as políticas de docs/storage-documentos.sql.
     bucketDocumentos: 'documentos-obra'
 };

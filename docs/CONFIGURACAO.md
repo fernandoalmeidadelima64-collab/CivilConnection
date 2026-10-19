@@ -6,19 +6,20 @@ repositório: a configuração é responsabilidade de quem faz o deploy.
 
 ## 1. Chaves públicas do projeto
 
-Edite `js/supabase-config.js` e preencha **localmente** (não commite chaves reais):
+O arquivo `js/supabase-config.js` já está preenchido com os dados públicos do
+projeto **CivilConnection** (ref `znnctmfnubammvgipozs`, sa-east-1):
 
 ```js
 window.CIVIL_CONNECTION_CONFIG = {
-    supabaseUrl: 'https://SEU-PROJETO.supabase.co',
-    supabaseAnonKey: 'SUA_CHAVE_ANON_PUBLISHABLE',
+    supabaseUrl: 'https://znnctmfnubammvgipozs.supabase.co',
+    supabaseAnonKey: 'sb_publishable_...', // chave publishable (pública)
     bucketDocumentos: 'documentos-obra'
 };
 ```
 
-> **Segurança:** o repositório traz placeholders (`your-project.supabase.co` / `your-anon-key`).
-> Em produção, injete a configuração via variável de ambiente ou substitua
-> o arquivo no pipeline de deploy. Nunca faça commit da chave real.
+> **Segurança:** a chave publishable/anon é pública por design e protegida
+> pelo RLS. Nunca coloque a chave `service_role`/`sb_secret_...` neste
+> arquivo — ela ignora todas as políticas de acesso.
 
 Regras aplicadas pela camada `js/supabase.js`:
 
@@ -29,6 +30,11 @@ Regras aplicadas pela camada `js/supabase.js`:
   exemplo: o usuário é levado ao login, que explica a pendência.
 
 ## 2. Banco de dados
+
+O banco do projeto já está provisionado e alinhado ao `schema.sql`
+(migrations registradas em 2026-10-19: contrato de tabelas/colunas,
+`tarefas_obra`, `diario_obra`, `documentos_obra`, helpers `private.*`,
+bucket de Storage e endurecimento de grants). Para um projeto novo:
 
 1. Execute `schema.sql` no SQL Editor do Supabase.
 2. Em **Authentication → Providers → Email**, mantenha o e-mail habilitado.

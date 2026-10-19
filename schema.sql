@@ -109,6 +109,7 @@ CREATE TABLE IF NOT EXISTS public.etapas_obra (
     descricao     TEXT,
     status        status_etapa_enum NOT NULL DEFAULT 'pendente',
     progresso     NUMERIC(5, 2) NOT NULL DEFAULT 0.00 CHECK (progresso >= 0 AND progresso <= 100),
+    ordem         INTEGER NOT NULL DEFAULT 1,
     data_inicio   DATE,
     data_previsao_fim DATE,
     deleted_at    TIMESTAMPTZ,
@@ -154,14 +155,17 @@ CREATE TABLE IF NOT EXISTS public.agendamentos (
     id             UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     obra_id        UUID NOT NULL REFERENCES public.obras (id) ON DELETE CASCADE,
     titulo         TEXT NOT NULL CHECK (char_length(trim(titulo)) > 0),
+    descricao      TEXT,
     tipo           tipo_agendamento_enum NOT NULL DEFAULT 'visita_tecnica',
     inicio         TIMESTAMPTZ NOT NULL,
     fim            TIMESTAMPTZ NOT NULL,
+    local          TEXT,
     responsavel_id UUID REFERENCES public.profissionais (id) ON DELETE SET NULL,
     status         status_agendamento_enum NOT NULL DEFAULT 'agendado',
     observacoes    TEXT,
     criado_por     UUID REFERENCES public.usuarios (id) ON DELETE SET NULL,
-    created_at     TIMESTAMPTZ NOT NULL DEFAULT now(),
+    criado_em      TIMESTAMPTZ NOT NULL DEFAULT now(),
+    atualizado_em  TIMESTAMPTZ NOT NULL DEFAULT now(),
     CHECK (fim > inicio)
 );
 
@@ -252,6 +256,11 @@ CREATE TRIGGER trg_tarefas_updated
     BEFORE UPDATE ON public.tarefas_obra
     FOR EACH ROW EXECUTE FUNCTION public.atualizar_timestamp();
 
+DROP TRIGGER IF EXISTS trg_agendamentos_updated ON public.agendamentos;
+CREATE TRIGGER trg_agendamentos_updated
+    BEFORE UPDATE ON public.agendamentos
+    FOR EACH ROW EXECUTE FUNCTION public.atualizar_timestamp();
+
 -- 6. TRIGGER DE CRIAÇÃO AUTOMÁTICA DE PERFIL DE USUÁRIO
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS TRIGGER AS $$
@@ -300,79 +309,150 @@ ALTER TABLE public.diario_obra ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.documentos_obra ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.historico_obra ENABLE ROW LEVEL SECURITY;
 
+-- HELPERS DE ACESSO (schema private, SECURITY DEFINER)
+-- Leem as tabelas sem reavaliar RLS, evitando recursão entre políticas
+-- (ex.: obras <-> obra_profissionais). pode_ver_obra = dono da obra,
+-- profissional vinculado à obra ou administrador.
+CREATE SCHEMA IF NOT EXISTS private;
+
+CREATE OR REPLACE FUNCTION private.is_admin()
+RETURNS boolean LANGUAGE sql STABLE SECURITY DEFINER SET search_path = ''
+AS $$ SELECT EXISTS (SELECT 1 FROM public.usuarios u WHERE u.id = (SELECT auth.uid()) AND u.tipo_usuario = 'administrador'::tipo_usuario_enum) $$;
+
+CREATE OR REPLACE FUNCTION private.eh_dono_obra(p_obra_id uuid)
+RETURNS boolean LANGUAGE sql STABLE SECURITY DEFINER SET search_path = ''
+AS $$ SELECT EXISTS (SELECT 1 FROM public.obras o WHERE o.id = p_obra_id AND o.cliente_id = (SELECT auth.uid())) $$;
+
+CREATE OR REPLACE FUNCTION private.eh_vinculado_obra(p_obra_id uuid)
+RETURNS boolean LANGUAGE sql STABLE SECURITY DEFINER SET search_path = ''
+AS $$ SELECT EXISTS (SELECT 1 FROM public.obra_profissionais op JOIN public.profissionais p ON p.id = op.profissional_id WHERE op.obra_id = p_obra_id AND p.usuario_id = (SELECT auth.uid())) $$;
+
+CREATE OR REPLACE FUNCTION private.pode_ver_obra(p_obra_id uuid)
+RETURNS boolean LANGUAGE sql STABLE SECURITY DEFINER SET search_path = ''
+AS $$ SELECT private.is_admin() OR private.eh_dono_obra(p_obra_id) OR private.eh_vinculado_obra(p_obra_id) $$;
+
+CREATE OR REPLACE FUNCTION private.pode_editar_obra(p_obra_id uuid)
+RETURNS boolean LANGUAGE sql STABLE SECURITY DEFINER SET search_path = ''
+AS $$ SELECT private.is_admin() OR private.eh_dono_obra(p_obra_id) $$;
+
+GRANT EXECUTE ON FUNCTION private.is_admin(), private.eh_dono_obra(uuid),
+    private.eh_vinculado_obra(uuid), private.pode_ver_obra(uuid),
+    private.pode_editar_obra(uuid) TO anon, authenticated;
+
 -- POLÍTICAS RLS PARA USUÁRIOS
-DROP POLICY IF EXISTS "Leitura publica de usuarios" ON public.usuarios;
-CREATE POLICY "Leitura publica de usuarios" ON public.usuarios FOR SELECT USING (true);
+-- Leitura: qualquer usuário autenticado (nomes em listas/histórico).
+-- Escrita: apenas o próprio perfil ou administrador.
+DROP POLICY IF EXISTS "usuarios_select_autenticado" ON public.usuarios;
+CREATE POLICY "usuarios_select_autenticado" ON public.usuarios FOR SELECT TO authenticated USING ((SELECT auth.uid()) IS NOT NULL);
+DROP POLICY IF EXISTS "usuarios_insert_proprio" ON public.usuarios;
+CREATE POLICY "usuarios_insert_proprio" ON public.usuarios FOR INSERT TO authenticated WITH CHECK ((SELECT auth.uid()) = id);
+DROP POLICY IF EXISTS "usuarios_update_proprio" ON public.usuarios;
+CREATE POLICY "usuarios_update_proprio" ON public.usuarios FOR UPDATE TO authenticated USING (((SELECT auth.uid()) = id) OR (SELECT private.is_admin()));
+DROP POLICY IF EXISTS "usuarios_delete_admin" ON public.usuarios;
+CREATE POLICY "usuarios_delete_admin" ON public.usuarios FOR DELETE TO authenticated USING ((SELECT private.is_admin()));
 
-DROP POLICY IF EXISTS "Usuarios editam proprio perfil" ON public.usuarios;
-CREATE POLICY "Usuarios editam proprio perfil" ON public.usuarios FOR UPDATE USING (auth.uid() = id);
-
-DROP POLICY IF EXISTS "Insercao de perfil de usuario" ON public.usuarios;
-CREATE POLICY "Insercao de perfil de usuario" ON public.usuarios FOR INSERT WITH CHECK (auth.uid() = id OR auth.uid() IS NULL);
-
--- POLÍTICAS RLS PARA PROFISSIONAIS
-DROP POLICY IF EXISTS "Leitura publica de profissionais" ON public.profissionais;
-CREATE POLICY "Leitura publica de profissionais" ON public.profissionais FOR SELECT USING (true);
-
-DROP POLICY IF EXISTS "Inserir profissional autenticado" ON public.profissionais;
-CREATE POLICY "Inserir profissional autenticado" ON public.profissionais FOR INSERT WITH CHECK (auth.uid() IS NOT NULL);
-
-DROP POLICY IF EXISTS "Atualizar profissional proprio" ON public.profissionais;
-CREATE POLICY "Atualizar profissional proprio" ON public.profissionais FOR UPDATE USING (auth.uid() IS NOT NULL) WITH CHECK (auth.uid() IS NOT NULL);
+-- POLÍTICAS RLS PARA PROFISSIONAIS (diretório público de leitura)
+DROP POLICY IF EXISTS "profissionais_select_publico" ON public.profissionais;
+CREATE POLICY "profissionais_select_publico" ON public.profissionais FOR SELECT USING (true);
+DROP POLICY IF EXISTS "profissionais_insert_autenticado" ON public.profissionais;
+CREATE POLICY "profissionais_insert_autenticado" ON public.profissionais FOR INSERT TO authenticated WITH CHECK ((SELECT auth.uid()) = usuario_id);
+DROP POLICY IF EXISTS "profissionais_update_proprio" ON public.profissionais;
+CREATE POLICY "profissionais_update_proprio" ON public.profissionais FOR UPDATE TO authenticated USING (((SELECT auth.uid()) = usuario_id) OR (SELECT private.is_admin()));
+DROP POLICY IF EXISTS "profissionais_delete_proprio" ON public.profissionais;
+CREATE POLICY "profissionais_delete_proprio" ON public.profissionais FOR DELETE TO authenticated USING (((SELECT auth.uid()) = usuario_id) OR (SELECT private.is_admin()));
 
 -- POLÍTICAS RLS PARA OBRAS
-DROP POLICY IF EXISTS "Leitura de obras ativas" ON public.obras;
-CREATE POLICY "Leitura de obras ativas" ON public.obras FOR SELECT USING (deleted_at IS NULL OR auth.uid() = cliente_id);
+DROP POLICY IF EXISTS "obras_select" ON public.obras;
+CREATE POLICY "obras_select" ON public.obras FOR SELECT TO authenticated USING (private.pode_ver_obra(id));
+DROP POLICY IF EXISTS "obras_insert_autenticado" ON public.obras;
+CREATE POLICY "obras_insert_autenticado" ON public.obras FOR INSERT TO authenticated WITH CHECK ((SELECT auth.uid()) = cliente_id);
+DROP POLICY IF EXISTS "obras_update" ON public.obras;
+CREATE POLICY "obras_update" ON public.obras FOR UPDATE TO authenticated USING (private.pode_editar_obra(id)) WITH CHECK (private.pode_editar_obra(id));
+DROP POLICY IF EXISTS "obras_delete" ON public.obras;
+CREATE POLICY "obras_delete" ON public.obras FOR DELETE TO authenticated USING (private.pode_editar_obra(id));
 
-DROP POLICY IF EXISTS "Inserir obra autenticado" ON public.obras;
-CREATE POLICY "Inserir obra autenticado" ON public.obras FOR INSERT WITH CHECK (auth.uid() IS NOT NULL);
+-- POLÍTICAS RLS DAS TABELAS VINCULADAS À OBRA
+-- SELECT/INSERT/UPDATE: pode_ver_obra · DELETE: pode_editar_obra (dono/admin)
+DROP POLICY IF EXISTS "etapas_select" ON public.etapas_obra;
+CREATE POLICY "etapas_select" ON public.etapas_obra FOR SELECT TO authenticated USING (private.pode_ver_obra(obra_id));
+DROP POLICY IF EXISTS "etapas_insert" ON public.etapas_obra;
+CREATE POLICY "etapas_insert" ON public.etapas_obra FOR INSERT TO authenticated WITH CHECK (private.pode_ver_obra(obra_id));
+DROP POLICY IF EXISTS "etapas_update" ON public.etapas_obra;
+CREATE POLICY "etapas_update" ON public.etapas_obra FOR UPDATE TO authenticated USING (private.pode_ver_obra(obra_id)) WITH CHECK (private.pode_ver_obra(obra_id));
+DROP POLICY IF EXISTS "etapas_delete" ON public.etapas_obra;
+CREATE POLICY "etapas_delete" ON public.etapas_obra FOR DELETE TO authenticated USING (private.pode_editar_obra(obra_id));
 
-DROP POLICY IF EXISTS "Atualizar obra propria" ON public.obras;
-CREATE POLICY "Atualizar obra propria" ON public.obras FOR UPDATE USING (auth.uid() = cliente_id OR auth.uid() IS NOT NULL);
+DROP POLICY IF EXISTS "tarefas_select" ON public.tarefas_obra;
+CREATE POLICY "tarefas_select" ON public.tarefas_obra FOR SELECT TO authenticated USING (private.pode_ver_obra(obra_id));
+DROP POLICY IF EXISTS "tarefas_insert" ON public.tarefas_obra;
+CREATE POLICY "tarefas_insert" ON public.tarefas_obra FOR INSERT TO authenticated WITH CHECK (private.pode_ver_obra(obra_id));
+DROP POLICY IF EXISTS "tarefas_update" ON public.tarefas_obra;
+CREATE POLICY "tarefas_update" ON public.tarefas_obra FOR UPDATE TO authenticated USING (private.pode_ver_obra(obra_id)) WITH CHECK (private.pode_ver_obra(obra_id));
+DROP POLICY IF EXISTS "tarefas_delete" ON public.tarefas_obra;
+CREATE POLICY "tarefas_delete" ON public.tarefas_obra FOR DELETE TO authenticated USING (private.pode_ver_obra(obra_id));
 
-DROP POLICY IF EXISTS "Excluir obra propria" ON public.obras;
-CREATE POLICY "Excluir obra propria" ON public.obras FOR DELETE USING (auth.uid() = cliente_id OR auth.uid() IS NOT NULL);
+DROP POLICY IF EXISTS "agendamentos_select" ON public.agendamentos;
+CREATE POLICY "agendamentos_select" ON public.agendamentos FOR SELECT TO authenticated USING (private.pode_ver_obra(obra_id));
+DROP POLICY IF EXISTS "agendamentos_insert" ON public.agendamentos;
+CREATE POLICY "agendamentos_insert" ON public.agendamentos FOR INSERT TO authenticated WITH CHECK (private.pode_ver_obra(obra_id));
+DROP POLICY IF EXISTS "agendamentos_update" ON public.agendamentos;
+CREATE POLICY "agendamentos_update" ON public.agendamentos FOR UPDATE TO authenticated USING (private.pode_ver_obra(obra_id)) WITH CHECK (private.pode_ver_obra(obra_id));
+DROP POLICY IF EXISTS "agendamentos_delete" ON public.agendamentos;
+CREATE POLICY "agendamentos_delete" ON public.agendamentos FOR DELETE TO authenticated USING (private.pode_editar_obra(obra_id));
 
--- POLÍTICAS RLS DEMAIS TABELAS
-DROP POLICY IF EXISTS "Acesso publico leitura etapas" ON public.etapas_obra;
-CREATE POLICY "Acesso publico leitura etapas" ON public.etapas_obra FOR SELECT USING (true);
-DROP POLICY IF EXISTS "Gerenciar etapas autenticado" ON public.etapas_obra;
-CREATE POLICY "Gerenciar etapas autenticado" ON public.etapas_obra FOR ALL USING (auth.uid() IS NOT NULL);
+DROP POLICY IF EXISTS "diario_select" ON public.diario_obra;
+CREATE POLICY "diario_select" ON public.diario_obra FOR SELECT TO authenticated USING (private.pode_ver_obra(obra_id));
+DROP POLICY IF EXISTS "diario_insert" ON public.diario_obra;
+CREATE POLICY "diario_insert" ON public.diario_obra FOR INSERT TO authenticated WITH CHECK (private.pode_ver_obra(obra_id));
+DROP POLICY IF EXISTS "diario_update" ON public.diario_obra;
+CREATE POLICY "diario_update" ON public.diario_obra FOR UPDATE TO authenticated USING (private.pode_ver_obra(obra_id)) WITH CHECK (private.pode_ver_obra(obra_id));
+DROP POLICY IF EXISTS "diario_delete" ON public.diario_obra;
+CREATE POLICY "diario_delete" ON public.diario_obra FOR DELETE TO authenticated USING (private.pode_editar_obra(obra_id));
 
-DROP POLICY IF EXISTS "Acesso tarefas" ON public.tarefas_obra;
-CREATE POLICY "Leitura publica de tarefas" ON public.tarefas_obra FOR SELECT USING (true);
-DROP POLICY IF EXISTS "Gestao tarefas autenticado" ON public.tarefas_obra;
-CREATE POLICY "Gestao tarefas autenticado" ON public.tarefas_obra FOR ALL USING (auth.uid() IS NOT NULL) WITH CHECK (auth.uid() IS NOT NULL);
+DROP POLICY IF EXISTS "documentos_select" ON public.documentos_obra;
+CREATE POLICY "documentos_select" ON public.documentos_obra FOR SELECT TO authenticated USING (private.pode_ver_obra(obra_id));
+DROP POLICY IF EXISTS "documentos_insert" ON public.documentos_obra;
+CREATE POLICY "documentos_insert" ON public.documentos_obra FOR INSERT TO authenticated WITH CHECK (private.pode_ver_obra(obra_id));
+DROP POLICY IF EXISTS "documentos_delete" ON public.documentos_obra;
+CREATE POLICY "documentos_delete" ON public.documentos_obra FOR DELETE TO authenticated USING (private.pode_editar_obra(obra_id));
 
-DROP POLICY IF EXISTS "Acesso obra_profissionais" ON public.obra_profissionais;
-CREATE POLICY "Acesso obra_profissionais" ON public.obra_profissionais FOR ALL USING (true);
--- Reforço: escrita exige autenticação, leitura pública para indicadores
-DROP POLICY IF EXISTS "Escrita obra_profissionais autenticado" ON public.obra_profissionais;
-CREATE POLICY "Escrita obra_profissionais autenticado" ON public.obra_profissionais FOR INSERT WITH CHECK (auth.uid() IS NOT NULL);
-DROP POLICY IF EXISTS "Remocao obra_profissionais autenticado" ON public.obra_profissionais;
-CREATE POLICY "Remocao obra_profissionais autenticado" ON public.obra_profissionais FOR DELETE USING (auth.uid() IS NOT NULL);
+DROP POLICY IF EXISTS "obra_profissionais_select" ON public.obra_profissionais;
+CREATE POLICY "obra_profissionais_select" ON public.obra_profissionais FOR SELECT TO authenticated
+    USING (private.pode_ver_obra(obra_id) OR (EXISTS (SELECT 1 FROM public.profissionais p WHERE p.id = obra_profissionais.profissional_id AND p.usuario_id = (SELECT auth.uid()))));
+DROP POLICY IF EXISTS "obra_profissionais_insert" ON public.obra_profissionais;
+CREATE POLICY "obra_profissionais_insert" ON public.obra_profissionais FOR INSERT TO authenticated WITH CHECK (private.pode_editar_obra(obra_id));
+DROP POLICY IF EXISTS "obra_profissionais_update" ON public.obra_profissionais;
+CREATE POLICY "obra_profissionais_update" ON public.obra_profissionais FOR UPDATE TO authenticated USING (private.pode_editar_obra(obra_id)) WITH CHECK (private.pode_editar_obra(obra_id));
+DROP POLICY IF EXISTS "obra_profissionais_delete" ON public.obra_profissionais;
+CREATE POLICY "obra_profissionais_delete" ON public.obra_profissionais FOR DELETE TO authenticated USING (private.pode_editar_obra(obra_id));
 
-DROP POLICY IF EXISTS "Acesso agendamentos" ON public.agendamentos;
-CREATE POLICY "Leitura publica de agendamentos" ON public.agendamentos FOR SELECT USING (true);
-DROP POLICY IF EXISTS "Gestao agendamentos autenticado" ON public.agendamentos;
-CREATE POLICY "Gestao agendamentos autenticado" ON public.agendamentos FOR ALL USING (auth.uid() IS NOT NULL) WITH CHECK (auth.uid() IS NOT NULL);
-
-DROP POLICY IF EXISTS "Acesso diario_obra" ON public.diario_obra;
-CREATE POLICY "Leitura publica diario" ON public.diario_obra FOR SELECT USING (true);
-DROP POLICY IF EXISTS "Escrita diario autenticado" ON public.diario_obra;
-CREATE POLICY "Escrita diario autenticado" ON public.diario_obra FOR INSERT WITH CHECK (auth.uid() IS NOT NULL);
-
-DROP POLICY IF EXISTS "Acesso documentos_obra" ON public.documentos_obra;
-CREATE POLICY "Leitura publica documentos" ON public.documentos_obra FOR SELECT USING (true);
-DROP POLICY IF EXISTS "Escrita documentos autenticado" ON public.documentos_obra;
-CREATE POLICY "Escrita documentos autenticado" ON public.documentos_obra FOR INSERT WITH CHECK (auth.uid() IS NOT NULL);
-
-DROP POLICY IF EXISTS "Acesso historico_obra" ON public.historico_obra;
-CREATE POLICY "Leitura historico autenticado" ON public.historico_obra FOR SELECT USING (auth.uid() IS NOT NULL);
-DROP POLICY IF EXISTS "Escrita historico autenticado" ON public.historico_obra;
-CREATE POLICY "Escrita historico autenticado" ON public.historico_obra FOR INSERT WITH CHECK (auth.uid() IS NOT NULL);
+-- Histórico: somente leitura + inserção (trilha de auditoria, sem edição)
+DROP POLICY IF EXISTS "historico_obra_select" ON public.historico_obra;
+CREATE POLICY "historico_obra_select" ON public.historico_obra FOR SELECT TO authenticated USING (private.pode_ver_obra(obra_id));
+DROP POLICY IF EXISTS "historico_obra_insert" ON public.historico_obra;
+CREATE POLICY "historico_obra_insert" ON public.historico_obra FOR INSERT TO authenticated
+    WITH CHECK (((usuario_id IS NULL) OR (usuario_id = (SELECT auth.uid()))) AND private.pode_ver_obra(obra_id));
 
 -- 8. PERMISSÕES
+-- O RLS é a barreira de linhas; os grants ficam no mínimo necessário
+-- (TRUNCATE/REFERENCES/TRIGGER ignoram RLS e nunca são concedidos).
 GRANT USAGE ON SCHEMA public TO anon, authenticated;
+REVOKE TRUNCATE, REFERENCES, TRIGGER ON ALL TABLES IN SCHEMA public FROM anon, authenticated;
 GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO anon, authenticated;
 GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO anon, authenticated;
+
+-- A view de resumo respeita o RLS de quem consulta e não é exposta à API.
+CREATE OR REPLACE VIEW public.vw_obras_resumo WITH (security_invoker = true) AS
+SELECT o.id, o.nome, o.descricao, o.cidade, o.status, o.progresso, o.criado_em,
+       o.cliente_id, u.nome AS cliente_nome,
+       count(e.id) AS total_etapas,
+       COALESCE(sum(e.progresso), 0::numeric) / NULLIF(count(e.id), 0) AS progresso_medio_etapas
+FROM public.obras o
+JOIN public.usuarios u ON u.id = o.cliente_id
+LEFT JOIN public.etapas_obra e ON e.obra_id = o.id
+GROUP BY o.id, u.nome;
+REVOKE ALL ON public.vw_obras_resumo FROM anon, authenticated;
+
+-- 9. STORAGE
+-- Bucket público 'documentos-obra' e suas políticas: docs/storage-documentos.sql
+-- (aplicado no projeto Supabase em 2026-10-19, migration storage_documentos_obra).
