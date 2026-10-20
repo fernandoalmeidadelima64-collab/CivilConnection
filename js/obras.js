@@ -147,6 +147,8 @@ function renderCardObra(obra) {
     const cidade = window.ccUI.escapeHtml(obra.cidade || 'Cidade não informada');
     const descricao = window.ccUI.escapeHtml(obra.descricao || 'Canteiro de obras cadastrado com acompanhamento técnico de progresso.');
 
+    const criador = window.ccUI.escapeHtml(obra.criador && obra.criador.nome ? obra.criador.nome : 'Não informado');
+
     return `
         <article class="bg-surface-card rounded-xl shadow-sm border border-border-subtle hover:shadow-md transition-all flex flex-col justify-between overflow-hidden" data-cc-obra-id="${window.ccUI.escapeHtml(obra.id)}">
             <div class="relative h-40 w-full bg-surface-subtle overflow-hidden cc-card-obra__midia">
@@ -172,6 +174,7 @@ function renderCardObra(obra) {
                     </span>
                     <h3 class="font-title-md text-title-md text-on-surface font-bold tracking-tight cc-quebra">${nome}</h3>
                     <p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2 my-1 cc-quebra">${descricao}</p>
+                    <p class="font-caption text-caption text-on-surface-variant cc-quebra">Cadastrado por: ${criador}</p>
                 </div>
 
                 <div class="flex flex-col gap-1 pt-space-xs">
@@ -250,7 +253,8 @@ async function carregarDetalhesObra() {
             : '';
         const nome = window.ccUI.escapeHtml(obra.nome);
         const cidade = window.ccUI.escapeHtml(obra.cidade || 'Cidade não informada');
-        const cliente = window.ccUI.escapeHtml(obra.usuarios && obra.usuarios.nome ? obra.usuarios.nome : 'Cliente cadastrado');
+        const cliente = window.ccUI.escapeHtml(obra.cliente && obra.cliente.nome ? obra.cliente.nome : 'Cliente cadastrado');
+        const criador = window.ccUI.escapeHtml(obra.criador && obra.criador.nome ? obra.criador.nome : 'Não informado');
         const responsavel = window.ccUI.escapeHtml(obra.profissionais && obra.profissionais.nome ? obra.profissionais.nome : 'Não atribuído');
         const inicio = obra.data_inicio ? window.ccUI.formatarData(obra.data_inicio) : 'Não informada';
         const previsao = obra.data_previsao_fim ? window.ccUI.formatarData(obra.data_previsao_fim) : 'A definir';
@@ -286,6 +290,10 @@ async function carregarDetalhesObra() {
                         <div class="flex flex-col min-w-0">
                             <dt class="font-caption text-caption text-on-surface-variant uppercase font-semibold">Cliente / Empreendedor</dt>
                             <dd class="font-title-md text-title-md text-on-surface font-bold mt-0.5 cc-quebra">${cliente}</dd>
+                        </div>
+                        <div class="flex flex-col min-w-0">
+                            <dt class="font-caption text-caption text-on-surface-variant uppercase font-semibold">Cadastrado por</dt>
+                            <dd class="font-title-md text-title-md text-on-surface font-bold mt-0.5 cc-quebra">${criador}</dd>
                         </div>
                         <div class="flex flex-col min-w-0">
                             <dt class="font-caption text-caption text-on-surface-variant uppercase font-semibold">Responsável técnico</dt>

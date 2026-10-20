@@ -82,6 +82,7 @@
                 {
                     id: '33333333-3333-4333-8333-333333333301',
                     cliente_id: usuarioTeste.id,
+                    criado_por: usuarioTeste.id,
                     nome: 'Residencial Aurora',
                     descricao: 'Edifício residencial de 8 pavimentos com laje protendida.',
                     cidade: 'Campinas',
@@ -97,6 +98,7 @@
                 {
                     id: '33333333-3333-4333-8333-333333333302',
                     cliente_id: usuarioTeste.id,
+                    criado_por: null,
                     nome: 'Galpão Logístico Norte',
                     descricao: 'Galpão industrial em estrutura metálica.',
                     cidade: 'São Paulo',
@@ -112,6 +114,7 @@
                 {
                     id: '33333333-3333-4333-8333-333333333303',
                     cliente_id: usuarioTeste.id,
+                    criado_por: usuarioTeste.id,
                     nome: 'Reforma Casa Praia',
                     descricao: 'Reforma completa de residência unifamiliar.',
                     cidade: 'Santos',
@@ -337,7 +340,7 @@
     window.__CC_TESTE_BANCO = () => banco;
 
     const RELACOES = {
-        obras: { usuarios: 'cliente_id' },
+            obras: { cliente: 'cliente_id', criador: 'criado_por', profissionais: 'responsavel_id' },
         agendamentos: { obras: 'obra_id', profissionais: 'responsavel_id' },
         diario_obra: { usuarios: 'usuario_id' },
         historico_obra: { usuarios: 'usuario_id', obras: 'obra_id' },
@@ -356,7 +359,9 @@
         Object.keys(relacoes).forEach((nome) => {
             const chave = relacoes[nome];
             const valor = registro[chave];
-            const base = nome === 'profissionais' ? banco.profissionais : banco[nome];
+            const base = nome === 'profissionais'
+                ? banco.profissionais
+                : (nome === 'cliente' || nome === 'criador' ? banco.usuarios : banco[nome]);
             const encontrado = (base || []).find((item) => item.id === valor);
             saida[nome] = encontrado ? { nome: encontrado.nome, especialidade: encontrado.especialidade } : null;
         });
@@ -500,6 +505,9 @@
             if (estado.operacao === 'insert') {
                 const inseridos = estado.valores.map((valores) => {
                     const registro = { ...valores };
+                    if (tabela === 'obras' && !Object.prototype.hasOwnProperty.call(registro, 'criado_por')) {
+                        registro.criado_por = usuarioLogado ? usuarioLogado.id : null;
+                    }
                     if (!registro.id) registro.id = crypto.randomUUID();
                     if (!registro.criado_em) registro.criado_em = new Date().toISOString();
                     banco[tabela].push(registro);

@@ -189,10 +189,10 @@ function clientSupabase() {
 
 function detalheTecnico(erro) {
     if (!erro) return '';
-    return [erro.code, erro.status, erro.message].filter(Boolean).join(' | ');
+    return [erro.code, erro.status, erro.message, erro.details, erro.hint].filter(Boolean).join(' | ');
 }
 
-function traduzirErroSupabase(erro, operacao) {
+function traduzirErroSupabase(erro, operacao, contexto) {
     const mensagemOriginal = String((erro && erro.message) || '');
     const codigo = erro && erro.code;
 
@@ -214,7 +214,26 @@ function traduzirErroSupabase(erro, operacao) {
         mensagem = 'Não foi possível conectar ao Supabase. Verifique sua internet e a configuração do projeto.';
     }
 
-    console.error(`Falha ao ${operacao || 'acessar o Supabase'}:`, detalheTecnico(erro) || erro);
+    if ((codigo === '42501' || /row-level security|permission denied/i.test(mensagemOriginal))
+        && contexto && contexto.tabela === 'public.obras' && operacao === 'cadastrar a obra') {
+        mensagem = 'Não foi possível registrar quem cadastrou a obra. Verifique a política RLS do campo criado_por.';
+    }
+
+    const diagnostico = {
+        operacao: operacao || 'acessar o Supabase',
+        tabela: (contexto && contexto.tabela) || 'não informada',
+        codigo: codigo || 'não informado',
+        status: (erro && erro.status) || 'não informado',
+        mensagem: mensagemOriginal || 'sem mensagem',
+        detalhes: (erro && erro.details) || '',
+        dicaSupabase: (erro && erro.hint) || ''
+    };
+    console.groupCollapsed(`[Supabase] Falha em ${diagnostico.operacao} (${diagnostico.tabela})`);
+    console.error('Diagnóstico retornado pelo Supabase:', diagnostico);
+    if (codigo === '42501' || /row-level security|permission denied/i.test(mensagemOriginal)) {
+        console.warn('Verifique a política RLS da tabela e confirme se o UUID enviado corresponde a auth.uid().');
+    }
+    console.groupEnd();
     return new ErroIntegracao(mensagem, { codigo, detalhe: detalheTecnico(erro), operacao });
 }
 
@@ -255,9 +274,9 @@ function normalizarUrlHttp(valor, campo) {
     return parsed.href;
 }
 
-function respostaDeEscrita(resultado, operacao) {
+function respostaDeEscrita(resultado, operacao, tabela) {
     if (resultado && resultado.error) {
-        throw traduzirErroSupabase(resultado.error, operacao);
+        throw traduzirErroSupabase(resultado.error, operacao, { tabela });
     }
     const linhas = Array.isArray(resultado && resultado.data) ? resultado.data : [];
     if (!linhas.length) {
@@ -541,8 +560,14 @@ const dbService = {
             throw new ErroIntegracao('A avaliação deve estar entre 0 e 5.', { operacao: 'salvar o profissional' });
         }
 
+        console.debug('[Cadastro de profissional] Enviando INSERT ao Supabase.', {
+            tabela: 'public.profissionais',
+            sessaoEncontrada: true,
+            usuarioVinculado: payload.usuario_id === usuarioId,
+            tipoRegistro: payload.tipo_registro
+        });
         const resultado = await client.from('profissionais').insert([payload]).select();
-        return respostaDeEscrita(resultado, 'salvar o profissional');
+        return respostaDeEscrita(resultado, 'salvar o profissional', 'public.profissionais');
     },
 
     async updateProfissional(id, dados) {
@@ -554,7 +579,9 @@ const dbService = {
     // ---- OBRAS ----
     async getObras({ busca = '', cidade = '', status = '', includeDeleted = false } = {}) {
         const client = clientSupabase();
-        let query = client.from('obras').select('*, usuarios(nome), profissionais(nome)').order('criado_em', { ascending: false });
+        let query = client.from('obras')
+            .select('*, cliente:usuarios!obras_cliente_id_fkey(nome), criador:usuarios!obras_criado_por_fkey(nome), profissionais(nome)')
+            .order('criado_em', { ascending: false });
 
         if (!includeDeleted) query = query.is('deleted_at', null);
         const termo = normalizarBusca(busca);
@@ -566,22 +593,30 @@ const dbService = {
         if (status) query = query.eq('status', status);
 
         const { data, error } = await query;
-        if (error) throw traduzirErroSupabase(error, 'consultar as obras');
+        if (error) throw traduzirErroSupabase(error, 'consultar as obras', { tabela: 'public.obras' });
         return Array.isArray(data) ? data : [];
     },
 
     async getObraById(id) {
         const client = clientSupabase();
-        const { data, error } = await client.from('obras').select('*, usuarios(nome), profissionais(nome)').eq('id', id).maybeSingle();
-        if (error) throw traduzirErroSupabase(error, 'consultar a obra');
+        const { data, error } = await client.from('obras')
+            .select('*, cliente:usuarios!obras_cliente_id_fkey(nome), criador:usuarios!obras_criado_por_fkey(nome), profissionais(nome)')
+            .eq('id', id)
+            .maybeSingle();
+        if (error) throw traduzirErroSupabase(error, 'consultar a obra', { tabela: 'public.obras' });
         if (!data || data.deleted_at) return null;
         return data;
     },
 
     async saveObra(obra) {
         const client = clientSupabase();
-        const usuario = await obterUsuarioAtual();
-        const clienteId = exigirUsuarioId(usuario);
+        const { data, error } = await client.auth.getUser();
+        if (error) throw traduzirErroSupabase(error, 'verificar sua sessão');
+        const user = data && data.user;
+        if (!user || !user.id) {
+            throw new ErroIntegracao('Você precisa estar logado para cadastrar uma obra.', { operacao: 'cadastrar a obra' });
+        }
+        const clienteId = user.id;
 
         const nome = String(obra.nome || '').trim();
         const cidade = String(obra.cidade || '').trim();
@@ -607,8 +642,15 @@ const dbService = {
             deleted_at: null
         };
 
+        console.debug('[Cadastro de obra] Enviando INSERT ao Supabase.', {
+            tabela: 'public.obras',
+            sessaoEncontrada: true,
+            clienteVinculadoAoUsuarioAtual: payload.cliente_id === clienteId,
+            criadoPorDefinidoPeloBanco: true,
+            responsavelInformado: !!payload.responsavel_id
+        });
         const resultado = await client.from('obras').insert([payload]).select();
-        const novaObra = respostaDeEscrita(resultado, 'cadastrar a obra');
+        const novaObra = respostaDeEscrita(resultado, 'cadastrar a obra', 'public.obras');
 
         await registrarHistoricoSeguro({
             obra_id: novaObra.id,
@@ -1159,12 +1201,30 @@ const dbService = {
 
     // ---- DASHBOARD ----
     async getDashboardMetrics() {
-        const [profissionais, obras, agendamentos, historicoGeral] = await Promise.all([
+        const client = clientSupabase();
+        const [profissionais, resultadoObras, resultadoObrasRecentes, agendamentos, historicoGeral] = await Promise.all([
             this.getProfissionais(),
-            this.getObras({ includeDeleted: false }),
+            client.from('obras')
+                .select('id, status, progresso, data_previsao_fim')
+                .is('deleted_at', null),
+            client.from('obras')
+                .select('id, nome, cidade, progresso, foto_capa_url, criado_em')
+                .is('deleted_at', null)
+                .order('criado_em', { ascending: false })
+                .limit(5),
             this.getAgendamentos(),
             this.getHistoricoRecente(6)
         ]);
+
+        if (resultadoObras.error) {
+            throw traduzirErroSupabase(resultadoObras.error, 'consultar as obras do dashboard', { tabela: 'public.obras' });
+        }
+        if (resultadoObrasRecentes.error) {
+            throw traduzirErroSupabase(resultadoObrasRecentes.error, 'consultar as obras recentes do dashboard', { tabela: 'public.obras' });
+        }
+
+        const obras = Array.isArray(resultadoObras.data) ? resultadoObras.data : [];
+        const obrasRecentes = Array.isArray(resultadoObrasRecentes.data) ? resultadoObrasRecentes.data : [];
 
         const totalProfissionais = profissionais.length;
         const totalObras = obras.length;
@@ -1198,7 +1258,7 @@ const dbService = {
             progressoMedio,
             proximosAgendamentos,
             historicoGeral,
-            obrasRecentes: obras.slice(0, 5)
+            obrasRecentes
         };
     }
 };
