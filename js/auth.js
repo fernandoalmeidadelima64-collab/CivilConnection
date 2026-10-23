@@ -12,6 +12,8 @@ function switchAuthTab(mode) {
     const formTitle = document.getElementById('form-main-title');
     const submitBtnText = document.getElementById('submit-btn-text');
     const feedbackMsg = document.getElementById('auth-feedback');
+    const forgotPasswordLink = document.getElementById('forgot-password-link');
+    const footerSwitch = document.getElementById('footer-switch');
 
     if (feedbackMsg) feedbackMsg.classList.add('hidden');
 
@@ -22,6 +24,8 @@ function switchAuthTab(mode) {
         registerFields.classList.add('flex');
         if (formTitle) formTitle.textContent = 'Criar sua Conta';
         if (submitBtnText) submitBtnText.textContent = 'Cadastrar-se';
+        if (forgotPasswordLink) forgotPasswordLink.style.display = 'none';
+        if (footerSwitch) footerSwitch.style.display = 'none';
     } else {
         tabRegister.className = 'flex-1 py-2 rounded-md font-label-md text-label-md transition-all duration-200 text-on-surface-variant hover:text-on-surface text-center';
         tabLogin.className = 'flex-1 py-2 rounded-md font-label-md text-label-md transition-all duration-200 bg-surface-card text-on-surface shadow-sm text-center';
@@ -29,6 +33,8 @@ function switchAuthTab(mode) {
         registerFields.classList.remove('flex');
         if (formTitle) formTitle.textContent = 'Entrar na Plataforma';
         if (submitBtnText) submitBtnText.textContent = 'Entrar no Sistema';
+        if (forgotPasswordLink) forgotPasswordLink.style.display = '';
+        if (footerSwitch) footerSwitch.style.display = '';
     }
 }
 
@@ -77,17 +83,27 @@ async function handleAuthSubmit(event) {
             });
 
             showAuthSuccess('Conta criada com sucesso! Redirecionando...');
-            setTimeout(() => {
+            setTimeout(async () => {
                 const isPagesDir = window.location.pathname.includes('/pages/');
-                window.location.href = isPagesDir ? '../index.html' : 'index.html';
+                const user = await dbService.getCurrentUser();
+                if (user && (user.tipo_usuario === 'gestor' || user.tipo_usuario === 'administrador')) {
+                    window.location.href = isPagesDir ? 'painel-gestor.html' : 'pages/painel-gestor.html';
+                } else {
+                    window.location.href = isPagesDir ? '../index.html' : 'index.html';
+                }
             }, 1000);
         } else {
             showAuthSuccess('Autenticando...');
             await dbService.loginUser({ email, password });
             showAuthSuccess('Login realizado com sucesso! Redirecionando...');
-            setTimeout(() => {
+            setTimeout(async () => {
                 const isPagesDir = window.location.pathname.includes('/pages/');
-                window.location.href = isPagesDir ? '../index.html' : 'index.html';
+                const user = await dbService.getCurrentUser();
+                if (user && (user.tipo_usuario === 'gestor' || user.tipo_usuario === 'administrador')) {
+                    window.location.href = isPagesDir ? 'painel-gestor.html' : 'pages/painel-gestor.html';
+                } else {
+                    window.location.href = isPagesDir ? '../index.html' : 'index.html';
+                }
             }, 1000);
         }
     } catch (err) {
@@ -134,7 +150,8 @@ async function checkAuthAndHeader() {
         });
 
         const roleMap = {
-            'administrador': 'Administrador',
+            'administrador': 'Gestor ETEC',
+            'gestor': 'Gestor ETEC',
             'profissional': 'Profissional Técnico',
             'cliente': 'Cliente'
         };
@@ -144,6 +161,19 @@ async function checkAuthAndHeader() {
 
         // Atualizar foto do perfil
         updateAvatarDisplay(currentUser.foto_perfil_url, currentUser.nome);
+
+        // Se o usuário for gestor/admin, adicionar link do Painel do Gestor no menu lateral se disponível
+        if (currentUser.tipo_usuario === 'gestor' || currentUser.tipo_usuario === 'administrador') {
+            const sidebarNav = document.querySelector('nav');
+            if (sidebarNav && !sidebarNav.querySelector('[href*="painel-gestor.html"]')) {
+                const gestorLink = document.createElement('a');
+                const isPagesDir = window.location.pathname.includes('/pages/');
+                gestorLink.className = 'flex items-center gap-space-sm px-space-md py-2.5 rounded-lg text-status-em-andamento bg-surface-subtle hover:bg-surface-container font-label-md text-label-md transition-colors font-bold mt-2';
+                gestorLink.href = isPagesDir ? 'painel-gestor.html' : 'pages/painel-gestor.html';
+                gestorLink.innerHTML = `<span class="material-symbols-outlined text-[20px]">admin_panel_settings</span><span>Painel do Gestor</span>`;
+                sidebarNav.appendChild(gestorLink);
+            }
+        }
     }
 }
 

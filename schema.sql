@@ -6,7 +6,7 @@
 -- 1. TIPOS ENUM
 DO $$ BEGIN
     IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'tipo_usuario_enum') THEN
-        CREATE TYPE tipo_usuario_enum AS ENUM ('cliente', 'profissional', 'administrador');
+        CREATE TYPE tipo_usuario_enum AS ENUM ('cliente', 'profissional', 'administrador', 'gestor');
     END IF;
 END $$;
 
