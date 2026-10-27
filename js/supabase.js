@@ -1260,6 +1260,64 @@ const dbService = {
             historicoGeral,
             obrasRecentes
         };
+    },
+
+    // ---- GESTOR ----
+    async getUsuariosList({ busca = '', tipo_usuario = '' } = {}) {
+        const client = clientSupabase();
+        let query = client.from('usuarios').select('*').order('criado_em', { ascending: false });
+
+        const termo = normalizarBusca(busca);
+        if (termo) {
+            const padrao = termo.replace(/[%_]/g, '');
+            query = query.or(`nome.ilike.%${padrao}%,email.ilike.%${padrao}%`);
+        }
+        if (tipo_usuario) {
+            query = query.eq('tipo_usuario', tipo_usuario);
+        }
+
+        const { data, error } = await query;
+        if (error) throw traduzirErroSupabase(error, 'consultar a lista de usuários', { tabela: 'public.usuarios' });
+        return Array.isArray(data) ? data : [];
+    },
+
+    async getGestorDashboardMetrics() {
+        const [usuarios, profissionais, obras] = await Promise.all([
+            this.getUsuariosList(),
+            this.getProfissionais(),
+            this.getObras()
+        ]);
+
+        const totalUsuarios = usuarios.length;
+        const totalClientes = usuarios.filter((u) => u.tipo_usuario === 'cliente').length;
+        const totalProfissionaisCadastrados = usuarios.filter((u) => u.tipo_usuario === 'profissional').length;
+        const totalGestores = usuarios.filter((u) => u.tipo_usuario === 'gestor' || u.tipo_usuario === 'administrador').length;
+
+        const totalObras = obras.length;
+        const obrasEmAndamento = obras.filter((o) => o.status === 'em_andamento').length;
+        const obrasConcluidas = obras.filter((o) => o.status === 'concluida').length;
+        const obrasPlanejamento = obras.filter((o) => o.status === 'planejamento').length;
+        const obrasPausadas = obras.filter((o) => o.status === 'pausada').length;
+
+        const somaProgresso = obras.reduce((sum, o) => sum + (Number(o.progresso) || 0), 0);
+        const progressoMedio = totalObras > 0 ? Math.round(somaProgresso / totalObras) : 0;
+
+        return {
+            totalUsuarios,
+            totalClientes,
+            totalProfissionaisCadastrados,
+            totalGestores,
+            totalProfissionais: profissionais.length,
+            totalObras,
+            obrasEmAndamento,
+            obrasConcluidas,
+            obrasPlanejamento,
+            obrasPausadas,
+            progressoMedio,
+            usuarios,
+            profissionais,
+            obras
+        };
     }
 };
 

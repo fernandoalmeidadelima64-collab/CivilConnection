@@ -300,6 +300,7 @@
         if (!usuario) return 'Sessão não identificada';
         const mapa = {
             administrador: 'Administrador',
+            gestor: 'Gestor da plataforma',
             profissional: 'Profissional técnico',
             cliente: 'Cliente'
         };
@@ -330,6 +331,34 @@
                 avatar.appendChild(img);
             } else {
                 avatar.appendChild(document.createTextNode((nome.charAt(0) || 'U').toUpperCase()));
+            }
+        }
+
+        // Se o usuário for Gestor ou Administrador, insere o link para o Painel do Gestor se ainda não existir
+        if (usuario && (usuario.tipo_usuario === 'gestor' || usuario.tipo_usuario === 'administrador')) {
+            const sidebarNav = document.querySelector('aside nav');
+            if (sidebarNav && !sidebarNav.querySelector('a[href*="gestor.html"]')) {
+                const link = document.createElement('a');
+                link.href = `${prefixo}gestor.html`;
+                link.className = 'flex items-center gap-space-sm px-space-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-subtle hover:text-on-surface transition-colors font-label-md text-label-md';
+                if (arquivoAtual === 'gestor.html') {
+                    link.className = 'flex items-center gap-space-sm px-space-md py-2.5 transition-colors bg-surface-container-high text-on-surface font-semibold rounded-lg';
+                    link.setAttribute('aria-current', 'page');
+                }
+                link.innerHTML = `<span class="material-symbols-outlined text-[20px]">admin_panel_settings</span><span>Painel do Gestor</span>`;
+                sidebarNav.appendChild(link);
+            }
+
+            const drawerNav = drawer ? drawer.querySelector('.cc-drawer__links[aria-label="Navegação principal"]') : null;
+            if (drawerNav && !drawerNav.querySelector('a[href*="gestor.html"]')) {
+                const linkDrawer = document.createElement('a');
+                linkDrawer.href = `${prefixo}gestor.html`;
+                linkDrawer.className = 'cc-drawer__link';
+                if (arquivoAtual === 'gestor.html') {
+                    linkDrawer.setAttribute('aria-current', 'page');
+                }
+                linkDrawer.innerHTML = `<span class="material-symbols-outlined text-[20px]">admin_panel_settings</span><span>Painel do Gestor</span>`;
+                drawerNav.appendChild(linkDrawer);
             }
         }
     }

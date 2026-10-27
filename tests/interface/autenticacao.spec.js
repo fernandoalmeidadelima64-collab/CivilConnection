@@ -90,3 +90,43 @@ test('página de login alterna entre entrar e criar conta com ARIA correto', asy
     await expect(page.locator('#tab-login')).toHaveAttribute('aria-selected', 'true');
     await expect(page.locator('#register-fields')).toBeHidden();
 });
+
+test('oculta os links de recuperar senha e troca de aba quando em modo Criar Conta', async ({ page }) => {
+    await limparEstado(page);
+    await page.goto('/pages/login.html');
+    await page.click('#tab-register');
+    await expect(page.locator('#forgot-password-link')).toBeHidden();
+    await expect(page.locator('#footer-switch')).toBeHidden();
+
+    await page.click('#tab-login');
+    await expect(page.locator('#forgot-password-link')).toBeVisible();
+    await expect(page.locator('#footer-switch')).toBeVisible();
+});
+
+test('painel do gestor exibe informacoes e metricas para usuarios autorizados', async ({ page }) => {
+    await autenticar(page);
+    await page.goto('/pages/gestor.html');
+    await expect(page.locator('h1')).toContainText('Painel do Gestor');
+    await expect(page.locator('#gestor-tabela-usuarios-container')).toBeVisible();
+    await expect(page.locator('#gestor-tabela-obras-container')).toBeVisible();
+});
+
+test('alternancia de tema claro e escuro funciona e persiste no localStorage', async ({ page }) => {
+    await autenticar(page);
+    await page.goto('/index.html');
+
+    const botaoTema = page.locator('.cc-theme-toggle').first();
+    await expect(botaoTema).toBeVisible();
+
+    await botaoTema.click();
+
+    const ehDark = await page.evaluate(() => document.documentElement.classList.contains('dark') || document.body.classList.contains('dark'));
+    expect(ehDark).toBe(true);
+
+    const temaSalvo = await page.evaluate(() => localStorage.getItem('civil_theme'));
+    expect(temaSalvo).toBe('escuro');
+
+    await page.reload();
+    const ehDarkAposReload = await page.evaluate(() => document.documentElement.classList.contains('dark') || document.body.classList.contains('dark'));
+    expect(ehDarkAposReload).toBe(true);
+});
