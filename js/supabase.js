@@ -410,7 +410,7 @@ const dbService = {
 
     async loginUser({ email, password }) {
         if (supabaseClient) {
-            const { data, error } = await supabaseClient.signInWithPassword({ email, password });
+            const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
             if (error) {
                 if (error.message && (error.message.includes('Invalid login credentials') || error.message.includes('invalid_credentials'))) {
                     throw new Error('E-mail ou senha incorretos.');

@@ -1,6 +1,124 @@
 /* ============================================================
    Civil Conection — Lógica de Autenticação, Sessão e Perfil (CC-10)
+   E Alternador de Tema Claro / Escuro
    ============================================================ */
+
+(function initThemeEarly() {
+    const theme = localStorage.getItem('civil_theme') || 'light';
+    if (theme === 'dark') {
+        document.documentElement.classList.add('dark');
+    }
+})();
+
+function injectDarkModeStyles() {
+    if (document.getElementById('dark-theme-styles')) return;
+    const style = document.createElement('style');
+    style.id = 'dark-theme-styles';
+    style.textContent = `
+        html.dark {
+            color-scheme: dark;
+        }
+        html.dark body,
+        html.dark main {
+            background-color: #121824 !important;
+            color: #f6f4ef !important;
+        }
+        html.dark aside,
+        html.dark header,
+        html.dark .bg-surface-card,
+        html.dark .bg-surface-canvas {
+            background-color: #17243c !important;
+            color: #f6f4ef !important;
+            border-color: #213352 !important;
+        }
+        html.dark .bg-surface-subtle {
+            background-color: #213352 !important;
+            color: #ffffff !important;
+        }
+        html.dark input,
+        html.dark select,
+        html.dark textarea {
+            background-color: #213352 !important;
+            color: #ffffff !important;
+            border-color: #314668 !important;
+        }
+        html.dark input::placeholder,
+        html.dark textarea::placeholder {
+            color: #a0aec0 !important;
+        }
+        html.dark .text-on-surface,
+        html.dark .text-primary,
+        html.dark .text-on-surface-variant {
+            color: #e2e8f0 !important;
+        }
+        html.dark table thead tr,
+        html.dark table tbody tr {
+            border-color: #213352 !important;
+        }
+        html.dark table tbody tr:hover {
+            background-color: #213352 !important;
+        }
+    `;
+    document.head.appendChild(style);
+}
+
+function getThemePreference() {
+    return localStorage.getItem('civil_theme') || 'light';
+}
+
+function applyTheme(theme) {
+    if (theme === 'dark') {
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('civil_theme', 'dark');
+    } else {
+        document.documentElement.classList.remove('dark');
+        localStorage.setItem('civil_theme', 'light');
+    }
+    updateThemeToggleButton(theme);
+}
+
+function toggleTheme() {
+    const currentTheme = getThemePreference();
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    applyTheme(newTheme);
+}
+
+function updateThemeToggleButton(theme) {
+    const btn = document.getElementById('btn-toggle-theme');
+    if (!btn) return;
+    const icon = btn.querySelector('.material-symbols-outlined');
+    const label = btn.querySelector('.theme-toggle-label');
+    if (theme === 'dark') {
+        if (icon) icon.textContent = 'light_mode';
+        if (label) label.textContent = 'Modo Claro';
+        btn.setAttribute('aria-label', 'Alternar para Tema Claro');
+        btn.setAttribute('title', 'Alternar para Tema Claro');
+    } else {
+        if (icon) icon.textContent = 'dark_mode';
+        if (label) label.textContent = 'Modo Escuro';
+        btn.setAttribute('aria-label', 'Alternar para Tema Escuro');
+        btn.setAttribute('title', 'Alternar para Tema Escuro');
+    }
+}
+
+function injectThemeToggleButton() {
+    injectDarkModeStyles();
+    if (document.getElementById('btn-toggle-theme')) return;
+
+    const headerContainer = document.querySelector('header .flex.items-center.gap-space-md') ||
+                            document.querySelector('header .flex.items-center:last-child') ||
+                            document.querySelector('header');
+    if (headerContainer) {
+        const btn = document.createElement('button');
+        btn.id = 'btn-toggle-theme';
+        btn.type = 'button';
+        btn.onclick = toggleTheme;
+        btn.className = 'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-subtle hover:bg-surface-container text-on-surface font-label-md text-label-md transition-colors cursor-pointer shadow-sm ml-2';
+        btn.innerHTML = `<span class="material-symbols-outlined text-[18px]">dark_mode</span><span class="theme-toggle-label hidden sm:inline">Modo Escuro</span>`;
+        headerContainer.appendChild(btn);
+        updateThemeToggleButton(getThemePreference());
+    }
+}
 
 let currentAuthMode = 'login'; // 'login' ou 'register'
 
@@ -306,6 +424,7 @@ async function handleLogout() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    injectThemeToggleButton();
     checkAuthAndHeader();
 
     // Listener para logout
