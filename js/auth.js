@@ -52,6 +52,8 @@ function switchAuthTab(mode) {
     const formTitle = document.getElementById('form-main-title');
     const submitBtnText = document.getElementById('submit-btn-text');
     const feedbackMsg = document.getElementById('auth-feedback');
+    const forgotPasswordLink = document.getElementById('forgot-password-link');
+    const footerSwitch = document.getElementById('footer-switch');
 
     if (feedbackMsg) {
         feedbackMsg.classList.add('hidden');
@@ -76,6 +78,8 @@ function switchAuthTab(mode) {
             registerFields.classList.remove('hidden');
             registerFields.classList.add('flex');
         }
+        if (forgotPasswordLink) forgotPasswordLink.classList.add('hidden');
+        if (footerSwitch) footerSwitch.classList.add('hidden');
         if (formTitle) formTitle.textContent = 'Criar sua conta';
         if (submitBtnText) submitBtnText.textContent = 'Cadastrar-se';
     } else {
@@ -93,6 +97,8 @@ function switchAuthTab(mode) {
             registerFields.classList.add('hidden');
             registerFields.classList.remove('flex');
         }
+        if (forgotPasswordLink) forgotPasswordLink.classList.remove('hidden');
+        if (footerSwitch) footerSwitch.classList.remove('hidden');
         if (formTitle) formTitle.textContent = 'Entrar na plataforma';
         if (submitBtnText) submitBtnText.textContent = 'Entrar no sistema';
     }
@@ -289,6 +295,7 @@ async function checkAuthAndHeader() {
 
     const roleMap = {
         administrador: 'Administrador',
+        gestor: 'Gestor da plataforma',
         profissional: 'Profissional técnico',
         cliente: 'Cliente'
     };

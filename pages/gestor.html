@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/><meta content="web_dashboard" name="shell-type"/>
+<style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style>
+<link rel="stylesheet" href="../css/app.css" />
+<link rel="stylesheet" href="../css/mobile.css" />
+<script defer src="../assets/vendor/supabase-js.min.js"></script>
+<script defer src="../js/supabase-config.js"></script>
+<script defer src="../js/supabase.js"></script>
+<script defer src="../js/ui.js"></script>
+<script defer src="../js/theme.js"></script>
+<script defer src="../js/header.js"></script>
+<script defer src="../js/auth.js"></script>
+<script defer src="../js/gestor.js"></script>
+<script defer src="../js/mobile.js"></script>
+</head><body class="bg-surface-canvas font-body-md text-on-surface antialiased"><aside class="fixed left-0 top-0 h-full w-64 bg-surface-card z-50 flex flex-col justify-between shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex flex-col"><div class="h-16 px-space-lg flex items-center gap-space-sm"><img alt="Civil Connection Logo" class="h-8 w-auto object-contain" src="../assets/images/civil_connection_logo.png"/><div class="flex flex-col"><span class="font-title-md text-title-md text-primary tracking-tight">Civil Connection</span><span class="font-caption text-caption text-on-surface-variant uppercase tracking-wider">Gestão Integrada</span></div></div><div class="px-space-md py-space-sm"><a class="w-full flex items-center justify-center gap-space-xs py-2.5 px-space-md rounded-lg bg-status-em-andamento text-on-primary font-label-md text-label-md shadow-sm hover:bg-secondary transition-colors" href="cadastro-obra.html"><span class="material-symbols-outlined text-[18px]">add</span><span>Nova Obra</span></a></div><nav class="flex flex-col gap-space-xs px-space-md mt-space-sm"><a class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-subtle hover:text-on-surface transition-colors font-label-md text-label-md" href="../index.html"><span class="material-symbols-outlined text-[20px]">grid_view</span><span>Visão Geral</span></a><a class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-subtle hover:text-on-surface transition-colors font-label-md text-label-md" href="obras.html"><span class="material-symbols-outlined text-[20px]">foundation</span><span>Obras</span></a><a class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-subtle hover:text-on-surface transition-colors font-label-md text-label-md" href="agenda.html"><span class="material-symbols-outlined text-[20px]">calendar_month</span><span>Agenda</span></a><a class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-subtle hover:text-on-surface transition-colors font-label-md text-label-md" href="profissionais.html"><span class="material-symbols-outlined text-[20px]">badge</span><span>Profissionais</span></a><a class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-subtle hover:text-on-surface transition-colors font-label-md text-label-md" href="relatorios.html"><span class="material-symbols-outlined text-[20px]">description</span><span>Relatórios</span></a><a aria-current="page" class="flex items-center gap-space-sm px-space-md py-2.5 transition-colors bg-surface-container-high text-on-surface font-semibold rounded-lg" href="gestor.html" id="nav-gestor-link"><span class="material-symbols-outlined text-[20px]">admin_panel_settings</span><span>Painel do Gestor</span></a></nav></div><div class="p-space-md bg-surface-card"><div class="flex items-center gap-space-sm p-space-sm rounded-lg bg-surface-subtle"><div class="w-9 h-9 rounded-full bg-primary flex items-center justify-center shrink-0 user-avatar-container cursor-pointer overflow-hidden shadow-sm" title="Clique para alterar foto de perfil"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><div class="flex flex-col min-w-0 flex-1"><span class="font-label-sm text-label-sm text-on-surface truncate user-display-name cursor-pointer" title="Clique para alterar foto de perfil">Carregando perfil...</span><span class="font-caption text-caption text-on-surface-variant truncate user-display-role">Gestor</span></div><a class="text-on-surface-variant hover:text-error transition-colors p-1" data-action="logout" href="#" title="Encerrar Sessão"><span class="material-symbols-outlined text-[18px]">logout</span></a></div></div></aside><div class="pl-64"><header class="fixed top-0 left-64 right-0 h-16 bg-surface-card/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-40 flex items-center justify-between px-space-xl"><div class="flex items-center gap-space-sm"><span class="font-caption text-caption uppercase text-on-surface-variant tracking-wider">Painel de Administração e Gestão Geral</span></div><div class="flex items-center gap-space-md"><div class="relative flex items-center"><span class="material-symbols-outlined absolute left-3 text-on-surface-variant text-[18px]">search</span><input class="w-72 h-10 pl-9 pr-space-md rounded-lg bg-surface-subtle font-body-sm text-body-sm text-on-surface placeholder:text-outline focus:outline-none focus:ring-1 focus:ring-primary-container" placeholder="Buscar obras, usuários..." type="text"/></div></div></header><main class="relative pt-16 w-full px-space-xl py-space-lg bg-surface-canvas min-h-screen"><div class="flex flex-col w-full" id="gestor-container">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-space-md mb-space-xl">
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="inline-flex w-2 h-2 rounded-full bg-status-em-andamento animate-pulse"></span>
+<span class="font-caption text-caption text-on-surface-variant uppercase tracking-wider">Área Restrita Administrativa</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-primary tracking-tight">Painel do Gestor</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Acompanhe usuários cadastrados, clientes, profissionais e o andamento geral das obras da plataforma.</p>
+</div>
+</div>
+
+<section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-space-md mb-space-2xl" id="gestor-metricas">
+<div class="bg-surface-card p-space-lg rounded-xl shadow-sm hover:shadow-md transition-shadow relative overflow-hidden flex flex-col justify-between">
+<span class="font-caption text-caption uppercase text-on-surface-variant tracking-wider font-semibold">Total Usuários</span>
+<div class="mt-space-md flex items-baseline gap-space-sm">
+<span class="font-display text-display text-primary font-bold" id="gestor-metric-usuarios">0</span>
+</div>
+</div>
+<div class="bg-surface-card p-space-lg rounded-xl shadow-sm hover:shadow-md transition-shadow relative overflow-hidden flex flex-col justify-between">
+<span class="font-caption text-caption uppercase text-on-surface-variant tracking-wider font-semibold">Clientes</span>
+<div class="mt-space-md flex items-baseline gap-space-sm">
+<span class="font-display text-display text-primary font-bold" id="gestor-metric-clientes">0</span>
+</div>
+</div>
+<div class="bg-surface-card p-space-lg rounded-xl shadow-sm hover:shadow-md transition-shadow relative overflow-hidden flex flex-col justify-between">
+<span class="font-caption text-caption uppercase text-on-surface-variant tracking-wider font-semibold">Profissionais</span>
+<div class="mt-space-md flex items-baseline gap-space-sm">
+<span class="font-display text-display text-primary font-bold" id="gestor-metric-profissionais">0</span>
+</div>
+</div>
+<div class="bg-surface-card p-space-lg rounded-xl shadow-sm hover:shadow-md transition-shadow relative overflow-hidden flex flex-col justify-between">
+<span class="font-caption text-caption uppercase text-on-surface-variant tracking-wider font-semibold">Total de Obras</span>
+<div class="mt-space-md flex items-baseline gap-space-sm">
+<span class="font-display text-display text-status-em-andamento font-bold" id="gestor-metric-obras">0</span>
+</div>
+</div>
+<div class="bg-surface-card p-space-lg rounded-xl shadow-sm hover:shadow-md transition-shadow relative overflow-hidden flex flex-col justify-between">
+<span class="font-caption text-caption uppercase text-on-surface-variant tracking-wider font-semibold">Obras Ativas</span>
+<div class="mt-space-md flex items-baseline gap-space-sm">
+<span class="font-display text-display text-status-concluida font-bold" id="gestor-metric-ativas">0</span>
+</div>
+</div>
+<div class="bg-surface-card p-space-lg rounded-xl shadow-sm hover:shadow-md transition-shadow relative overflow-hidden flex flex-col justify-between">
+<span class="font-caption text-caption uppercase text-on-surface-variant tracking-wider font-semibold">Progresso Médio</span>
+<div class="mt-space-md flex items-baseline gap-space-sm">
+<span class="font-display text-display text-primary font-bold" id="gestor-metric-progresso">0%</span>
+</div>
+</div>
+</section>
+
+<!-- SEÇÃO DE USUÁRIOS -->
+<section class="flex flex-col gap-space-md mb-space-2xl">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-md">
+<h2 class="font-headline-sm text-headline-sm text-primary tracking-tight">Usuários do Sistema</h2>
+<div class="flex items-center gap-space-sm">
+<input class="h-10 px-3 rounded-lg bg-surface-card border border-border-subtle font-body-sm text-body-sm text-on-surface focus:outline-none" id="gestor-busca-usuario" placeholder="Buscar por nome ou e-mail..." type="text"/>
+<select class="h-10 px-3 rounded-lg bg-surface-card border border-border-subtle font-label-md text-label-md text-on-surface focus:outline-none" id="gestor-filtro-tipo-usuario">
+<option value="">Todos os perfis</option>
+<option value="cliente">Clientes</option>
+<option value="profissional">Profissionais</option>
+<option value="gestor">Gestores</option>
+<option value="administrador">Administradores</option>
+</select>
+</div>
+</div>
+<div class="bg-surface-card rounded-xl shadow-sm overflow-hidden border border-border-subtle" id="gestor-tabela-usuarios-container">
+<!-- Tabela de usuários carregada via js/gestor.js -->
+</div>
+</section>
+
+<!-- SEÇÃO DE OBRAS -->
+<section class="flex flex-col gap-space-md mb-space-2xl">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-md">
+<h2 class="font-headline-sm text-headline-sm text-primary tracking-tight">Acompanhamento Geral de Obras</h2>
+<div class="flex items-center gap-space-sm">
+<input class="h-10 px-3 rounded-lg bg-surface-card border border-border-subtle font-body-sm text-body-sm text-on-surface focus:outline-none" id="gestor-busca-obra" placeholder="Buscar por obra ou cidade..." type="text"/>
+<select class="h-10 px-3 rounded-lg bg-surface-card border border-border-subtle font-label-md text-label-md text-on-surface focus:outline-none" id="gestor-filtro-status-obra">
+<option value="">Todos os status</option>
+<option value="planejamento">Planejamento</option>
+<option value="em_andamento">Em andamento</option>
+<option value="pausada">Pausada</option>
+<option value="concluida">Concluída</option>
+</select>
+</div>
+</div>
+<div class="bg-surface-card rounded-xl shadow-sm overflow-hidden border border-border-subtle" id="gestor-tabela-obras-container">
+<!-- Tabela de obras carregada via js/gestor.js -->
+</div>
+</section>
+
+</div></main></div></body></html>

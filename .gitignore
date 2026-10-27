@@ -8,3 +8,4 @@ blob-report/
 # Evita subir credenciais locais
 .env
 .env.*
+server.log

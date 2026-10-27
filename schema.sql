@@ -6,7 +6,9 @@
 -- 1. TIPOS ENUM
 DO $$ BEGIN
     IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'tipo_usuario_enum') THEN
-        CREATE TYPE tipo_usuario_enum AS ENUM ('cliente', 'profissional', 'administrador');
+        CREATE TYPE tipo_usuario_enum AS ENUM ('cliente', 'profissional', 'administrador', 'gestor');
+    ELSE
+        ALTER TYPE tipo_usuario_enum ADD VALUE IF NOT EXISTS 'gestor';
     END IF;
 END $$;
 
@@ -239,15 +241,15 @@ SET search_path = ''
 AS $$
 BEGIN
     -- A user may edit their profile, but cannot promote themselves.
-    -- Trusted operators (service role) and existing admins can manage roles.
+    -- Trusted operators (service role) and existing admins/gestores can manage roles.
     IF (SELECT auth.uid()) = OLD.id
        AND NEW.tipo_usuario IS DISTINCT FROM OLD.tipo_usuario
        AND NOT EXISTS (
            SELECT 1 FROM public.usuarios u
            WHERE u.id = (SELECT auth.uid())
-             AND u.tipo_usuario = 'administrador'::public.tipo_usuario_enum
+             AND u.tipo_usuario IN ('administrador'::public.tipo_usuario_enum, 'gestor'::public.tipo_usuario_enum)
        ) THEN
-        RAISE EXCEPTION 'Somente um administrador pode alterar o perfil de acesso.'
+        RAISE EXCEPTION 'Somente um administrador ou gestor pode alterar o perfil de acesso.'
             USING ERRCODE = '42501';
     END IF;
     RETURN NEW;
@@ -347,7 +349,7 @@ CREATE SCHEMA IF NOT EXISTS private;
 
 CREATE OR REPLACE FUNCTION private.is_admin()
 RETURNS boolean LANGUAGE sql STABLE SECURITY DEFINER SET search_path = ''
-AS $$ SELECT EXISTS (SELECT 1 FROM public.usuarios u WHERE u.id = (SELECT auth.uid()) AND u.tipo_usuario = 'administrador'::tipo_usuario_enum) $$;
+AS $$ SELECT EXISTS (SELECT 1 FROM public.usuarios u WHERE u.id = (SELECT auth.uid()) AND u.tipo_usuario IN ('administrador'::tipo_usuario_enum, 'gestor'::tipo_usuario_enum)) $$;
 
 CREATE OR REPLACE FUNCTION private.eh_dono_obra(p_obra_id uuid)
 RETURNS boolean LANGUAGE sql STABLE SECURITY DEFINER SET search_path = ''

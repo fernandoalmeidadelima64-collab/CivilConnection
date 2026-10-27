@@ -1660,3 +1660,147 @@ main {
         display: none;
     }
 }
+
+/* ==========================================================================
+   Civil Connection — Tema Escuro (Dark Mode)
+   ========================================================================== */
+
+:root.dark,
+:root.theme-dark,
+body.dark,
+body.theme-dark {
+    --cc-fundo: #0f172a;
+    --cc-card: #1e293b;
+    --cc-texto: #f8fafc;
+    --cc-texto-suave: #94a3b8;
+    --cc-borda: #334155;
+    --cc-borda-forte: #475569;
+    --cc-erro-fundo: #450a0a;
+    --cc-sucesso-fundo: #052e16;
+    --cc-alerta-fundo: #451a03;
+    color-scheme: dark;
+}
+
+.dark body,
+.theme-dark body,
+html.dark,
+html.theme-dark {
+    background-color: #0f172a !important;
+    color: #f8fafc !important;
+}
+
+/* Fundo da aplicação e containers */
+.dark .bg-surface-canvas,
+.theme-dark .bg-surface-canvas,
+.dark main,
+.theme-dark main {
+    background-color: #0f172a !important;
+    color: #f8fafc !important;
+}
+
+/* Cartões e superfícies */
+.dark .bg-surface-card,
+.theme-dark .bg-surface-card,
+.dark aside,
+.theme-dark aside,
+.dark header,
+.theme-dark header,
+.dark .cc-drawer__painel,
+.dark .cc-topbar,
+.dark .cc-bottomnav {
+    background-color: #1e293b !important;
+    color: #f8fafc !important;
+    border-color: #334155 !important;
+}
+
+/* Elementos sutis e fundos secundários */
+.dark .bg-surface-subtle,
+.theme-dark .bg-surface-subtle,
+.dark .bg-surface-container,
+.theme-dark .bg-surface-container,
+.dark .bg-surface-container-high,
+.theme-dark .bg-surface-container-high,
+.dark .bg-surface-subtle\/50,
+.dark .bg-surface-subtle\/30 {
+    background-color: #334155 !important;
+    color: #f8fafc !important;
+}
+
+/* Textos principais e secundários */
+.dark .text-on-surface,
+.theme-dark .text-on-surface,
+.dark .text-primary,
+.theme-dark .text-primary,
+.dark h1, .dark h2, .dark h3, .dark h4 {
+    color: #f8fafc !important;
+}
+
+.dark .text-on-surface-variant,
+.theme-dark .text-on-surface-variant,
+.dark .text-outline {
+    color: #cbd5e1 !important;
+}
+
+/* Bordas e divisores */
+.dark .border-border-subtle,
+.theme-dark .border-border-subtle,
+.dark .border,
+.dark .border-b,
+.dark .border-t,
+.dark .border-r,
+.dark .border-l {
+    border-color: #334155 !important;
+}
+
+/* Campos de entrada e selects */
+.dark input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]),
+.dark select,
+.dark textarea,
+.theme-dark input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]),
+.theme-dark select,
+.theme-dark textarea {
+    background-color: #1e293b !important;
+    color: #f8fafc !important;
+    border-color: #475569 !important;
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder {
+    color: #94a3b8 !important;
+}
+
+/* Modais */
+.dark .cc-modal__painel,
+.theme-dark .cc-modal__painel {
+    background-color: #1e293b !important;
+    color: #f8fafc !important;
+    border: 1px solid #334155 !important;
+}
+
+/* Links e navegação ativa */
+.dark a.text-on-surface-variant:hover,
+.dark button.text-on-surface-variant:hover {
+    color: #ffffff !important;
+}
+
+.dark [aria-current="page"] {
+    background-color: #334155 !important;
+    color: #f8fafc !important;
+}
+
+.dark .cc-drawer__usuario {
+    background-color: #0f172a !important;
+    border-color: #334155 !important;
+}
+
+/* Tabelas */
+.dark table tr,
+.theme-dark table tr {
+    border-color: #334155 !important;
+}
+
+.dark table th,
+.theme-dark table th {
+    background-color: #334155 !important;
+    color: #cbd5e1 !important;
+}
