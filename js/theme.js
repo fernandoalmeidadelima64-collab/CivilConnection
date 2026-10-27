@@ -68,7 +68,7 @@
         botao.setAttribute('title', escuro ? 'Alternar para tema claro' : 'Alternar para tema escuro');
         botao.innerHTML = `
             <span class="material-symbols-outlined text-[20px]" aria-hidden="true">${escuro ? 'light_mode' : 'dark_mode'}</span>
-            <span class="cc-theme-toggle-label cc-sr-only">${escuro ? 'Tema Claro' : 'Tema Escuro'}</span>
+            <span class="cc-theme-toggle-label sr-only">${escuro ? 'Tema Claro' : 'Tema Escuro'}</span>
         `;
         botao.addEventListener('click', alternarTema);
         return botao;
@@ -78,7 +78,7 @@
         // Cabeçalho desktop
         const desktopHeader = document.querySelector('header .flex.items-center.gap-space-md');
         if (desktopHeader && !desktopHeader.querySelector('.cc-theme-toggle')) {
-            const btnHeader = criarBotaoTema('w-9 h-9 rounded-lg flex items-center justify-center text-on-surface-variant hover:bg-surface-subtle hover:text-on-surface transition-colors border border-border-subtle bg-transparent overflow-hidden');
+            const btnHeader = criarBotaoTema('relative w-9 h-9 rounded-lg flex items-center justify-center text-on-surface-variant hover:bg-surface-subtle hover:text-on-surface transition-colors border border-border-subtle bg-transparent overflow-hidden');
             desktopHeader.prepend(btnHeader);
         }
 

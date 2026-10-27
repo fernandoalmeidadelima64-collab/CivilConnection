@@ -1777,6 +1777,59 @@ html.theme-dark {
     border: 1px solid #334155 !important;
 }
 
+/* Estados de vazio e erro no modo escuro */
+.dark .cc-estado,
+.theme-dark .cc-estado,
+.dark .cc-estado--vazio,
+.theme-dark .cc-estado--vazio {
+    background-color: #1e293b !important;
+    border-color: #334155 !important;
+    color: #cbd5e1 !important;
+}
+
+.dark .cc-estado strong,
+.theme-dark .cc-estado strong {
+    color: #f8fafc !important;
+}
+
+.dark .cc-estado p,
+.theme-dark .cc-estado p {
+    color: #cbd5e1 !important;
+}
+
+.dark .cc-estado__icone,
+.theme-dark .cc-estado__icone {
+    background-color: #334155 !important;
+    color: #f8fafc !important;
+}
+
+.dark .cc-btn--secundario,
+.theme-dark .cc-btn--secundario {
+    background-color: #1e293b !important;
+    border-color: #475569 !important;
+    color: #f8fafc !important;
+}
+
+.dark .cc-btn--secundario:hover,
+.theme-dark .cc-btn--secundario:hover {
+    background-color: #334155 !important;
+    color: #ffffff !important;
+}
+
+/* Botão de alternância de tema */
+.cc-theme-toggle {
+    background-color: transparent;
+    color: inherit;
+    border-color: var(--cc-borda);
+}
+
+.dark .cc-theme-toggle,
+.theme-dark .cc-theme-toggle {
+    background-color: transparent !important;
+    color: #f8fafc !important;
+    border-color: #334155 !important;
+}
+
 /* Links e navegação ativa */
 .dark a.text-on-surface-variant:hover,
 .dark button.text-on-surface-variant:hover {
@@ -1803,4 +1856,19 @@ html.theme-dark {
 .theme-dark table th {
     background-color: #334155 !important;
     color: #cbd5e1 !important;
+}
+
+.dark table td,
+.theme-dark table td {
+    color: #f8fafc !important;
+    border-color: #334155 !important;
+}
+
+/* Painel do Gestor específicas para modo escuro */
+.dark #gestor-tabela-usuarios-container,
+.theme-dark #gestor-tabela-usuarios-container,
+.dark #gestor-tabela-obras-container,
+.theme-dark #gestor-tabela-obras-container {
+    background-color: #1e293b !important;
+    border-color: #334155 !important;
 }
